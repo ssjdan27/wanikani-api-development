@@ -41,14 +41,31 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
 
   const radicalAccuracy = calculateTypeAccuracy('radical')
   const kanjiAccuracy = calculateTypeAccuracy('kanji')
-  const vocabularyAccuracy = 
-    (calculateTypeAccuracy('vocabulary') + calculateTypeAccuracy('kana_vocabulary')) / 2
+  const vocabularyAccuracy = calculateTypeAccuracy('vocabulary')
+  const kanaVocabularyAccuracy = calculateTypeAccuracy('kana_vocabulary')
+  
+  // Calculate combined vocabulary accuracy properly
+  const combinedVocabularyAccuracy = (() => {
+    const vocabStats = visibleStats.filter(s => s.data.subject_type === 'vocabulary')
+    const kanaStats = visibleStats.filter(s => s.data.subject_type === 'kana_vocabulary')
+    
+    const totalCorrect = 
+      vocabStats.reduce((sum, s) => sum + s.data.meaning_correct + s.data.reading_correct, 0) +
+      kanaStats.reduce((sum, s) => sum + s.data.meaning_correct + s.data.reading_correct, 0)
+    
+    const totalIncorrect = 
+      vocabStats.reduce((sum, s) => sum + s.data.meaning_incorrect + s.data.reading_incorrect, 0) +
+      kanaStats.reduce((sum, s) => sum + s.data.meaning_incorrect + s.data.reading_incorrect, 0)
+    
+    const total = totalCorrect + totalIncorrect
+    return total > 0 ? (totalCorrect / total * 100) : 0
+  })()
 
   const data = {
     labels: ['Radicals', 'Kanji', 'Vocabulary'],
     datasets: [
       {
-        data: [radicalAccuracy, kanjiAccuracy, vocabularyAccuracy],
+        data: [radicalAccuracy, kanjiAccuracy, combinedVocabularyAccuracy],
         backgroundColor: [
           '#00aaff',
           '#ff00aa',
@@ -108,7 +125,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
         </div>
         <div>
           <div className="text-2xl font-bold text-wanikani-vocabulary">
-            {vocabularyAccuracy.toFixed(1)}%
+            {combinedVocabularyAccuracy.toFixed(1)}%
           </div>
           <div className="text-sm text-gray-400">Vocabulary</div>
         </div>
