@@ -3,18 +3,21 @@ import type { Metadata } from 'next'
 import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
-  title: 'WaniKani Dashboard',
-  description: 'Advanced WaniKani statistics and progress tracking',
+    title: 'WaniKani Dashboard',
+    description: 'Advanced WaniKani statistics and progress tracking',
 }
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body className="bg-wanikani-dark">{children}</body>
-    </html>
-  )
+    return (
+        <html lang="en">
+            <body className="bg-wanikani-dark">{children}
+                {children}
+                <Analytics />
+            </body>
+        </html>
+    )
 }
