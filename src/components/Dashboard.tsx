@@ -7,7 +7,7 @@ import LevelProgress from './LevelProgress'
 import SubjectGrid from './SubjectGrid'
 import AccuracyChart from './AccuracyChart'
 import { WaniKaniService } from '@/services/wanikani'
-import type { UserData, ReviewStatistic, Subject } from '@/types/wanikani'
+import type { UserData, ReviewStatistic, Subject, Assignment } from '@/types/wanikani'
 
 interface DashboardProps {
   apiToken: string
@@ -18,6 +18,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [reviewStats, setReviewStats] = useState<ReviewStatistic[]>([])
   const [subjects, setSubjects] = useState<Subject[]>([])
+  const [assignments, setAssignments] = useState<Assignment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -28,15 +29,17 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
     setError('')
     
     try {
-      const [userResponse, reviewStatsResponse, subjectsResponse] = await Promise.all([
+      const [userResponse, reviewStatsResponse, subjectsResponse, assignmentsResponse] = await Promise.all([
         wanikaniService.getUser(),
         wanikaniService.getReviewStatistics(),
-        wanikaniService.getSubjects()
+        wanikaniService.getSubjects(),
+        wanikaniService.getAssignments()
       ])
 
       setUserData(userResponse)
       setReviewStats(reviewStatsResponse)
       setSubjects(subjectsResponse)
+      setAssignments(assignmentsResponse)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data')
     } finally {
@@ -118,7 +121,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         <StatsOverview userData={userData} reviewStats={reviewStats} />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <LevelProgress userData={userData} subjects={subjects} />
+          <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
           <AccuracyChart reviewStats={reviewStats} />
         </div>
 
