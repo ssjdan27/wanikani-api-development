@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className="bg-wanikani-dark">{children}
+            <body className="bg-wanikani-dark">
                 {children}
                 <Analytics />
             </body>
