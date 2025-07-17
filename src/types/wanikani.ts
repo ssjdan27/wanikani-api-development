@@ -5,8 +5,9 @@ export interface UserData {
   started_at: string
   subscription?: {
     active: boolean
-    type: string
+    type: "lifetime" | "recurring" | "free" | "unknown"
     max_level_granted: number
+    period_ends_at?: string | null
   }
 }
 
@@ -88,4 +89,22 @@ export interface ApiResponse<T> {
   total_count?: number
   data_updated_at: string
   data: T
+}
+
+export interface CacheEntry<T> {
+  data: T
+  etag?: string
+  lastModified?: string
+  timestamp: number
+  expiresAt?: number
+}
+
+export interface CacheConfig {
+  // Cache durations in milliseconds
+  subjects: number      // Cache subjects aggressively (24 hours)
+  user: number         // User data (1 hour)
+  assignments: number  // Assignments (30 minutes)
+  reviewStats: number  // Review statistics (30 minutes)
+  reviews: number      // Reviews (permanent - never change once recorded)
+  summary: number      // Summary (1 hour - changes every hour)
 }
