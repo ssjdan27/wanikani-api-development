@@ -66,6 +66,21 @@ export interface Assignment {
   }
 }
 
+export interface Review {
+  id: number
+  data_updated_at?: string
+  data: {
+    assignment_id: number
+    subject_id: number
+    subject_type: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary'
+    created_at: string
+    meaning_correct: number
+    meaning_incorrect: number
+    reading_correct: number
+    reading_incorrect: number
+  }
+}
+
 export interface LevelProgression {
   id: number
   data: {

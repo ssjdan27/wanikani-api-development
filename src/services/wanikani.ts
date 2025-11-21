@@ -6,7 +6,8 @@ import type {
   ApiResponse,
   CacheEntry,
   CacheConfig,
-  LevelProgression
+  LevelProgression,
+  Review
 } from '@/types/wanikani'
 
 export class WaniKaniService {
@@ -314,6 +315,15 @@ export class WaniKaniService {
       '/assignments',
       updatedAfter,
       this.cacheConfig.assignments
+    )
+    return data
+  }
+
+  async getReviews(updatedAfter?: string): Promise<Review[]> {
+    const { data } = await this.getAllPages<Review>(
+      '/reviews',
+      updatedAfter,
+      this.cacheConfig.reviews
     )
     return data
   }

@@ -8,7 +8,9 @@ import AccuracyChart from './AccuracyChart'
 import SubscriptionInfo from './SubscriptionInfo'
 import LevelProjectionChart from './LevelProjectionChart'
 import { WaniKaniService } from '@/services/wanikani'
-import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression } from '@/types/wanikani'
+import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression, Review } from '@/types/wanikani'
+import StudyHeatmap from './StudyHeatmap'
+import { useTabState, TabButton } from './Tabs'
 
 interface DashboardProps {
   apiToken: string
@@ -21,12 +23,14 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [levelProgressions, setLevelProgressions] = useState<LevelProgression[]>([])
+  const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [refreshMessage, setRefreshMessage] = useState('')
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const { activeTab, setActiveTab } = useTabState<'projection' | 'heatmap'>('projection')
 
   // Memoize the WaniKani service to prevent unnecessary re-creation
   const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
@@ -55,10 +59,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       const userResponse = await wanikaniService.getUser()
       setUserData(userResponse)
 
-      const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse] = await Promise.all([
+      const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse, reviewsResponse] = await Promise.all([
         wanikaniService.getReviewStatistics(),
         wanikaniService.getAssignments(),
-        wanikaniService.getLevelProgressions()
+        wanikaniService.getLevelProgressions(),
+        wanikaniService.getReviews()
       ])
 
       let subjectsResponse: Subject[] = []
@@ -81,6 +86,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       setAssignments(assignmentsResponse)
       setReviewStats(reviewStatsResponse)
       setLevelProgressions(levelProgressionsResponse)
+      setReviews(reviewsResponse)
       setSubjects(subjectsResponse)
       setLastRefresh(new Date())
       
@@ -116,6 +122,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
     setReviewStats([])
     setSubjects([])
     setLevelProgressions([])
+    setReviews([])
     setUserData(null)
     fetchData(true)
   }, [wanikaniService, fetchData])
@@ -254,10 +261,34 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         <SubscriptionInfo userData={userData} />
         <StatsOverview userData={userData} reviewStats={reviewStats} />
 
-        <LevelProjectionChart
-          userData={userData}
-          levelProgressions={levelProgressions}
-        />
+        <div className="bg-wanikani-darker rounded-xl p-1">
+          <div className="flex gap-2 px-4 pt-3">
+            <TabButton
+              label="Level Projection"
+              isActive={activeTab === 'projection'}
+              onClick={() => setActiveTab('projection')}
+            />
+            <TabButton
+              label="Study Heatmap"
+              isActive={activeTab === 'heatmap'}
+              onClick={() => setActiveTab('heatmap')}
+            />
+          </div>
+          <div className="p-5">
+            {activeTab === 'projection' ? (
+              <LevelProjectionChart
+                userData={userData}
+                levelProgressions={levelProgressions}
+              />
+            ) : (
+              <StudyHeatmap
+                assignments={assignments}
+                reviews={reviews}
+                userData={userData}
+              />
+            )}
+          </div>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
