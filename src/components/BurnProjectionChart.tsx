@@ -151,7 +151,9 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
       projectionByDay.set(dateKey, (projectionByDay.get(dateKey) || 0) + count)
     })
 
-    const allProjectionDates = Array.from(new Set([...projectionByDay.keys(), ...burnByDay.keys()])).sort()
+    const projectionDates = Array.from(projectionByDay.keys())
+    const burnDates = Array.from(burnByDay.keys())
+    const allProjectionDates = Array.from(new Set([...projectionDates, ...burnDates])).sort()
     let projectedCumulative = burnedAssignments.length
     const today = new Date()
     const projectionPoints = [{ x: today, y: burnedAssignments.length }]
