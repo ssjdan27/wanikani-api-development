@@ -4,11 +4,11 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { LogOut, RefreshCw, Wifi, WifiOff } from 'lucide-react'
 import StatsOverview from './StatsOverview'
 import LevelProgress from './LevelProgress'
-import SubjectGrid from './SubjectGrid'
 import AccuracyChart from './AccuracyChart'
 import SubscriptionInfo from './SubscriptionInfo'
+import LevelProjectionChart from './LevelProjectionChart'
 import { WaniKaniService } from '@/services/wanikani'
-import type { UserData, ReviewStatistic, Subject, Assignment } from '@/types/wanikani'
+import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression } from '@/types/wanikani'
 
 interface DashboardProps {
   apiToken: string
@@ -20,6 +20,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [reviewStats, setReviewStats] = useState<ReviewStatistic[]>([])
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [assignments, setAssignments] = useState<Assignment[]>([])
+  const [levelProgressions, setLevelProgressions] = useState<LevelProgression[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [refreshMessage, setRefreshMessage] = useState('')
@@ -54,99 +55,34 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       const userResponse = await wanikaniService.getUser()
       setUserData(userResponse)
 
-      // Use incremental updates only if not forcing refresh AND we have existing data
-      const hasExistingAssignments = assignments.length > 0
-      const hasExistingReviewStats = reviewStats.length > 0
-      
-      const lastSyncAssignments = (forceRefresh || !hasExistingAssignments) ? null : wanikaniService.getLastSyncTimestamp('assignments')
-      const lastSyncReviewStats = (forceRefresh || !hasExistingReviewStats) ? null : wanikaniService.getLastSyncTimestamp('reviewStats')
-      
-      console.log('Fetch params:', {
-        forceRefresh,
-        hasExistingAssignments,
-        hasExistingReviewStats,
-        lastSyncAssignments,
-        lastSyncReviewStats
-      })
-      
-      // First, get user data and basic assignments/review stats
-      // Skip subjects initially to avoid rate limiting and storage issues
-      const [reviewStatsResponse, assignmentsResponse] = await Promise.all([
-        wanikaniService.getReviewStatistics(lastSyncReviewStats || undefined),
-        wanikaniService.getAssignments(lastSyncAssignments || undefined)
+      const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse] = await Promise.all([
+        wanikaniService.getReviewStatistics(),
+        wanikaniService.getAssignments(),
+        wanikaniService.getLevelProgressions()
       ])
 
-      console.log('API responses:', {
-        reviewStatsCount: reviewStatsResponse.length,
-        assignmentsCount: assignmentsResponse.length
-      })
-
-      // Only fetch subjects if we don't have them or if forced refresh
       let subjectsResponse: Subject[] = []
-      if (forceRefresh || subjects.length === 0) {
-        try {
-          // Get subjects for the user's current level (essential for progress display)
-          const userLevel = userResponse.level
-          subjectsResponse = await wanikaniService.getSubjectsWithSubscriptionFilter(
-            userResponse, 
-            [userLevel] // Only fetch current level to avoid rate limits
-          )
-          console.log('Subjects loaded for level:', userLevel, 'Count:', subjectsResponse.length)
-        } catch (subjectError) {
-          console.warn('Failed to load subjects, using empty array:', subjectError)
-          subjectsResponse = []
-        }
-      } else {
-        console.log('Using existing subjects:', subjects.length)
-        subjectsResponse = subjects
+      try {
+        const maxAccessibleLevel = Math.min(
+          userResponse.level,
+          userResponse.subscription?.max_level_granted || userResponse.level
+        )
+        const levelsToLoad = Array.from({ length: maxAccessibleLevel }, (_, i) => i + 1)
+        subjectsResponse = await wanikaniService.getSubjectsWithSubscriptionFilter(
+          userResponse, 
+          levelsToLoad
+        )
+        console.log('Subjects loaded for levels 1-', maxAccessibleLevel, 'Count:', subjectsResponse.length)
+      } catch (subjectError) {
+        console.warn('Failed to load subjects, using empty array:', subjectError)
+        subjectsResponse = []
       }
 
-      // For incremental updates, merge with existing data (only if we have existing data)
-      if (lastSyncAssignments && !forceRefresh && assignments.length > 0) {
-        setAssignments(prev => {
-          const updated = [...prev]
-          assignmentsResponse.forEach(newAssignment => {
-            const existingIndex = updated.findIndex(a => a.id === newAssignment.id)
-            if (existingIndex >= 0) {
-              updated[existingIndex] = newAssignment
-            } else {
-              updated.push(newAssignment)
-            }
-          })
-          return updated
-        })
-      } else {
-        setAssignments(assignmentsResponse)
-      }
-
-      if (lastSyncReviewStats && !forceRefresh && reviewStats.length > 0) {
-        setReviewStats(prev => {
-          const updated = [...prev]
-          reviewStatsResponse.forEach(newStat => {
-            const existingIndex = updated.findIndex(s => s.id === newStat.id)
-            if (existingIndex >= 0) {
-              updated[existingIndex] = newStat
-            } else {
-              updated.push(newStat)
-            }
-          })
-          return updated
-        })
-      } else {
-        setReviewStats(reviewStatsResponse)
-      }
-
+      setAssignments(assignmentsResponse)
+      setReviewStats(reviewStatsResponse)
+      setLevelProgressions(levelProgressionsResponse)
       setSubjects(subjectsResponse)
       setLastRefresh(new Date())
-      
-      // Update sync timestamps only if we got data
-      const now = new Date().toISOString()
-      if (assignmentsResponse.length > 0 || !lastSyncAssignments) {
-        wanikaniService.setLastSyncTimestamp('assignments', now)
-      }
-      if (reviewStatsResponse.length > 0 || !lastSyncReviewStats) {
-        wanikaniService.setLastSyncTimestamp('reviewStats', now)
-      }
       
       if (forceRefresh) {
         setRefreshMessage('Data refreshed successfully!')
@@ -173,43 +109,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
     }
   }, [fetchData, isRefreshing, loading, isOnline])
 
-  // Progressive subjects loading
-  const [isLoadingMoreSubjects, setIsLoadingMoreSubjects] = useState(false)
-  
-  const loadMoreSubjects = useCallback(async () => {
-    if (isLoadingMoreSubjects || !userData) return
-    
-    setIsLoadingMoreSubjects(true)
-    try {
-      const currentLevel = userData.level
-      const maxLevel = userData.subscription?.max_level_granted || 3
-      
-      // Load subjects for levels 1 through user's current level + 1 (within subscription limits)
-      const endLevel = Math.min(currentLevel + 1, maxLevel)
-      const levelsToLoad = Array.from({ length: endLevel }, (_, i) => i + 1)
-      
-      const moreSubjects = await wanikaniService.getSubjectsWithSubscriptionFilter(
-        userData,
-        levelsToLoad
-      )
-      
-      setSubjects(moreSubjects)
-      setRefreshMessage(`Loaded subjects for levels 1-${endLevel}`)
-      setTimeout(() => setRefreshMessage(''), 3000)
-      
-    } catch (error) {
-      setError('Failed to load additional subjects: ' + (error instanceof Error ? error.message : 'Unknown error'))
-    } finally {
-      setIsLoadingMoreSubjects(false)
-    }
-  }, [isLoadingMoreSubjects, userData, wanikaniService])
-
   // Clear cache and reload (for debugging)
   const handleClearCache = useCallback(() => {
     wanikaniService.clearUserCache()
     setAssignments([])
     setReviewStats([])
     setSubjects([])
+    setLevelProgressions([])
     setUserData(null)
     fetchData(true)
   }, [wanikaniService, fetchData])
@@ -347,13 +253,16 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       <main className="px-6 py-8 space-y-8">
         <SubscriptionInfo userData={userData} />
         <StatsOverview userData={userData} reviewStats={reviewStats} />
+
+        <LevelProjectionChart
+          userData={userData}
+          levelProgressions={levelProgressions}
+        />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
           <AccuracyChart reviewStats={reviewStats} />
         </div>
-
-        <SubjectGrid subjects={subjects} reviewStats={reviewStats} />
       </main>
     </div>
   )

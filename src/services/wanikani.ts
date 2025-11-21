@@ -5,7 +5,8 @@ import type {
   Assignment, 
   ApiResponse,
   CacheEntry,
-  CacheConfig
+  CacheConfig,
+  LevelProgression
 } from '@/types/wanikani'
 
 export class WaniKaniService {
@@ -20,6 +21,7 @@ export class WaniKaniService {
     reviewStats: 30 * 60 * 1000,      // 30 minutes
     reviews: Infinity,                // Never expire - reviews never change
     summary: 60 * 60 * 1000,          // 1 hour - changes every hour
+    levelProgressions: 60 * 60 * 1000 // 1 hour
   }
 
   constructor(apiToken: string) {
@@ -285,7 +287,8 @@ export class WaniKaniService {
     const params: string[] = []
     
     if (levels && levels.length > 0) {
-      params.push(...levels.map(l => `levels=${l}`))
+      const uniqueLevels = Array.from(new Set(levels)).sort((a, b) => a - b)
+      params.push(`levels=${uniqueLevels.join(',')}`)
     }
     
     if (params.length > 0) {
@@ -311,6 +314,15 @@ export class WaniKaniService {
       '/assignments',
       updatedAfter,
       this.cacheConfig.assignments
+    )
+    return data
+  }
+
+  async getLevelProgressions(updatedAfter?: string): Promise<LevelProgression[]> {
+    const { data } = await this.getAllPages<LevelProgression>(
+      '/level_progressions',
+      updatedAfter,
+      this.cacheConfig.levelProgressions
     )
     return data
   }

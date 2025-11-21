@@ -107,4 +107,5 @@ export interface CacheConfig {
   reviewStats: number  // Review statistics (30 minutes)
   reviews: number      // Reviews (permanent - never change once recorded)
   summary: number      // Summary (1 hour - changes every hour)
+  levelProgressions: number // Level progressions (1 hour)
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import type { UserData, Subject, Assignment } from '@/types/wanikani'
 
 interface LevelProgressProps {
@@ -9,23 +10,42 @@ interface LevelProgressProps {
 }
 
 export default function LevelProgress({ userData, subjects, assignments }: LevelProgressProps) {
-  const currentLevel = userData.level
-  const currentLevelSubjects = subjects.filter(s => s.data.level === currentLevel && !s.data.hidden_at)
+  const [selectedLevel, setSelectedLevel] = useState(userData.level)
+
+  useEffect(() => {
+    setSelectedLevel(userData.level)
+  }, [userData.level])
+
+  const levelOptions = useMemo(
+    () => Array.from({ length: userData.level }, (_, i) => i + 1),
+    [userData.level]
+  )
+
+  const selectedLevelSubjects = useMemo(
+    () => subjects.filter(s => s.data.level === selectedLevel && !s.data.hidden_at),
+    [subjects, selectedLevel]
+  )
   
-  // Get assignments for current level subjects
-  const currentLevelSubjectIds = new Set(currentLevelSubjects.map(s => s.id))
-  const currentLevelAssignments = assignments.filter(a => 
-    currentLevelSubjectIds.has(a.data.subject_id) && !a.data.hidden
+  // Get assignments for the selected level subjects
+  const selectedLevelSubjectIds = useMemo(
+    () => new Set(selectedLevelSubjects.map(s => s.id)),
+    [selectedLevelSubjects]
+  )
+
+  const selectedLevelAssignments = useMemo(
+    () => assignments.filter(a => selectedLevelSubjectIds.has(a.data.subject_id) && !a.data.hidden),
+    [assignments, selectedLevelSubjectIds]
   )
   
   // Create assignment lookup for easy access
-  const assignmentLookup = new Map(
-    currentLevelAssignments.map(a => [a.data.subject_id, a])
+  const assignmentLookup = useMemo(
+    () => new Map(selectedLevelAssignments.map(a => [a.data.subject_id, a])),
+    [selectedLevelAssignments]
   )
   
-  const radicals = currentLevelSubjects.filter(s => s.object === 'radical')
-  const kanji = currentLevelSubjects.filter(s => s.object === 'kanji')
-  const vocabulary = currentLevelSubjects.filter(s => s.object === 'vocabulary' || s.object === 'kana_vocabulary')
+  const radicals = selectedLevelSubjects.filter(s => s.object === 'radical')
+  const kanji = selectedLevelSubjects.filter(s => s.object === 'kanji')
+  const vocabulary = selectedLevelSubjects.filter(s => s.object === 'vocabulary' || s.object === 'kana_vocabulary')
 
   // Calculate completed items (SRS stage 5+ means passed/guru+)
   const getCompletedCount = (subjectList: Subject[]) => {
@@ -63,47 +83,71 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
 
   return (
     <div className="bg-wanikani-darker rounded-xl p-6">
-      <h2 className="text-2xl font-bold text-white mb-6">Level {currentLevel} Progress</h2>
-      
-      <div className="space-y-6">
-        <ProgressBar
-          label="Radicals"
-          current={completedRadicals}
-          total={radicals.length}
-          color="bg-wanikani-radical"
-        />
-        
-        <ProgressBar
-          label="Kanji"
-          current={completedKanji}
-          total={kanji.length}
-          color="bg-wanikani-kanji"
-        />
-        
-        <ProgressBar
-          label="Vocabulary"
-          current={completedVocabulary}
-          total={vocabulary.length}
-          color="bg-wanikani-vocabulary"
-        />
-      </div>
-
-      <div className="mt-6 p-4 bg-gray-800 rounded-lg">
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <div className="text-2xl font-bold text-wanikani-radical">{completedRadicals}/{radicals.length}</div>
-            <div className="text-xs text-gray-400">部首</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-wanikani-kanji">{completedKanji}/{kanji.length}</div>
-            <div className="text-xs text-gray-400">漢字</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-wanikani-vocabulary">{completedVocabulary}/{vocabulary.length}</div>
-            <div className="text-xs text-gray-400">単語</div>
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-white">Level {selectedLevel} Progress</h2>
+          <p className="text-sm text-gray-400 mt-1">Guru+ items count as completed. Switch levels to review past progress.</p>
         </div>
+        <select
+          value={selectedLevel}
+          onChange={(e) => setSelectedLevel(parseInt(e.target.value, 10))}
+          className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {levelOptions.map(level => (
+            <option key={level} value={level}>
+              Level {level} {level === userData.level ? '(current)' : ''}
+            </option>
+          ))}
+        </select>
       </div>
+      
+      {selectedLevelSubjects.length === 0 ? (
+        <div className="text-gray-400 text-sm bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+          No subject data available for this level yet. Try refreshing or check your subscription limits.
+        </div>
+      ) : (
+        <>
+          <div className="space-y-6">
+            <ProgressBar
+              label="Radicals"
+              current={completedRadicals}
+              total={radicals.length}
+              color="bg-wanikani-radical"
+            />
+            
+            <ProgressBar
+              label="Kanji"
+              current={completedKanji}
+              total={kanji.length}
+              color="bg-wanikani-kanji"
+            />
+            
+            <ProgressBar
+              label="Vocabulary"
+              current={completedVocabulary}
+              total={vocabulary.length}
+              color="bg-wanikani-vocabulary"
+            />
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-800 rounded-lg">
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-wanikani-radical">{completedRadicals}/{radicals.length || 0}</div>
+                <div className="text-xs text-gray-400">部首</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-wanikani-kanji">{completedKanji}/{kanji.length || 0}</div>
+                <div className="text-xs text-gray-400">漢字</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-wanikani-vocabulary">{completedVocabulary}/{vocabulary.length || 0}</div>
+                <div className="text-xs text-gray-400">単語</div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
