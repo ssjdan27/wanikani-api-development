@@ -29,7 +29,7 @@ export default function ApiTokenInput({ onTokenSubmit }: ApiTokenInputProps) {
             <Key className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">🦀 WaniKani Dashboard</h1>
-          <p className="text-gray-300">Enter your API token to view your statistics</p>
+          <p className="text-gray-300">Please enter a read-only API token to view your statistics.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,6 +67,7 @@ export default function ApiTokenInput({ onTokenSubmit }: ApiTokenInputProps) {
             >
               WaniKani settings
             </a>
+            {' '}and select the read-only scope.
           </p>
         </div>
       </div>
