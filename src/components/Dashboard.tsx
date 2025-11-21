@@ -60,11 +60,16 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       const userResponse = await wanikaniService.getUser()
       setUserData(userResponse)
 
+      const currentYear = new Date().getFullYear()
+      const accountStartYear = new Date(userResponse.started_at).getFullYear()
+      const reviewStartYear = Math.max(accountStartYear, currentYear - 3) // keep review fetch manageable
+      const reviewStartDate = new Date(reviewStartYear, 0, 1).toISOString()
+
       const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse, reviewsResponse] = await Promise.all([
         wanikaniService.getReviewStatistics(),
         wanikaniService.getAssignments(),
         wanikaniService.getLevelProgressions(),
-        wanikaniService.getReviews()
+        wanikaniService.getReviews(reviewStartDate)
       ])
 
       let subjectsResponse: Subject[] = []

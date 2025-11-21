@@ -105,7 +105,7 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
   if (maxTotal === 0) {
     return (
       <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-gray-300 text-sm">
-        No study activity found for {selectedYear}. Try another year or confirm your token includes the Reviews scope.
+        No study activity found for {selectedYear}. Try another year or confirm your token includes the all data scope (reviews loaded: {reviews.length}).
       </div>
     )
   }
