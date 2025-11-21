@@ -7,6 +7,7 @@ import LevelProgress from './LevelProgress'
 import AccuracyChart from './AccuracyChart'
 import SubscriptionInfo from './SubscriptionInfo'
 import LevelProjectionChart from './LevelProjectionChart'
+import BurnProjectionChart from './BurnProjectionChart'
 import { WaniKaniService } from '@/services/wanikani'
 import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression, Review } from '@/types/wanikani'
 import StudyHeatmap from './StudyHeatmap'
@@ -30,7 +31,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const { activeTab, setActiveTab } = useTabState<'projection' | 'heatmap'>('projection')
+  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap'>('projection')
 
   // Memoize the WaniKani service to prevent unnecessary re-creation
   const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
@@ -269,6 +270,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               onClick={() => setActiveTab('projection')}
             />
             <TabButton
+              label="Burn Projection"
+              isActive={activeTab === 'burn'}
+              onClick={() => setActiveTab('burn')}
+            />
+            <TabButton
               label="Study Heatmap"
               isActive={activeTab === 'heatmap'}
               onClick={() => setActiveTab('heatmap')}
@@ -279,6 +285,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               <LevelProjectionChart
                 userData={userData}
                 levelProgressions={levelProgressions}
+              />
+            ) : activeTab === 'burn' ? (
+              <BurnProjectionChart
+                assignments={assignments}
+                levelProgressions={levelProgressions}
+                userData={userData}
+                subjects={subjects}
               />
             ) : (
               <StudyHeatmap
