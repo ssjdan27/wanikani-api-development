@@ -9,9 +9,14 @@ import SubscriptionInfo from './SubscriptionInfo'
 import LevelProjectionChart from './LevelProjectionChart'
 import BurnProjectionChart from './BurnProjectionChart'
 import { WaniKaniService } from '@/services/wanikani'
-import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression } from '@/types/wanikani'
+import type { UserData, ReviewStatistic, Subject, Assignment, LevelProgression, SpacedRepetitionSystem, Summary } from '@/types/wanikani'
 import StudyHeatmap from './StudyHeatmap'
 import { useTabState, TabButton } from './Tabs'
+import LevelPacingCoach from './LevelPacingCoach'
+import BurnRadar from './BurnRadar'
+import LeechDetector from './LeechDetector'
+import LessonBatchingHelper from './LessonBatchingHelper'
+import SrsStageHistogram from './SrsStageHistogram'
 
 interface DashboardProps {
   apiToken: string
@@ -24,6 +29,8 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [levelProgressions, setLevelProgressions] = useState<LevelProgression[]>([])
+  const [srsSystems, setSrsSystems] = useState<SpacedRepetitionSystem[]>([])
+  const [summary, setSummary] = useState<Summary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [refreshMessage, setRefreshMessage] = useState('')
@@ -59,10 +66,12 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       const userResponse = await wanikaniService.getUser()
       setUserData(userResponse)
 
-      const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse] = await Promise.all([
+      const [reviewStatsResponse, assignmentsResponse, levelProgressionsResponse, srsResponse, summaryResponse] = await Promise.all([
         wanikaniService.getReviewStatistics(),
         wanikaniService.getAssignments(),
-        wanikaniService.getLevelProgressions()
+        wanikaniService.getLevelProgressions(),
+        wanikaniService.getSpacedRepetitionSystems(),
+        wanikaniService.getSummary()
       ])
 
       let subjectsResponse: Subject[] = []
@@ -85,6 +94,8 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       setAssignments(assignmentsResponse)
       setReviewStats(reviewStatsResponse)
       setLevelProgressions(levelProgressionsResponse)
+      setSrsSystems(srsResponse)
+      setSummary(summaryResponse)
       setSubjects(subjectsResponse)
       setLastRefresh(new Date())
       
@@ -120,6 +131,8 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
     setReviewStats([])
     setSubjects([])
     setLevelProgressions([])
+    setSrsSystems([])
+    setSummary(null)
     setUserData(null)
     fetchData(true)
   }, [wanikaniService, fetchData])
@@ -258,6 +271,17 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         <SubscriptionInfo userData={userData} />
         <StatsOverview userData={userData} reviewStats={reviewStats} />
 
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <LevelPacingCoach
+            assignments={assignments}
+            subjects={subjects}
+            levelProgressions={levelProgressions}
+            srsSystems={srsSystems}
+            userData={userData}
+          />
+          <LessonBatchingHelper summary={summary} />
+        </div>
+
         <div className="bg-wanikani-darker rounded-xl p-1">
           <div className="flex gap-2 px-4 pt-3">
             <TabButton
@@ -298,6 +322,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           </div>
         </div>
         
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <BurnRadar assignments={assignments} subjects={subjects} srsSystems={srsSystems} />
+          <LeechDetector reviewStats={reviewStats} subjects={subjects} />
+        </div>
+
+        <SrsStageHistogram assignments={assignments} subjects={subjects} />
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
           <AccuracyChart reviewStats={reviewStats} />

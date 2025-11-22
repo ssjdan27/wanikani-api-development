@@ -7,7 +7,9 @@ import type {
   CacheEntry,
   CacheConfig,
   LevelProgression,
-  Review
+  Review,
+  SpacedRepetitionSystem,
+  Summary
 } from '@/types/wanikani'
 
 export class WaniKaniService {
@@ -22,7 +24,8 @@ export class WaniKaniService {
     reviewStats: 30 * 60 * 1000,      // 30 minutes
     reviews: Infinity,                // Never expire - reviews never change
     summary: 60 * 60 * 1000,          // 1 hour - changes every hour
-    levelProgressions: 60 * 60 * 1000 // 1 hour
+    levelProgressions: 60 * 60 * 1000, // 1 hour
+    spacedRepetitionSystems: 12 * 60 * 60 * 1000 // 12 hours
   }
 
   constructor(apiToken: string) {
@@ -67,6 +70,9 @@ export class WaniKaniService {
           data: {
             level: item.data.level,
             characters: item.data.characters,
+            slug: item.data.slug,
+            document_url: item.data.document_url,
+            spaced_repetition_system_id: item.data.spaced_repetition_system_id,
             meanings: item.data.meanings?.slice(0, 3), // Keep only first 3 meanings
             readings: item.data.readings?.slice(0, 2), // Keep only first 2 readings
             hidden_at: item.data.hidden_at
@@ -335,6 +341,24 @@ export class WaniKaniService {
       this.cacheConfig.levelProgressions
     )
     return data
+  }
+
+  async getSpacedRepetitionSystems(updatedAfter?: string): Promise<SpacedRepetitionSystem[]> {
+    const { data } = await this.getAllPages<SpacedRepetitionSystem>(
+      '/spaced_repetition_systems',
+      updatedAfter,
+      this.cacheConfig.spacedRepetitionSystems
+    )
+    return data
+  }
+
+  async getSummary(): Promise<Summary> {
+    const { data: response } = await this.makeRequest<Summary>(
+      '/summary',
+      true,
+      this.cacheConfig.summary
+    )
+    return response
   }
 
   async getSubject(id: number): Promise<Subject> {

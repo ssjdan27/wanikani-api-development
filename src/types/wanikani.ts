@@ -35,6 +35,9 @@ export interface Subject {
   object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary'
   data: {
     level: number
+    slug?: string
+    document_url?: string
+    spaced_repetition_system_id?: number
     characters?: string
     meanings: Array<{
       meaning: string
@@ -63,6 +66,41 @@ export interface Assignment {
     available_at?: string
     resurrected_at?: string
     hidden: boolean
+  }
+}
+
+export interface SpacedRepetitionSystem {
+  id: number
+  object: 'spaced_repetition_system'
+  data: {
+    name: string
+    description?: string
+    unlocking_stage_position: number
+    starting_stage_position: number
+    passing_stage_position: number
+    burning_stage_position: number
+    stages: Array<{
+      interval: number | null
+      position: number
+      interval_unit: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | null
+    }>
+  }
+}
+
+export interface Summary {
+  object: 'report'
+  url: string
+  data_updated_at: string
+  data: {
+    lessons: Array<{
+      available_at: string
+      subject_ids: number[]
+    }>
+    next_reviews_at: string | null
+    reviews: Array<{
+      available_at: string
+      subject_ids: number[]
+    }>
   }
 }
 
@@ -123,4 +161,5 @@ export interface CacheConfig {
   reviews: number      // Reviews (permanent - never change once recorded)
   summary: number      // Summary (1 hour - changes every hour)
   levelProgressions: number // Level progressions (1 hour)
+  spacedRepetitionSystems: number // SRS definitions (12 hours)
 }
