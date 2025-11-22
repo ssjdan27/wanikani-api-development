@@ -1,11 +1,10 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import type { Assignment, Review, UserData } from '@/types/wanikani'
+import type { Assignment, UserData } from '@/types/wanikani'
 
 interface StudyHeatmapProps {
   assignments: Assignment[]
-  reviews: Review[]
   userData: UserData
 }
 
@@ -31,7 +30,7 @@ function getColor(total: number, maxTotal: number): string {
   return 'bg-blue-300'
 }
 
-export default function StudyHeatmap({ assignments, reviews, userData }: StudyHeatmapProps) {
+export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProps) {
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
 
   // Ensure the selected year is within the user's activity window
@@ -45,13 +44,11 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
   const {
     days,
     maxLessons,
-    maxReviews,
     maxTotal,
     years,
-    totalReviews
+    totalLessons
   } = useMemo(() => {
     const lessonsByDay = new Map<DayKey, number>()
-    const reviewsByDay = new Map<DayKey, number>()
     let earliestDate = new Date(userData.started_at).getTime()
 
     assignments.forEach(a => {
@@ -61,15 +58,7 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
       earliestDate = Math.min(earliestDate, new Date(a.data.started_at).getTime())
     })
 
-    let totalReviews = 0
-    reviews.forEach(r => {
-      const createdAt = r.data.created_at || r.data_updated_at
-      if (!createdAt) return
-      const key = toDayKey(createdAt)
-      reviewsByDay.set(key, (reviewsByDay.get(key) || 0) + 1)
-      totalReviews += 1
-      earliestDate = Math.min(earliestDate, new Date(createdAt).getTime())
-    })
+    const totalLessons = Array.from(lessonsByDay.values()).reduce((sum, count) => sum + count, 0)
 
     const currentYear = new Date().getFullYear()
     const earliestYear = Number.isFinite(earliestDate) ? new Date(earliestDate).getFullYear() : currentYear
@@ -85,27 +74,25 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
     const isCurrentYear = selectedYear === today.getFullYear()
     const end = isCurrentYear ? new Date(today.getFullYear(), today.getMonth(), today.getDate()) : new Date(selectedYear, 11, 31)
 
-    const days: Array<{ date: Date; lessons: number; reviews: number }> = []
+    const days: Array<{ date: Date; lessons: number }> = []
     for (let d = start; d <= end; d = new Date(d.getTime() + 86400000)) {
       const key = toDayKey(d)
       days.push({
         date: new Date(d),
-        lessons: lessonsByDay.get(key) || 0,
-        reviews: reviewsByDay.get(key) || 0,
+        lessons: lessonsByDay.get(key) || 0
       })
     }
 
     const maxLessons = Math.max(...days.map(d => d.lessons), 0)
-    const maxReviews = Math.max(...days.map(d => d.reviews), 0)
-    const maxTotal = Math.max(...days.map(d => d.lessons + d.reviews), 0)
+    const maxTotal = maxLessons
 
-    return { days, maxLessons, maxReviews, maxTotal, years, totalReviews }
-  }, [assignments, reviews, selectedYear, userData.started_at])
+    return { days, maxLessons, maxTotal, years, totalLessons }
+  }, [assignments, selectedYear, userData.started_at])
 
   if (maxTotal === 0) {
     return (
       <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-gray-300 text-sm">
-        No study activity found for {selectedYear}. Try another year or confirm your token includes the all data scope (reviews loaded: {reviews.length}).
+        No study activity found for {selectedYear}. Try another year or confirm your token includes lesson data.
       </div>
     )
   }
@@ -122,7 +109,7 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Study Heatmap</h2>
-          <p className="text-sm text-gray-400">Hover to see daily lessons and reviews completed. Loaded {totalReviews.toLocaleString()} reviews.</p>
+          <p className="text-sm text-gray-400">Hover to see daily lessons started. Loaded {totalLessons.toLocaleString()} lessons.</p>
         </div>
         <div className="flex items-center gap-3">
           <label className="text-sm text-gray-400">Year</label>
@@ -160,8 +147,8 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
             return <div key={`empty-${idx}`} className="w-4 h-4 rounded bg-transparent" aria-hidden />
           }
 
-          const total = day.lessons + day.reviews
-          const label = `${day.date.toLocaleDateString()}\nLessons: ${day.lessons}\nReviews: ${day.reviews}`
+          const total = day.lessons
+          const label = `${day.date.toLocaleDateString()}\nLessons: ${day.lessons}`
           return (
             <div
               key={day.date.toISOString()}
@@ -178,8 +165,8 @@ export default function StudyHeatmap({ assignments, reviews, userData }: StudyHe
           <div className="text-white font-semibold">{maxLessons}</div>
         </div>
         <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-gray-400 mb-1">Max reviews in a day</div>
-          <div className="text-white font-semibold">{maxReviews}</div>
+          <div className="text-gray-400 mb-1">Total lessons loaded</div>
+          <div className="text-white font-semibold">{totalLessons.toLocaleString()}</div>
         </div>
       </div>
     </div>
