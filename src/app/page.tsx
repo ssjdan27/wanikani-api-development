@@ -53,12 +53,12 @@ export default function Home() {
   // Show loading state while checking for saved token
   if (isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen bg-wanikani-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-wanikani-kanji to-wanikani-vocabulary flex items-center justify-center mx-auto mb-4 shadow-kanji animate-pulse">
+          <div className="w-12 h-12 rounded-full bg-wanikani-pink flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-2xl">🦀</span>
           </div>
-          <p className="text-gray-300 japanese-text">読み込み中...</p>
+          <p className="text-wanikani-text-light">Loading...</p>
         </div>
       </main>
     )

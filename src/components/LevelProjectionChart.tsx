@@ -138,7 +138,7 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#9ca3af' },
+        labels: { color: '#333333' },
       },
       tooltip: {
         callbacks: {
@@ -152,13 +152,13 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#6b7280', stepSize: 5 },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666', stepSize: 5 },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         suggestedMin: 1,
         suggestedMax: 60,
       },
@@ -169,19 +169,18 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">Level Up Projection</span>
-            <span className="text-lg opacity-50 japanese-text">予測</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            Level Up Projection
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-wanikani-text-light">
             Based on your recent pace (last {sampleSize > 0 ? sampleSize : 5} levels)
           </p>
         </div>
         <div className="text-right">
-          <div className="text-sm text-gray-400">Average pace</div>
-          <div className="text-lg font-bold text-wanikani-radical">{averageDaysPerLevel.toFixed(1)} days/level</div>
+          <div className="text-sm text-wanikani-text-light">Average pace</div>
+          <div className="text-lg font-bold text-wanikani-cyan">{averageDaysPerLevel.toFixed(1)} days/level</div>
           {level60Eta && (
-            <div className="text-xs text-wanikani-gold mt-1">
+            <div className="text-xs text-wanikani-pink mt-1 font-medium">
               Level 60 ETA: {new Date(level60Eta).toLocaleDateString()}
             </div>
           )}
@@ -193,21 +192,21 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       </div>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-radical/10 hover:border-wanikani-radical/30 transition-all">
-          <div className="text-gray-500 text-xs mb-1">Latest completed level</div>
-          <div className="text-white font-bold">
-            {latestDurationDays ? `${latestDurationDays.toFixed(1)} days` : 'まだ...'}
+        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+          <div className="text-wanikani-text-light text-xs mb-1">Latest completed level</div>
+          <div className="text-wanikani-text font-bold">
+            {latestDurationDays ? `${latestDurationDays.toFixed(1)} days` : 'N/A'}
           </div>
         </div>
-        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
-          <div className="text-gray-500 text-xs mb-1">Projection start</div>
-          <div className="text-white font-bold">
+        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+          <div className="text-wanikani-text-light text-xs mb-1">Projection start</div>
+          <div className="text-wanikani-text font-bold">
             Level {projectionStartLevel}
           </div>
         </div>
-        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-vocabulary/10 hover:border-wanikani-vocabulary/30 transition-all">
-          <div className="text-gray-500 text-xs mb-1">Total to go</div>
-          <div className="text-white font-bold">
+        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+          <div className="text-wanikani-text-light text-xs mb-1">Total to go</div>
+          <div className="text-wanikani-text font-bold">
             {levelsRemaining} {levelsRemaining === 1 ? 'level' : 'levels'}
           </div>
         </div>

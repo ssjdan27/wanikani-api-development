@@ -43,44 +43,42 @@ export default function LessonBatchingHelper({ summary }: LessonBatchingHelperPr
   }, [summary])
 
   return (
-    <div className="wk-card rounded-2xl p-6 space-y-4 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical to-wanikani-vocabulary"></div>
+    <div className="wk-card rounded-lg p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">Lesson Batching Helper</span>
-            <span className="text-lg opacity-50 japanese-text">レッスン</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            Lesson Batching Helper
           </h2>
-          <p className="text-sm text-gray-500">Match your lesson pace to upcoming reviews</p>
+          <p className="text-sm text-wanikani-text-light">Match your lesson pace to upcoming reviews</p>
         </div>
-        <div className="bg-gradient-to-br from-wanikani-kanji/20 to-wanikani-vocabulary/20 rounded-xl p-3 border border-wanikani-kanji/30">
-          <div className="text-gray-400 text-xs">Recommended today</div>
-          <div className="text-wanikani-sakura font-bold text-xl">{recommendedLessons} レッスン</div>
+        <div className="wk-card-pink rounded-lg p-3">
+          <div className="text-white/80 text-xs">Recommended today</div>
+          <div className="text-white font-bold text-xl">{recommendedLessons} lessons</div>
         </div>
       </div>
 
       {!summary ? (
-        <div className="text-gray-400 text-sm bg-wanikani-darker/30 rounded-xl p-3">Summary data not loaded yet.</div>
+        <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">Summary data not loaded yet.</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-radical/10 hover:border-wanikani-radical/30 transition-all">
-            <div className="text-gray-500 text-xs">Lessons available</div>
+          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+            <div className="text-wanikani-text-light text-xs">Lessons available</div>
             <div className="text-wanikani-radical font-bold text-lg">{lessonsAvailable}</div>
           </div>
-          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
-            <div className="text-gray-500 text-xs">Next reviews</div>
-            <div className="text-white font-bold text-lg">
-              {nextReviewsAt ? new Date(nextReviewsAt).toLocaleTimeString() : 'なし'}
+          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+            <div className="text-wanikani-text-light text-xs">Next reviews</div>
+            <div className="text-wanikani-text font-bold text-lg">
+              {nextReviewsAt ? new Date(nextReviewsAt).toLocaleTimeString() : 'None'}
             </div>
           </div>
-          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-vocabulary/10 hover:border-wanikani-vocabulary/30 transition-all">
-            <div className="text-gray-500 text-xs">Reviews in 24h</div>
+          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+            <div className="text-wanikani-text-light text-xs">Reviews in 24h</div>
             <div className="text-wanikani-vocabulary font-bold text-lg">{reviewsNext24h}</div>
           </div>
-          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-gold/10 hover:border-wanikani-gold/30 transition-all">
-            <div className="text-gray-500 text-xs">Peak hour</div>
-            <div className="text-wanikani-gold font-bold text-lg">
-              {peakHour ? `${new Date(peakHour.hour).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '平均'}
+          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
+            <div className="text-wanikani-text-light text-xs">Peak hour</div>
+            <div className="text-wanikani-text font-bold text-lg">
+              {peakHour ? `${new Date(peakHour.hour).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Average'}
             </div>
           </div>
         </div>

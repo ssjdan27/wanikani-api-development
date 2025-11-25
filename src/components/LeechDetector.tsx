@@ -38,30 +38,28 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
   }, [reviewStats, subjects])
 
   return (
-    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-apprentice to-wanikani-kanji"></div>
+    <div className="wk-card rounded-lg p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">Leech Detector</span>
-            <span className="text-lg opacity-50 japanese-text">🦉</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            Leech Detector 🦉
           </h2>
-          <p className="text-sm text-gray-500">Items with low accuracy - drill these first</p>
+          <p className="text-sm text-wanikani-text-light">Items with low accuracy - drill these first</p>
         </div>
-        <div className="text-sm text-gray-400">Top {leeches.length} leeches</div>
+        <div className="text-sm text-wanikani-text-light">Top {leeches.length} leeches</div>
       </div>
 
       {leeches.length === 0 ? (
-        <div className="text-green-400 text-sm bg-green-500/10 border border-green-500/20 rounded-xl p-3 flex items-center gap-2">
-          <span>✨</span>
-          No leeches detected yet. すごい！ Keep it up!
+        <div className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+          <span>✓</span>
+          No leeches detected yet. Great job! Keep it up!
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-left border-b border-wanikani-kanji/10">
-                <th className="pb-2">アイテム</th>
+              <tr className="text-wanikani-text-light text-left border-b border-wanikani-border">
+                <th className="pb-2">Item</th>
                 <th className="pb-2">Accuracy</th>
                 <th className="pb-2">Incorrect</th>
                 <th className="pb-2">Link</th>
@@ -69,19 +67,19 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
             </thead>
             <tbody>
               {leeches.map(leech => (
-                <tr key={leech.subjectId} className="border-t border-wanikani-kanji/10 hover:bg-wanikani-darker/30 transition-colors">
-                  <td className="py-2 text-white font-semibold wk-kanji">{leech.label}</td>
+                <tr key={leech.subjectId} className="border-t border-wanikani-border hover:bg-gray-50 transition-colors">
+                  <td className="py-2 text-wanikani-text font-semibold">{leech.label}</td>
                   <td className="py-2">
-                    <span className={leech.percentage < 50 ? 'text-wanikani-kanji' : leech.percentage < 70 ? 'text-wanikani-gold' : 'text-gray-300'}>
+                    <span className={leech.percentage < 50 ? 'text-red-500' : leech.percentage < 70 ? 'text-yellow-600' : 'text-wanikani-text'}>
                       {leech.percentage.toFixed(0)}%
                     </span>
                   </td>
-                  <td className="py-2 text-wanikani-apprentice">{leech.incorrect}</td>
+                  <td className="py-2 text-red-500">{leech.incorrect}</td>
                   <td className="py-2">
                     {leech.link ? (
-                      <a href={leech.link} target="_blank" rel="noreferrer" className="text-wanikani-radical hover:text-wanikani-kanji transition-colors">見る</a>
+                      <a href={leech.link} target="_blank" rel="noreferrer" className="text-wanikani-cyan hover:text-wanikani-pink transition-colors">View</a>
                     ) : (
-                      <span className="text-gray-600">N/A</span>
+                      <span className="text-gray-400">N/A</span>
                     )}
                   </td>
                 </tr>

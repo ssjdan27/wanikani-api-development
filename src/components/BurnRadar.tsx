@@ -112,8 +112,8 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
       {
         label: 'Burns per week',
         data: weeklyCounts,
-        backgroundColor: 'rgba(67, 67, 67, 0.8)',
-        borderColor: '#666666',
+        backgroundColor: 'rgba(67, 67, 67, 0.7)',
+        borderColor: '#434343',
         borderWidth: 1,
       }
     ]
@@ -122,35 +122,33 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
   const options = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#9ca3af' } },
+      legend: { labels: { color: '#333333' } },
       tooltip: { enabled: true }
     },
     scales: {
       x: {
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' }
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' }
       },
       y: {
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         beginAtZero: true
       }
     }
   }
 
   return (
-    <div className="wk-card rounded-2xl p-6 space-y-4 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-burned via-gray-500 to-wanikani-burned"></div>
+    <div className="wk-card rounded-lg p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">Burn Radar</span>
-            <span className="text-lg opacity-50 japanese-text">🔥</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            Burn Radar 🔥
           </h2>
-          <p className="text-sm text-gray-500">Upcoming burns and burn velocity</p>
+          <p className="text-sm text-wanikani-text-light">Upcoming burns and burn velocity</p>
         </div>
-        <div className="bg-wanikani-burned/20 rounded-xl p-3 border border-wanikani-burned/30">
-          <div className="text-gray-400 text-xs">Total burned</div>
+        <div className="bg-gray-700 rounded-lg p-3">
+          <div className="text-gray-300 text-xs">Total burned</div>
           <div className="text-white font-bold text-lg">{totalBurned.toLocaleString()} 🔥</div>
         </div>
       </div>
@@ -160,15 +158,15 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
       </div>
 
       <div>
-        <div className="text-sm text-gray-400 mb-2">Next burns (fastest to slowest)</div>
+        <div className="text-sm text-wanikani-text-light mb-2">Next burns (fastest to slowest)</div>
         {upcoming.length === 0 ? (
-          <div className="text-gray-400 text-sm bg-wanikani-darker/30 rounded-xl p-3">No items approaching burn yet. Keep studying! 頑張って！</div>
+          <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">No items approaching burn yet. Keep studying!</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {upcoming.map(item => (
-              <div key={item.subjectId} className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-burned/20 hover:border-wanikani-burned/50 transition-all group">
-                <div className="text-2xl font-bold text-white wk-kanji group-hover:scale-110 transition-transform inline-block">{item.label}</div>
-                <div className="text-sm text-wanikani-gold">
+              <div key={item.subjectId} className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:border-gray-400 transition-colors">
+                <div className="text-2xl font-bold text-wanikani-text">{item.label}</div>
+                <div className="text-sm text-wanikani-cyan font-medium">
                   {item.etaMs < 3600000 ? `${(item.etaMs / (1000 * 60)).toFixed(0)}m` : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
                 </div>
               </div>

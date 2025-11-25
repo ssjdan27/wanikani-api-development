@@ -88,7 +88,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: '#ffffff',
+          color: '#333333',
           padding: 20,
         },
       },
@@ -103,11 +103,9 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
   }
 
   return (
-    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        <span className="wk-gradient-text">Accuracy by Type</span>
-        <span className="text-lg opacity-50 japanese-text">正確率</span>
+    <div className="wk-card rounded-lg p-6">
+      <h2 className="text-xl font-bold mb-5 text-wanikani-text">
+        Accuracy by Type
       </h2>
       
       <div className="h-64 flex items-center justify-center">
@@ -115,23 +113,23 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
-          <div className="text-2xl font-bold text-wanikani-radical group-hover:scale-110 transition-transform">
+        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div className="text-2xl font-bold text-wanikani-radical">
             {radicalAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400 japanese-text">部首</div>
+          <div className="text-sm text-wanikani-text-light">Radicals</div>
         </div>
-        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
-          <div className="text-2xl font-bold text-wanikani-kanji group-hover:scale-110 transition-transform">
+        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div className="text-2xl font-bold text-wanikani-kanji">
             {kanjiAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400 japanese-text">漢字</div>
+          <div className="text-sm text-wanikani-text-light">Kanji</div>
         </div>
-        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
-          <div className="text-2xl font-bold text-wanikani-vocabulary group-hover:scale-110 transition-transform">
+        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div className="text-2xl font-bold text-wanikani-vocabulary">
             {combinedVocabularyAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400 japanese-text">単語</div>
+          <div className="text-sm text-wanikani-text-light">Vocabulary</div>
         </div>
       </div>
     </div>

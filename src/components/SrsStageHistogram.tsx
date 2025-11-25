@@ -77,39 +77,37 @@ export default function SrsStageHistogram({ assignments, subjects }: SrsStageHis
   const options = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#9ca3af' } },
+      legend: { labels: { color: '#333333' } },
       tooltip: { enabled: true }
     },
     scales: {
       x: {
         stacked: true,
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' }
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' }
       },
       y: {
         stacked: true,
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         beginAtZero: true
       }
     }
   }
 
   return (
-    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-apprentice via-wanikani-guru via-wanikani-master via-wanikani-enlightened to-wanikani-burned"></div>
+    <div className="wk-card rounded-lg p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">SRS Stage Histogram</span>
-            <span className="text-lg opacity-50 japanese-text">分布</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            SRS Stage Histogram
           </h2>
-          <p className="text-sm text-gray-500">Distribution across SRS stages</p>
+          <p className="text-sm text-wanikani-text-light">Distribution across SRS stages</p>
         </div>
         <div className="flex gap-2 text-xs">
-          <span className="px-2 py-1 rounded-full bg-wanikani-radical/20 text-wanikani-radical">部首</span>
-          <span className="px-2 py-1 rounded-full bg-wanikani-kanji/20 text-wanikani-kanji">漢字</span>
-          <span className="px-2 py-1 rounded-full bg-wanikani-vocabulary/20 text-wanikani-vocabulary">単語</span>
+          <span className="px-2 py-1 rounded-full bg-blue-100 text-wanikani-radical">Radicals</span>
+          <span className="px-2 py-1 rounded-full bg-pink-100 text-wanikani-kanji">Kanji</span>
+          <span className="px-2 py-1 rounded-full bg-purple-100 text-wanikani-vocabulary">Vocab</span>
         </div>
       </div>
       <div className="h-64">

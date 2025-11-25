@@ -210,7 +210,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#9ca3af' },
+        labels: { color: '#333333' },
       },
       tooltip: {
         callbacks: {
@@ -224,13 +224,13 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#6b7280' },
-        grid: { color: 'rgba(255,0,170,0.05)' },
+        ticks: { color: '#666666' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
         suggestedMin: 0,
     suggestedMax: Math.max(totalBurnable, burnedCount + 10),
   },
@@ -243,27 +243,26 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <span className="wk-gradient-text">Burn Projection</span>
-            <span className="text-lg opacity-50">🔥</span>
+          <h2 className="text-xl font-bold text-wanikani-text">
+            Burn Projection 🔥
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-wanikani-text-light">
             Based on level pace ({averageDaysPerLevel.toFixed(1)} days/level)
           </p>
         </div>
         <div className="text-right text-sm space-y-1">
-          <div className="text-gray-400">Total burnable: <span className="text-white font-bold">{totalBurnable.toLocaleString()}</span></div>
-          <div className="text-gray-400">Burned so far: <span className="text-wanikani-burned font-bold">{burnedCount.toLocaleString()}</span></div>
-          <div className="text-gray-400">Burn rate: <span className="text-wanikani-gold font-bold">{impliedBurnRatePerDay.toFixed(2)}/day</span></div>
+          <div className="text-wanikani-text-light">Total burnable: <span className="text-wanikani-text font-bold">{totalBurnable.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light">Burned so far: <span className="text-gray-600 font-bold">{burnedCount.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light">Burn rate: <span className="text-wanikani-pink font-bold">{impliedBurnRatePerDay.toFixed(2)}/day</span></div>
           {etaDate && (
-            <div className="text-xs text-wanikani-sakura">ETA: {etaDate.toLocaleDateString()}</div>
+            <div className="text-xs text-wanikani-cyan font-medium">ETA: {etaDate.toLocaleDateString()}</div>
           )}
         </div>
       </div>
 
       {notEnoughData ? (
-        <div className="bg-wanikani-darker/50 rounded-xl p-4 border border-wanikani-kanji/10 text-gray-400 text-sm">
-          Not enough burn data yet. もっと続けて！ Complete more reviews to burn items.
+        <div className="bg-gray-50 rounded-lg p-4 border border-wanikani-border text-wanikani-text-light text-sm">
+          Not enough burn data yet. Complete more reviews to burn items.
         </div>
       ) : (
         <div className="h-72">
