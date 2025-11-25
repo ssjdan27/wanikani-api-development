@@ -78,12 +78,18 @@ export default function StatsOverview({ userData, reviewStats }: StatsOverviewPr
   ]
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
-      <h2 className="text-2xl font-bold text-white mb-6">Statistics Overview</h2>
+    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
+      {/* Decorative gradient accent */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
+      
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+        <span className="wk-gradient-text">Statistics Overview</span>
+        <span className="text-lg opacity-50 japanese-text">統計</span>
+      </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
         {stats.map((stat, index) => (
-          <div key={index} className="text-center">
-            <div className={`text-2xl font-bold ${stat.color} mb-1`}>
+          <div key={index} className="text-center p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all duration-300 group">
+            <div className={`text-2xl font-bold ${stat.color} mb-1 group-hover:scale-110 transition-transform`}>
               {stat.value}
             </div>
             <div className="text-sm text-gray-400">

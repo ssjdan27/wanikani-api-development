@@ -163,10 +163,21 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
-          <p className="text-xl text-gray-300">Loading your WaniKani data...</p>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        {/* Floating kanji background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <span className="absolute top-[20%] left-[20%] text-8xl opacity-5 wk-kanji animate-float">読</span>
+          <span className="absolute top-[40%] right-[25%] text-6xl opacity-5 wk-kanji animate-float" style={{ animationDelay: '0.5s' }}>書</span>
+          <span className="absolute bottom-[30%] left-[15%] text-7xl opacity-5 wk-kanji animate-float" style={{ animationDelay: '1s' }}>聞</span>
+        </div>
+        <div className="text-center z-10">
+          <div className="relative">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-wanikani-kanji to-wanikani-vocabulary flex items-center justify-center mx-auto mb-4 shadow-kanji animate-pulse">
+              <span className="text-3xl">🦀</span>
+            </div>
+          </div>
+          <p className="text-xl text-gray-300 japanese-text">データを読み込み中...</p>
+          <p className="text-sm text-gray-500 mt-2">Loading your WaniKani data</p>
         </div>
       </div>
     )
@@ -174,12 +185,14 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-red-900/20 border border-red-500 rounded-lg p-6 max-w-md text-center">
-          <p className="text-red-400 mb-4">{error}</p>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="wk-card border-wanikani-kanji/30 rounded-2xl p-6 max-w-md text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-kanji to-wanikani-vocabulary"></div>
+          <div className="text-4xl mb-4">😿</div>
+          <p className="text-wanikani-kanji mb-4 japanese-text">{error}</p>
           <button
             onClick={() => onTokenChange('')}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+            className="bg-gradient-to-r from-wanikani-kanji to-wanikani-vocabulary hover:opacity-90 text-white px-6 py-2 rounded-xl transition-all wk-btn"
           >
             Update Token
           </button>
@@ -191,49 +204,56 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   if (!userData) return null
 
   return (
-    <div className="min-h-screen bg-wanikani-dark">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-wanikani-darker border-b border-gray-700 px-6 py-4">
+      <header className="wk-card border-b border-wanikani-kanji/10 px-6 py-4 sticky top-0 z-50">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-white">🦀 WaniKani Dashboard</h1>
-            <div className="flex items-center space-x-2 text-sm text-gray-300">
-              <span>Level {userData.level}</span>
-              <span>•</span>
-              <span>{userData.username}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-wanikani-kanji to-wanikani-vocabulary flex items-center justify-center shadow-kanji">
+                <span className="text-xl">🦀</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold wk-gradient-text">WaniKani Dashboard</h1>
+                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                  <span className="px-2 py-0.5 rounded-full bg-wanikani-kanji/20 text-wanikani-kanji text-xs font-semibold">Lv. {userData.level}</span>
+                  <span className="japanese-text">{userData.username}</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-1 text-sm">
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 text-sm">
               {isOnline ? (
-                <Wifi className="w-4 h-4 text-green-500" />
+                <Wifi className="w-4 h-4 text-green-400" />
               ) : (
-                <WifiOff className="w-4 h-4 text-red-500" />
+                <WifiOff className="w-4 h-4 text-wanikani-kanji" />
               )}
-              <span className={isOnline ? 'text-green-400' : 'text-red-400'}>
+              <span className={isOnline ? 'text-green-400' : 'text-wanikani-kanji'}>
                 {isOnline ? 'Online' : 'Offline'}
               </span>
               {lastRefresh && (
                 <>
-                  <span className="text-gray-500">•</span>
-                  <span className="text-gray-400">Updated: {lastRefresh.toLocaleTimeString()}</span>
+                  <span className="text-gray-600">•</span>
+                  <span className="text-gray-500 text-xs">{lastRefresh.toLocaleTimeString()}</span>
                 </>
               )}
             </div>
             <button
               onClick={handleRefresh}
               disabled={isRefreshing || loading || !isOnline}
-              className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white rounded-lg transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-wanikani-radical to-wanikani-radical/80 hover:opacity-90 disabled:opacity-50 text-white rounded-xl transition-all wk-btn shadow-radical"
               title="Refresh data"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing || loading ? 'animate-spin' : ''}`} />
-              <span className="hidden sm:inline">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+              <span className="hidden sm:inline">{isRefreshing ? '更新中...' : 'Refresh'}</span>
             </button>
             {process.env.NODE_ENV === 'development' && (
               <>
                 <button
                   onClick={handleClearCache}
-                  className="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors text-sm"
+                  className="px-3 py-2 bg-wanikani-gold/80 hover:bg-wanikani-gold text-wanikani-darker rounded-xl transition-all text-sm font-medium"
                   title="Clear cache and reload"
                 >
                   Clear Cache
@@ -241,16 +261,16 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
                 <button
                   onClick={loadAllSubjects}
                   disabled={!userData}
-                  className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 text-white rounded-lg transition-colors text-sm"
+                  className="px-3 py-2 bg-wanikani-vocabulary/80 hover:bg-wanikani-vocabulary disabled:opacity-50 text-white rounded-xl transition-all text-sm"
                   title="Load all subjects progressively"
                 >
-                  Load All Subjects
+                  Load All
                 </button>
               </>
             )}
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-wanikani-darker border border-wanikani-kanji/30 hover:bg-wanikani-kanji/10 hover:border-wanikani-kanji/50 text-gray-300 hover:text-white rounded-xl transition-all"
             >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
@@ -261,8 +281,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
       {/* Refresh Message Notification */}
       {refreshMessage && (
-        <div className="bg-green-900/20 border border-green-500 rounded-lg p-3 mx-6 mt-4">
-          <p className="text-green-400 text-sm">{refreshMessage}</p>
+        <div className="wk-card border-green-500/30 rounded-xl p-3 mx-6 mt-4">
+          <p className="text-green-400 text-sm flex items-center gap-2">
+            <span>✨</span>
+            {refreshMessage}
+          </p>
         </div>
       )}
 
@@ -282,8 +305,9 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <LessonBatchingHelper summary={summary} />
         </div>
 
-        <div className="bg-wanikani-darker rounded-xl p-1">
-          <div className="flex gap-2 px-4 pt-3">
+        <div className="wk-card rounded-2xl p-1 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
+          <div className="flex gap-2 px-4 pt-4">
             <TabButton
               label="Level Projection"
               isActive={activeTab === 'projection'}
@@ -333,6 +357,12 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
           <AccuracyChart reviewStats={reviewStats} />
         </div>
+
+        {/* Footer */}
+        <footer className="text-center py-8 border-t border-wanikani-kanji/10">
+          <p className="text-gray-500 text-sm japanese-text">頑張って！ Keep going! 🦀</p>
+          <p className="text-gray-600 text-xs mt-2">Made with 💜 for Japanese learners</p>
+        </footer>
       </main>
     </div>
   )

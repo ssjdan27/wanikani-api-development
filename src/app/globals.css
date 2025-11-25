@@ -2,30 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
 body {
-  background-color: #1a1f2e;
+  background: linear-gradient(135deg, #1a1625 0%, #110f1a 50%, #1a1020 100%);
   color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Noto Sans JP', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
 }
 
 .japanese-text {
-  font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', 'Noto Sans CJK JP', sans-serif;
+  font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', sans-serif;
 }
 
-/* Custom scrollbar */
+/* Japanese-themed scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #2a2f3e;
+  background: #1a1625;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4a5568;
+  background: linear-gradient(180deg, #ff00aa 0%, #aa00ff 100%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5a6578;
+  background: linear-gradient(180deg, #ff33bb 0%, #bb33ff 100%);
+}
+
+/* WaniKani-style card backgrounds */
+.wk-card {
+  background: linear-gradient(145deg, rgba(26, 22, 37, 0.9) 0%, rgba(17, 15, 26, 0.95) 100%);
+  border: 1px solid rgba(255, 0, 170, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.wk-card:hover {
+  border-color: rgba(255, 0, 170, 0.3);
+  box-shadow: 0 0 30px rgba(255, 0, 170, 0.1);
+}
+
+/* Gradient text for headers */
+.wk-gradient-text {
+  background: linear-gradient(90deg, #00aaff, #ff00aa, #aa00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Japanese wave pattern overlay */
+.wk-wave-bg {
+  position: relative;
+}
+
+.wk-wave-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%23ff00aa' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Torii gate inspired divider */
+.wk-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ff00aa, #aa00ff, transparent);
+  margin: 1rem 0;
+}
+
+/* SRS stage badges */
+.srs-apprentice { background: linear-gradient(135deg, #dd0093, #ff1493); }
+.srs-guru { background: linear-gradient(135deg, #882d9e, #9932cc); }
+.srs-master { background: linear-gradient(135deg, #294ddb, #4169e1); }
+.srs-enlightened { background: linear-gradient(135deg, #0093dd, #00bfff); }
+.srs-burned { background: linear-gradient(135deg, #434343, #555555); }
+
+/* Kanji character display */
+.wk-kanji {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+}
+
+/* Subtle glow effects */
+.glow-radical { box-shadow: 0 0 20px rgba(0, 170, 255, 0.3); }
+.glow-kanji { box-shadow: 0 0 20px rgba(255, 0, 170, 0.3); }
+.glow-vocabulary { box-shadow: 0 0 20px rgba(170, 0, 255, 0.3); }
+
+/* Button hover animations */
+.wk-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.wk-btn:hover::after {
+  width: 200%;
+  height: 200%;
 }

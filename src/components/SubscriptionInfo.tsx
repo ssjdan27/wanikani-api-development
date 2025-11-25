@@ -12,10 +12,11 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
   
   if (!subscription) {
     return (
-      <div className="bg-red-900/20 border border-red-500 rounded-lg p-4 mb-6">
+      <div className="wk-card border-wanikani-kanji/30 rounded-2xl p-4 mb-6 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-wanikani-kanji"></div>
         <div className="flex items-center space-x-2">
-          <AlertTriangle className="w-5 h-5 text-red-400" />
-          <span className="text-red-400 font-medium">Subscription Status Unknown</span>
+          <AlertTriangle className="w-5 h-5 text-wanikani-kanji" />
+          <span className="text-wanikani-kanji font-medium">Subscription Status Unknown</span>
         </div>
         <p className="text-gray-300 text-sm mt-2">
           Unable to determine subscription status. Some features may be limited.
@@ -27,49 +28,56 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
   const getSubscriptionIcon = () => {
     switch (subscription.type) {
       case 'lifetime':
-        return <Crown className="w-5 h-5 text-yellow-400" />
+        return <Crown className="w-5 h-5 text-wanikani-gold" />
       case 'recurring':
-        return <Shield className="w-5 h-5 text-blue-400" />
+        return <Shield className="w-5 h-5 text-wanikani-radical" />
       case 'free':
         return <Clock className="w-5 h-5 text-gray-400" />
       default:
-        return <AlertTriangle className="w-5 h-5 text-red-400" />
+        return <AlertTriangle className="w-5 h-5 text-wanikani-kanji" />
     }
   }
 
-  const getStatusColor = () => {
-    if (!subscription.active) return 'red'
-    if (subscription.type === 'lifetime') return 'yellow'
-    if (subscription.type === 'recurring') return 'blue'
-    return 'gray'
+  const getGradient = () => {
+    if (!subscription.active) return 'from-wanikani-kanji to-wanikani-kanji'
+    if (subscription.type === 'lifetime') return 'from-wanikani-gold via-wanikani-sakura to-wanikani-gold'
+    if (subscription.type === 'recurring') return 'from-wanikani-radical to-wanikani-kanji'
+    return 'from-gray-500 to-gray-600'
   }
 
   const getStatusText = () => {
     if (!subscription.active) return 'Inactive'
-    if (subscription.type === 'lifetime') return 'Lifetime'
+    if (subscription.type === 'lifetime') return '生涯会員 Lifetime'
     if (subscription.type === 'recurring') return 'Active'
     if (subscription.type === 'free') return 'Free'
     return 'Unknown'
   }
 
-  const statusColor = getStatusColor()
   const maxLevel = subscription.max_level_granted
 
   return (
-    <div className={`bg-${statusColor}-900/20 border border-${statusColor}-500 rounded-lg p-4 mb-6`}>
+    <div className="wk-card rounded-2xl p-4 mb-6 relative overflow-hidden">
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getGradient()}`}></div>
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           {getSubscriptionIcon()}
-          <span className={`text-${statusColor}-400 font-medium`}>
-            {getStatusText()} Subscription
+          <span className="font-medium text-white">
+            {getStatusText()}
           </span>
+          {subscription.type === 'lifetime' && (
+            <span className="text-wanikani-gold text-sm animate-pulse">✨</span>
+          )}
         </div>
         <div className="text-right">
-          <div className={`text-${statusColor}-400 text-sm`}>
-            Access Level: {maxLevel === 60 ? 'Full' : `Levels 1-${maxLevel}`}
+          <div className="text-gray-300 text-sm">
+            Access: {maxLevel === 60 ? (
+              <span className="text-wanikani-gold">Full Access 全部</span>
+            ) : (
+              <span>Levels 1-{maxLevel}</span>
+            )}
           </div>
           {subscription.period_ends_at && (
-            <div className="text-gray-400 text-xs">
+            <div className="text-gray-500 text-xs">
               {subscription.type === 'recurring' ? 'Renews' : 'Ends'}: {' '}
               {new Date(subscription.period_ends_at).toLocaleDateString()}
             </div>
@@ -78,19 +86,17 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
       </div>
       
       {maxLevel < 60 && (
-        <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
-          <p className="text-gray-300 text-sm">
-            <strong>Note:</strong> Your subscription grants access to levels 1-{maxLevel}. 
-            Content above level {maxLevel} is filtered from the dashboard to respect your subscription limits.
+        <div className="mt-3 p-3 bg-wanikani-darker/30 rounded-xl border border-wanikani-kanji/10">
+          <p className="text-gray-400 text-sm">
+            <strong className="text-gray-300">Note:</strong> Content above level {maxLevel} is filtered to respect subscription limits.
           </p>
         </div>
       )}
       
       {!subscription.active && (
-        <div className="mt-3 p-3 bg-red-800/30 rounded-lg">
-          <p className="text-red-300 text-sm">
-            <strong>Subscription Inactive:</strong> Your subscription is not currently active. 
-            Some features may be limited and content access is restricted to free levels.
+        <div className="mt-3 p-3 bg-wanikani-kanji/10 rounded-xl border border-wanikani-kanji/20">
+          <p className="text-wanikani-sakura text-sm">
+            <strong>注意:</strong> Subscription inactive. Some features are limited.
           </p>
         </div>
       )}

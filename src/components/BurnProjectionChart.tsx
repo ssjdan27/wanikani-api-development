@@ -186,8 +186,8 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
       {
         label: 'Burned (actual)',
         data: actualPoints,
-        borderColor: '#f97316',
-        backgroundColor: 'rgba(249,115,22,0.2)',
+        borderColor: '#434343',
+        backgroundColor: 'rgba(67,67,67,0.3)',
         borderWidth: 2,
         pointRadius: 4,
         tension: 0.25,
@@ -195,8 +195,8 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
       {
         label: 'Projected (all burns)',
         data: projectionPoints,
-        borderColor: '#fbbf24',
-        backgroundColor: 'rgba(251,191,36,0.15)',
+        borderColor: '#daa520',
+        backgroundColor: 'rgba(218,165,32,0.15)',
         borderWidth: 2,
         borderDash: [6, 6],
         pointRadius: 3,
@@ -210,7 +210,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#e5e7eb' },
+        labels: { color: '#9ca3af' },
       },
       tooltip: {
         callbacks: {
@@ -224,13 +224,13 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#d1d5db' },
-        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#6b7280' },
+        grid: { color: 'rgba(255,0,170,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#d1d5db' },
-        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#6b7280' },
+        grid: { color: 'rgba(255,0,170,0.05)' },
         suggestedMin: 0,
     suggestedMax: Math.max(totalBurnable, burnedCount + 10),
   },
@@ -240,27 +240,30 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
   const notEnoughData = projectionPoints.length === 0 || totalBurnable === 0
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">Burn Projection</h2>
-          <p className="text-sm text-gray-400">
-            Based on level pace (average {averageDaysPerLevel.toFixed(1)} days/level) with minimum ~6 months from unlock to burn.
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <span className="wk-gradient-text">Burn Projection</span>
+            <span className="text-lg opacity-50">🔥</span>
+          </h2>
+          <p className="text-sm text-gray-500">
+            Based on level pace ({averageDaysPerLevel.toFixed(1)} days/level)
           </p>
         </div>
-        <div className="text-right text-sm text-gray-300 space-y-1">
-          <div>Total burnable: <span className="text-white font-semibold">{totalBurnable.toLocaleString()}</span></div>
-          <div>Burned so far: <span className="text-white font-semibold">{burnedCount.toLocaleString()}</span></div>
-          <div>Implied burn/day: <span className="text-white font-semibold">{impliedBurnRatePerDay.toFixed(2)}</span></div>
+        <div className="text-right text-sm space-y-1">
+          <div className="text-gray-400">Total burnable: <span className="text-white font-bold">{totalBurnable.toLocaleString()}</span></div>
+          <div className="text-gray-400">Burned so far: <span className="text-wanikani-burned font-bold">{burnedCount.toLocaleString()}</span></div>
+          <div className="text-gray-400">Burn rate: <span className="text-wanikani-gold font-bold">{impliedBurnRatePerDay.toFixed(2)}/day</span></div>
           {etaDate && (
-            <div className="text-xs text-gray-400">ETA to burn all: {etaDate.toLocaleDateString()}</div>
+            <div className="text-xs text-wanikani-sakura">ETA: {etaDate.toLocaleDateString()}</div>
           )}
         </div>
       </div>
 
       {notEnoughData ? (
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-gray-300 text-sm">
-          Not enough burn data yet to project an ETA. Complete more reviews to burn items.
+        <div className="bg-wanikani-darker/50 rounded-xl p-4 border border-wanikani-kanji/10 text-gray-400 text-sm">
+          Not enough burn data yet. もっと続けて！ Complete more reviews to burn items.
         </div>
       ) : (
         <div className="h-72">

@@ -53,17 +53,19 @@ export default function Home() {
   // Show loading state while checking for saved token
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-wanikani-dark flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-300">Loading...</p>
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-wanikani-kanji to-wanikani-vocabulary flex items-center justify-center mx-auto mb-4 shadow-kanji animate-pulse">
+            <span className="text-2xl">🦀</span>
+          </div>
+          <p className="text-gray-300 japanese-text">読み込み中...</p>
         </div>
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-wanikani-dark">
+    <main className="min-h-screen">
       {apiToken ? (
         <Dashboard apiToken={apiToken} onTokenChange={handleTokenChange} />
       ) : (

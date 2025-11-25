@@ -103,31 +103,35 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
   }
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
-      <h2 className="text-2xl font-bold text-white mb-6">Accuracy by Type</h2>
+    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        <span className="wk-gradient-text">Accuracy by Type</span>
+        <span className="text-lg opacity-50 japanese-text">正確率</span>
+      </h2>
       
       <div className="h-64 flex items-center justify-center">
         <Doughnut data={data} options={options} />
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-        <div>
-          <div className="text-2xl font-bold text-wanikani-radical">
+        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
+          <div className="text-2xl font-bold text-wanikani-radical group-hover:scale-110 transition-transform">
             {radicalAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400">Radicals</div>
+          <div className="text-sm text-gray-400 japanese-text">部首</div>
         </div>
-        <div>
-          <div className="text-2xl font-bold text-wanikani-kanji">
+        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
+          <div className="text-2xl font-bold text-wanikani-kanji group-hover:scale-110 transition-transform">
             {kanjiAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400">Kanji</div>
+          <div className="text-sm text-gray-400 japanese-text">漢字</div>
         </div>
-        <div>
-          <div className="text-2xl font-bold text-wanikani-vocabulary">
+        <div className="p-3 rounded-xl bg-wanikani-darker/30 hover:bg-wanikani-darker/50 transition-all group">
+          <div className="text-2xl font-bold text-wanikani-vocabulary group-hover:scale-110 transition-transform">
             {combinedVocabularyAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-400">Vocabulary</div>
+          <div className="text-sm text-gray-400 japanese-text">単語</div>
         </div>
       </div>
     </div>

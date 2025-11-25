@@ -114,8 +114,8 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       {
         label: 'Actual',
         data: actualPoints,
-        borderColor: '#22c55e',
-        backgroundColor: 'rgba(34,197,94,0.2)',
+        borderColor: '#00aaff',
+        backgroundColor: 'rgba(0,170,255,0.2)',
         borderWidth: 2,
         pointRadius: 4,
         tension: 0.25,
@@ -123,8 +123,8 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       {
         label: 'Projected',
         data: projectionPoints,
-        borderColor: '#3b82f6',
-        backgroundColor: 'rgba(59,130,246,0.15)',
+        borderColor: '#ff00aa',
+        backgroundColor: 'rgba(255,0,170,0.15)',
         borderWidth: 2,
         borderDash: [6, 6],
         pointRadius: 3,
@@ -138,7 +138,7 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#e5e7eb' },
+        labels: { color: '#9ca3af' },
       },
       tooltip: {
         callbacks: {
@@ -152,13 +152,13 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#d1d5db' },
-        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#6b7280' },
+        grid: { color: 'rgba(255,0,170,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#d1d5db', stepSize: 5 },
-        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#6b7280', stepSize: 5 },
+        grid: { color: 'rgba(255,0,170,0.05)' },
         suggestedMin: 1,
         suggestedMax: 60,
       },
@@ -166,19 +166,22 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
   }
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">Level Up Projection</h2>
-          <p className="text-sm text-gray-400">
-            Based on your recent pace (last {sampleSize > 0 ? sampleSize : 5} levels or default 7-day pace).
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <span className="wk-gradient-text">Level Up Projection</span>
+            <span className="text-lg opacity-50 japanese-text">予測</span>
+          </h2>
+          <p className="text-sm text-gray-500">
+            Based on your recent pace (last {sampleSize > 0 ? sampleSize : 5} levels)
           </p>
         </div>
         <div className="text-right">
           <div className="text-sm text-gray-400">Average pace</div>
-          <div className="text-lg font-semibold text-white">{averageDaysPerLevel.toFixed(1)} days/level</div>
+          <div className="text-lg font-bold text-wanikani-radical">{averageDaysPerLevel.toFixed(1)} days/level</div>
           {level60Eta && (
-            <div className="text-xs text-gray-400 mt-1">
+            <div className="text-xs text-wanikani-gold mt-1">
               Level 60 ETA: {new Date(level60Eta).toLocaleDateString()}
             </div>
           )}
@@ -190,21 +193,21 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       </div>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-        <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-gray-400 mb-1">Latest completed level</div>
-          <div className="text-white font-semibold">
-            {latestDurationDays ? `${latestDurationDays.toFixed(1)} days` : 'Not enough data yet'}
+        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-radical/10 hover:border-wanikani-radical/30 transition-all">
+          <div className="text-gray-500 text-xs mb-1">Latest completed level</div>
+          <div className="text-white font-bold">
+            {latestDurationDays ? `${latestDurationDays.toFixed(1)} days` : 'まだ...'}
           </div>
         </div>
-        <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-gray-400 mb-1">Projection start</div>
-          <div className="text-white font-semibold">
+        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
+          <div className="text-gray-500 text-xs mb-1">Projection start</div>
+          <div className="text-white font-bold">
             Level {projectionStartLevel}
           </div>
         </div>
-        <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-gray-400 mb-1">Total to go</div>
-          <div className="text-white font-semibold">
+        <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-vocabulary/10 hover:border-wanikani-vocabulary/30 transition-all">
+          <div className="text-gray-500 text-xs mb-1">Total to go</div>
+          <div className="text-white font-bold">
             {levelsRemaining} {levelsRemaining === 1 ? 'level' : 'levels'}
           </div>
         </div>

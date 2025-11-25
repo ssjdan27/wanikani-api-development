@@ -107,46 +107,53 @@ export default function LevelPacingCoach({
   }, [assignments, subjects, srsSystems, userData.level, userData.started_at, levelProgressions])
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6 space-y-4">
+    <div className="wk-card rounded-2xl p-6 space-y-4 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-kanji to-wanikani-vocabulary"></div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-white">Level Pacing Coach</h2>
-          <p className="text-sm text-gray-400">Which kanji are blocking level-up and how long until you can pass them.</p>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <span className="wk-gradient-text">Level Pacing Coach</span>
+            <span className="text-lg opacity-50 japanese-text">ペース</span>
+          </h2>
+          <p className="text-sm text-gray-500">Which kanji are blocking level-up</p>
         </div>
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-gray-400">Gating kanji</div>
-            <div className="text-white font-semibold text-lg">{gatingKanji.length}</div>
+          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
+            <div className="text-gray-500 text-xs">Gating kanji</div>
+            <div className="text-wanikani-kanji font-bold text-lg">{gatingKanji.length}</div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-gray-400">ETA to next level</div>
-            <div className="text-white font-semibold text-lg">
-              {gatingKanji.length === 0 ? 'Ready now' : `${etaDays.toFixed(1)} days`}
+          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
+            <div className="text-gray-500 text-xs">ETA to next level</div>
+            <div className="text-white font-bold text-lg">
+              {gatingKanji.length === 0 ? '今すぐ!' : `${etaDays.toFixed(1)} days`}
             </div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-gray-400">Passing stage</div>
-            <div className="text-white font-semibold text-lg">SRS {passingStage}</div>
+          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
+            <div className="text-gray-500 text-xs">Passing stage</div>
+            <div className="text-wanikani-guru font-bold text-lg">SRS {passingStage}</div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-gray-400">Time in level</div>
-            <div className="text-white font-semibold text-lg">{currentLevelDurationDays.toFixed(1)} days</div>
+          <div className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/10 hover:border-wanikani-kanji/30 transition-all">
+            <div className="text-gray-500 text-xs">Time in level</div>
+            <div className="text-white font-bold text-lg">{currentLevelDurationDays.toFixed(1)} days</div>
           </div>
         </div>
       </div>
 
       {gatingKanji.length === 0 ? (
-        <div className="text-green-300 text-sm">All current-level kanji are at or above passing. You can level up as soon as your reviews allow.</div>
+        <div className="text-green-400 text-sm bg-green-500/10 border border-green-500/20 rounded-xl p-3 flex items-center gap-2">
+          <span>✨</span>
+          All current-level kanji are at or above passing. You can level up as soon as your reviews allow!
+        </div>
       ) : (
         <div>
           <div className="text-sm text-gray-400 mb-2">Focus these next:</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {gatingKanji.map(item => (
-              <div key={item.subjectId} className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-                <div className="text-2xl font-bold text-white mb-1">{item.label}</div>
-                <div className="text-xs text-gray-400">SRS {item.srsStage} → {item.passingStage}</div>
-                <div className="text-sm text-blue-300 mt-1">
-                  ETA to passing: {item.etaMs <= 0 ? 'Ready now' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+              <div key={item.subjectId} className="bg-wanikani-darker/50 rounded-xl p-3 border border-wanikani-kanji/20 hover:border-wanikani-kanji/50 hover:shadow-kanji transition-all group">
+                <div className="text-2xl font-bold text-white mb-1 wk-kanji group-hover:scale-110 transition-transform inline-block">{item.label}</div>
+                <div className="text-xs text-gray-500">SRS {item.srsStage} → {item.passingStage}</div>
+                <div className="text-sm text-wanikani-radical mt-1">
+                  {item.etaMs <= 0 ? '今すぐ!' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
                 </div>
               </div>
             ))}

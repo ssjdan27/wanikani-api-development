@@ -68,13 +68,13 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
           <span className="text-gray-300">{label}</span>
           <span className="text-gray-400">{current}/{total}</span>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-3">
+        <div className="w-full bg-wanikani-darker/50 rounded-full h-3 overflow-hidden">
           <div
             className={`h-3 rounded-full transition-all duration-500 ${color}`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
         </div>
-        <div className="text-right text-xs text-gray-400 mt-1">
+        <div className="text-right text-xs text-gray-500 mt-1">
           {percentage.toFixed(1)}%
         </div>
       </div>
@@ -82,16 +82,20 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
   }
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
+    <div className="wk-card rounded-2xl p-6 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-wanikani-radical via-wanikani-kanji to-wanikani-vocabulary"></div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-white">Level {selectedLevel} Progress</h2>
-          <p className="text-sm text-gray-400 mt-1">Guru+ items count as completed. Switch levels to review past progress.</p>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <span className="wk-gradient-text">Level {selectedLevel} Progress</span>
+            <span className="text-lg opacity-50 japanese-text">進捗</span>
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">Guru+ items count as completed</p>
         </div>
         <select
           value={selectedLevel}
           onChange={(e) => setSelectedLevel(parseInt(e.target.value, 10))}
-          className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-wanikani-darker/50 text-white px-3 py-2 rounded-xl border border-wanikani-kanji/20 focus:outline-none focus:ring-2 focus:ring-wanikani-kanji/50 focus:border-wanikani-kanji/30 transition-all"
         >
           {levelOptions.map(level => (
             <option key={level} value={level}>
@@ -102,7 +106,7 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
       </div>
       
       {selectedLevelSubjects.length === 0 ? (
-        <div className="text-gray-400 text-sm bg-gray-800/60 border border-gray-700 rounded-lg p-4">
+        <div className="text-gray-400 text-sm bg-wanikani-darker/30 border border-wanikani-kanji/10 rounded-xl p-4">
           No subject data available for this level yet. Try refreshing or check your subscription limits.
         </div>
       ) : (
@@ -130,19 +134,19 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
             />
           </div>
 
-          <div className="mt-6 p-4 bg-gray-800 rounded-lg">
+          <div className="mt-6 p-4 bg-wanikani-darker/30 rounded-xl border border-wanikani-kanji/10">
             <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <div className="text-2xl font-bold text-wanikani-radical">{completedRadicals}/{radicals.length || 0}</div>
-                <div className="text-xs text-gray-400">部首</div>
+              <div className="group">
+                <div className="text-2xl font-bold text-wanikani-radical group-hover:scale-110 transition-transform">{completedRadicals}/{radicals.length || 0}</div>
+                <div className="text-xs text-gray-400 japanese-text">部首</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-wanikani-kanji">{completedKanji}/{kanji.length || 0}</div>
-                <div className="text-xs text-gray-400">漢字</div>
+              <div className="group">
+                <div className="text-2xl font-bold text-wanikani-kanji group-hover:scale-110 transition-transform">{completedKanji}/{kanji.length || 0}</div>
+                <div className="text-xs text-gray-400 japanese-text">漢字</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-wanikani-vocabulary">{completedVocabulary}/{vocabulary.length || 0}</div>
-                <div className="text-xs text-gray-400">単語</div>
+              <div className="group">
+                <div className="text-2xl font-bold text-wanikani-vocabulary group-hover:scale-110 transition-transform">{completedVocabulary}/{vocabulary.length || 0}</div>
+                <div className="text-xs text-gray-400 japanese-text">単語</div>
               </div>
             </div>
           </div>
