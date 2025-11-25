@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import { LogOut, RefreshCw, Wifi, WifiOff } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import StatsOverview from './StatsOverview'
 import LevelProgress from './LevelProgress'
 import AccuracyChart from './AccuracyChart'
@@ -201,48 +201,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🦀</span>
-              <span className="text-xl font-bold text-wanikani-pink">WANIKANI</span>
+              <span className="text-xl font-bold text-wanikani-pink">WANIKANI DASHBOARD</span>
             </div>
             <div className="text-sm text-wanikani-text-light">
               Level <span className="font-bold text-wanikani-text">{userData.level}</span> · {userData.username}
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-sm text-wanikani-text-light">
-              {isOnline ? (
-                <Wifi className="w-4 h-4 text-green-500" />
-              ) : (
-                <WifiOff className="w-4 h-4 text-red-500" />
-              )}
-              {lastRefresh && (
-                <span className="text-xs">{lastRefresh.toLocaleTimeString()}</span>
-              )}
-            </div>
-            <button
-              onClick={handleRefresh}
-              disabled={isRefreshing || loading || !isOnline}
-              className="flex items-center gap-2 px-4 py-2 bg-wanikani-cyan hover:bg-cyan-600 disabled:opacity-50 text-white rounded-lg transition-colors text-sm"
-            >
-              <RefreshCw className={`w-4 h-4 ${isRefreshing || loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </button>
-            {process.env.NODE_ENV === 'development' && (
-              <>
-                <button
-                  onClick={handleClearCache}
-                  className="px-3 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm"
-                >
-                  Clear Cache
-                </button>
-                <button
-                  onClick={loadAllSubjects}
-                  disabled={!userData}
-                  className="px-3 py-2 bg-purple-500 hover:bg-purple-600 disabled:opacity-50 text-white rounded-lg text-sm"
-                >
-                  Load All
-                </button>
-              </>
-            )}
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2 border border-wanikani-border hover:bg-gray-50 text-wanikani-text rounded-lg transition-colors text-sm"
