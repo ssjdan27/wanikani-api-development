@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import type { ReviewStatistic, Subject } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface LeechDetectorProps {
   reviewStats: ReviewStatistic[]
@@ -17,6 +18,7 @@ type Leech = {
 }
 
 export default function LeechDetector({ reviewStats, subjects }: LeechDetectorProps) {
+  const { t } = useLanguage()
   const leeches = useMemo<Leech[]>(() => {
     const subjectById = new Map(subjects.map(s => [s.id, s]))
     return reviewStats
@@ -42,27 +44,27 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Leech Detector 🦉
+            {t('leech.title')} 🦉
           </h2>
-          <p className="text-sm text-wanikani-text-light">Items with low accuracy - drill these first</p>
+          <p className="text-sm text-wanikani-text-light">{t('leech.subtitle')}</p>
         </div>
-        <div className="text-sm text-wanikani-text-light">Top {leeches.length} leeches</div>
+        <div className="text-sm text-wanikani-text-light">{t('leech.topLeeches').replace('{count}', String(leeches.length))}</div>
       </div>
 
       {leeches.length === 0 ? (
         <div className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
           <span>✓</span>
-          No leeches detected yet. Great job! Keep it up!
+          {t('leech.noLeeches')}
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
               <tr className="text-wanikani-text-light text-left border-b border-wanikani-border">
-                <th className="pb-2">Item</th>
-                <th className="pb-2">Accuracy</th>
-                <th className="pb-2">Incorrect</th>
-                <th className="pb-2">Link</th>
+                <th className="pb-2">{t('leech.item')}</th>
+                <th className="pb-2">{t('leech.accuracy')}</th>
+                <th className="pb-2">{t('leech.incorrect')}</th>
+                <th className="pb-2">{t('leech.link')}</th>
               </tr>
             </thead>
             <tbody>
@@ -77,7 +79,7 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
                   <td className="py-2 text-red-500">{leech.incorrect}</td>
                   <td className="py-2">
                     {leech.link ? (
-                      <a href={leech.link} target="_blank" rel="noreferrer" className="text-wanikani-cyan hover:text-wanikani-pink transition-colors">View</a>
+                      <a href={leech.link} target="_blank" rel="noreferrer" className="text-wanikani-cyan hover:text-wanikani-pink transition-colors">{t('leech.view')}</a>
                     ) : (
                       <span className="text-gray-400">N/A</span>
                     )}

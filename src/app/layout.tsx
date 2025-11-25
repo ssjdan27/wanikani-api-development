@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { LanguageProvider } from '@/contexts/LanguageContext'
 
 export const metadata: Metadata = {
     title: 'WaniKani Dashboard',
@@ -23,7 +24,9 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             </head>
             <body className="bg-wanikani-bg min-h-screen">
-                {children}
+                <LanguageProvider>
+                    {children}
+                </LanguageProvider>
                 <Analytics />
                 <SpeedInsights />
             </body>

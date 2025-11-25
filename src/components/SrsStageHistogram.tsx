@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js'
 import type { Assignment, Subject } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -22,6 +23,7 @@ interface SrsStageHistogramProps {
 const STAGES = Array.from({ length: 10 }, (_, i) => i)
 
 export default function SrsStageHistogram({ assignments, subjects }: SrsStageHistogramProps) {
+  const { t } = useLanguage()
   const { radicalCounts, kanjiCounts, vocabCounts } = useMemo(() => {
     const subjectById = new Map(subjects.map(s => [s.id, s]))
 
@@ -51,21 +53,21 @@ export default function SrsStageHistogram({ assignments, subjects }: SrsStageHis
     labels: STAGES.map(s => `SRS ${s}`),
     datasets: [
       {
-        label: 'Radicals',
+        label: t('common.radicals'),
         data: radicalCounts,
         backgroundColor: 'rgba(0,170,255,0.7)',
         borderColor: '#00aaff',
         borderWidth: 1
       },
       {
-        label: 'Kanji',
+        label: t('common.kanji'),
         data: kanjiCounts,
         backgroundColor: 'rgba(255,0,170,0.7)',
         borderColor: '#ff00aa',
         borderWidth: 1
       },
       {
-        label: 'Vocabulary',
+        label: t('common.vocabulary'),
         data: vocabCounts,
         backgroundColor: 'rgba(170,0,255,0.7)',
         borderColor: '#aa00ff',
@@ -100,14 +102,14 @@ export default function SrsStageHistogram({ assignments, subjects }: SrsStageHis
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            SRS Stage Histogram
+            {t('srs.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">Distribution across SRS stages</p>
+          <p className="text-sm text-wanikani-text-light">{t('srs.subtitle')}</p>
         </div>
         <div className="flex gap-2 text-xs">
-          <span className="px-2 py-1 rounded-full bg-blue-100 text-wanikani-radical">Radicals</span>
-          <span className="px-2 py-1 rounded-full bg-pink-100 text-wanikani-kanji">Kanji</span>
-          <span className="px-2 py-1 rounded-full bg-purple-100 text-wanikani-vocabulary">Vocab</span>
+          <span className="px-2 py-1 rounded-full bg-blue-100 text-wanikani-radical">{t('common.radicals')}</span>
+          <span className="px-2 py-1 rounded-full bg-pink-100 text-wanikani-kanji">{t('common.kanji')}</span>
+          <span className="px-2 py-1 rounded-full bg-purple-100 text-wanikani-vocabulary">{t('srs.vocab')}</span>
         </div>
       </div>
       <div className="h-64">

@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react'
 import Dashboard from '@/components/Dashboard'
 import ApiTokenInput from '@/components/ApiTokenInput'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function Home() {
   const [apiToken, setApiToken] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isClient, setIsClient] = useState(false)
+  const { t } = useLanguage()
 
   // Ensure we're on the client side before accessing localStorage
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function Home() {
           <div className="w-12 h-12 rounded-full bg-wanikani-pink flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-2xl">🦀</span>
           </div>
-          <p className="text-wanikani-text-light">Loading...</p>
+          <p className="text-wanikani-text-light">{t('loading')}</p>
         </div>
       </main>
     )

@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js'
 import type { Assignment, Subject, SpacedRepetitionSystem } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -60,6 +61,7 @@ function weekKey(date: Date): string {
 }
 
 export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRadarProps) {
+  const { t } = useLanguage()
   const {
     upcoming,
     totalBurned,
@@ -110,7 +112,7 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
     labels: weeklyLabels,
     datasets: [
       {
-        label: 'Burns per week',
+        label: t('burn.burnsPerWeek'),
         data: weeklyCounts,
         backgroundColor: 'rgba(67, 67, 67, 0.7)',
         borderColor: '#434343',
@@ -143,12 +145,12 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Burn Radar 🔥
+            {t('burn.title')} 🔥
           </h2>
-          <p className="text-sm text-wanikani-text-light">Upcoming burns and burn velocity</p>
+          <p className="text-sm text-wanikani-text-light">{t('burn.subtitle')}</p>
         </div>
         <div className="bg-gray-700 rounded-lg p-3">
-          <div className="text-gray-300 text-xs">Total burned</div>
+          <div className="text-gray-300 text-xs">{t('burn.totalBurned')}</div>
           <div className="text-white font-bold text-lg">{totalBurned.toLocaleString()} 🔥</div>
         </div>
       </div>
@@ -158,9 +160,9 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
       </div>
 
       <div>
-        <div className="text-sm text-wanikani-text-light mb-2">Next burns (fastest to slowest)</div>
+        <div className="text-sm text-wanikani-text-light mb-2">{t('burn.nextBurns')}</div>
         {upcoming.length === 0 ? (
-          <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">No items approaching burn yet. Keep studying!</div>
+          <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">{t('burn.noItems')}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {upcoming.map(item => (

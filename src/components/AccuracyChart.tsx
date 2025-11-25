@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import type { ReviewStatistic } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 ChartJS.register(
   CategoryScale,
@@ -29,6 +30,7 @@ interface AccuracyChartProps {
 }
 
 export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
+  const { t } = useLanguage()
   const visibleStats = reviewStats.filter(stat => !stat.data.hidden)
 
   const calculateTypeAccuracy = (type: string) => {
@@ -62,7 +64,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
   })()
 
   const data = {
-    labels: ['Radicals', 'Kanji', 'Vocabulary'],
+    labels: [t('common.radicals'), t('common.kanji'), t('common.vocabulary')],
     datasets: [
       {
         data: [radicalAccuracy, kanjiAccuracy, combinedVocabularyAccuracy],
@@ -105,7 +107,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
   return (
     <div className="wk-card rounded-lg p-6">
       <h2 className="text-xl font-bold mb-5 text-wanikani-text">
-        Accuracy by Type
+        {t('accuracy.title')}
       </h2>
       
       <div className="h-64 flex items-center justify-center">
@@ -117,19 +119,19 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
           <div className="text-2xl font-bold text-wanikani-radical">
             {radicalAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">Radicals</div>
+          <div className="text-sm text-wanikani-text-light">{t('common.radicals')}</div>
         </div>
         <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
           <div className="text-2xl font-bold text-wanikani-kanji">
             {kanjiAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">Kanji</div>
+          <div className="text-sm text-wanikani-text-light">{t('common.kanji')}</div>
         </div>
         <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
           <div className="text-2xl font-bold text-wanikani-vocabulary">
             {combinedVocabularyAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">Vocabulary</div>
+          <div className="text-sm text-wanikani-text-light">{t('common.vocabulary')}</div>
         </div>
       </div>
     </div>

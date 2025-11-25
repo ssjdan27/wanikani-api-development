@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import type { LevelProgression, UserData } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 ChartJS.register(
   TimeScale,
@@ -31,6 +32,7 @@ interface LevelProjectionChartProps {
 const DAY_MS = 1000 * 60 * 60 * 24
 
 export default function LevelProjectionChart({ userData, levelProgressions }: LevelProjectionChartProps) {
+  const { t } = useLanguage()
   const {
     actualPoints,
     projectionPoints,
@@ -112,7 +114,7 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
   const data = {
     datasets: [
       {
-        label: 'Actual',
+        label: t('projection.actual'),
         data: actualPoints,
         borderColor: '#00aaff',
         backgroundColor: 'rgba(0,170,255,0.2)',
@@ -121,7 +123,7 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
         tension: 0.25,
       },
       {
-        label: 'Projected',
+        label: t('projection.projected'),
         data: projectionPoints,
         borderColor: '#ff00aa',
         backgroundColor: 'rgba(255,0,170,0.15)',
@@ -170,18 +172,18 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Level Up Projection
+            {t('projection.title')}
           </h2>
           <p className="text-sm text-wanikani-text-light">
-            Based on your recent pace (last {sampleSize > 0 ? sampleSize : 5} levels)
+            {t('projection.basedOnPace').replace('{count}', String(sampleSize > 0 ? sampleSize : 5))}
           </p>
         </div>
         <div className="text-right">
-          <div className="text-sm text-wanikani-text-light">Average pace</div>
-          <div className="text-lg font-bold text-wanikani-cyan">{averageDaysPerLevel.toFixed(1)} days/level</div>
+          <div className="text-sm text-wanikani-text-light">{t('projection.averagePace')}</div>
+          <div className="text-lg font-bold text-wanikani-cyan">{averageDaysPerLevel.toFixed(1)} {t('projection.daysPerLevel')}</div>
           {level60Eta && (
             <div className="text-xs text-wanikani-pink mt-1 font-medium">
-              Level 60 ETA: {new Date(level60Eta).toLocaleDateString()}
+              {t('projection.level60Eta')}: {new Date(level60Eta).toLocaleDateString()}
             </div>
           )}
         </div>
@@ -193,21 +195,21 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
         <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">Latest completed level</div>
+          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.latestLevel')}</div>
           <div className="text-wanikani-text font-bold">
-            {latestDurationDays ? `${latestDurationDays.toFixed(1)} days` : 'N/A'}
+            {latestDurationDays ? `${latestDurationDays.toFixed(1)} ${t('common.days')}` : 'N/A'}
           </div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">Projection start</div>
+          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.projectionStart')}</div>
           <div className="text-wanikani-text font-bold">
-            Level {projectionStartLevel}
+            {t('common.level')} {projectionStartLevel}
           </div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">Total to go</div>
+          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.totalToGo')}</div>
           <div className="text-wanikani-text font-bold">
-            {levelsRemaining} {levelsRemaining === 1 ? 'level' : 'levels'}
+            {levelsRemaining} {levelsRemaining === 1 ? t('common.level').toLowerCase() : t('projection.levels')}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import type { Assignment, LevelProgression, UserData, Subject } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 ChartJS.register(
   TimeScale,
@@ -36,6 +37,7 @@ const TOTAL_WK_ITEMS_APPROX = 9000
 const LEVEL_COUNT = 60
 
 export default function BurnProjectionChart({ assignments, levelProgressions, userData, subjects }: BurnProjectionChartProps) {
+  const { t } = useLanguage()
   const {
     actualPoints,
     projectionPoints,
@@ -184,7 +186,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
   const data = {
     datasets: [
       {
-        label: 'Burned (actual)',
+        label: t('burnProjection.actualLabel'),
         data: actualPoints,
         borderColor: '#434343',
         backgroundColor: 'rgba(67,67,67,0.3)',
@@ -193,7 +195,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
         tension: 0.25,
       },
       {
-        label: 'Projected (all burns)',
+        label: t('burnProjection.projectedLabel'),
         data: projectionPoints,
         borderColor: '#daa520',
         backgroundColor: 'rgba(218,165,32,0.15)',
@@ -244,25 +246,25 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Burn Projection 🔥
+            {t('burnProjection.title')} 🔥
           </h2>
           <p className="text-sm text-wanikani-text-light">
-            Based on level pace ({averageDaysPerLevel.toFixed(1)} days/level)
+            {t('burnProjection.basedOnPace').replace('{days}', averageDaysPerLevel.toFixed(1))}
           </p>
         </div>
         <div className="text-right text-sm space-y-1">
-          <div className="text-wanikani-text-light">Total burnable: <span className="text-wanikani-text font-bold">{totalBurnable.toLocaleString()}</span></div>
-          <div className="text-wanikani-text-light">Burned so far: <span className="text-gray-600 font-bold">{burnedCount.toLocaleString()}</span></div>
-          <div className="text-wanikani-text-light">Burn rate: <span className="text-wanikani-pink font-bold">{impliedBurnRatePerDay.toFixed(2)}/day</span></div>
+          <div className="text-wanikani-text-light">{t('burnProjection.totalBurnable')}: <span className="text-wanikani-text font-bold">{totalBurnable.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light">{t('burnProjection.burnedSoFar')}: <span className="text-gray-600 font-bold">{burnedCount.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light">{t('burnProjection.burnRate')}: <span className="text-wanikani-pink font-bold">{impliedBurnRatePerDay.toFixed(2)}/{t('common.day')}</span></div>
           {etaDate && (
-            <div className="text-xs text-wanikani-cyan font-medium">ETA: {etaDate.toLocaleDateString()}</div>
+            <div className="text-xs text-wanikani-cyan font-medium">{t('burnProjection.eta')}: {etaDate.toLocaleDateString()}</div>
           )}
         </div>
       </div>
 
       {notEnoughData ? (
         <div className="bg-gray-50 rounded-lg p-4 border border-wanikani-border text-wanikani-text-light text-sm">
-          Not enough burn data yet. Complete more reviews to burn items.
+          {t('burnProjection.noData')}
         </div>
       ) : (
         <div className="h-72">

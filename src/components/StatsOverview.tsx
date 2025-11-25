@@ -1,6 +1,7 @@
 'use client'
 
 import type { UserData, ReviewStatistic } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface StatsOverviewProps {
   userData: UserData
@@ -8,6 +9,7 @@ interface StatsOverviewProps {
 }
 
 export default function StatsOverview({ userData, reviewStats }: StatsOverviewProps) {
+  const { t } = useLanguage()
   const visibleStats = reviewStats.filter(stat => !stat.data.hidden)
   
   const totalCorrect = visibleStats.reduce((total, stat) => {
@@ -36,42 +38,42 @@ export default function StatsOverview({ userData, reviewStats }: StatsOverviewPr
 
   const stats = [
     {
-      label: 'Current Level',
+      label: t('stats.currentLevel'),
       value: userData.level.toString(),
       color: 'text-blue-400'
     },
     {
-      label: 'Total Reviews',
+      label: t('stats.totalReviews'),
       value: totalReviews.toLocaleString(),
       color: 'text-green-400'
     },
     {
-      label: 'Overall Accuracy',
+      label: t('stats.overallAccuracy'),
       value: `${overallAccuracy.toFixed(1)}%`,
       color: 'text-purple-400'
     },
     {
-      label: 'Radical Accuracy',
+      label: t('stats.radicalAccuracy'),
       value: `${calculateAccuracy(radicalStats).toFixed(1)}%`,
       color: 'text-wanikani-radical'
     },
     {
-      label: 'Kanji Accuracy',
+      label: t('stats.kanjiAccuracy'),
       value: `${calculateAccuracy(kanjiStats).toFixed(1)}%`,
       color: 'text-wanikani-kanji'
     },
     {
-      label: 'Vocabulary Accuracy',
+      label: t('stats.vocabAccuracy'),
       value: `${calculateAccuracy(vocabularyStats).toFixed(1)}%`,
       color: 'text-wanikani-vocabulary'
     },
     {
-      label: 'Account Age',
-      value: `${accountAge} days`,
+      label: t('stats.accountAge'),
+      value: `${accountAge} ${t('stats.days')}`,
       color: 'text-yellow-400'
     },
     {
-      label: 'Items Studied',
+      label: t('stats.itemsStudied'),
       value: visibleStats.length.toLocaleString(),
       color: 'text-indigo-400'
     }
@@ -80,7 +82,7 @@ export default function StatsOverview({ userData, reviewStats }: StatsOverviewPr
   return (
     <div className="wk-card rounded-lg p-6">
       <h2 className="text-xl font-bold mb-5 text-wanikani-text">
-        Statistics Overview
+        {t('stats.title')}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
         {stats.map((stat, index) => (

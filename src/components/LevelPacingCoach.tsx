@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import type { Assignment, LevelProgression, Subject, UserData, SpacedRepetitionSystem } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface LevelPacingCoachProps {
   assignments: Assignment[]
@@ -62,6 +63,7 @@ export default function LevelPacingCoach({
   srsSystems,
   userData
 }: LevelPacingCoachProps) {
+  const { t } = useLanguage()
   const {
     gatingKanji,
     etaDays,
@@ -111,28 +113,28 @@ export default function LevelPacingCoach({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Level Pacing Coach
+            {t('pacing.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">Which kanji are blocking level-up</p>
+          <p className="text-sm text-wanikani-text-light">{t('pacing.subtitle')}</p>
         </div>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Gating kanji</div>
+            <div className="text-wanikani-text-light text-xs">{t('pacing.gatingKanji')}</div>
             <div className="text-wanikani-kanji font-bold text-lg">{gatingKanji.length}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">ETA to next level</div>
+            <div className="text-wanikani-text-light text-xs">{t('pacing.etaNextLevel')}</div>
             <div className="text-wanikani-text font-bold text-lg">
-              {gatingKanji.length === 0 ? 'Ready!' : `${etaDays.toFixed(1)} days`}
+              {gatingKanji.length === 0 ? t('pacing.ready') : `${etaDays.toFixed(1)} ${t('common.days')}`}
             </div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Passing stage</div>
+            <div className="text-wanikani-text-light text-xs">{t('pacing.passingStage')}</div>
             <div className="text-wanikani-guru font-bold text-lg">SRS {passingStage}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Time in level</div>
-            <div className="text-wanikani-text font-bold text-lg">{currentLevelDurationDays.toFixed(1)} days</div>
+            <div className="text-wanikani-text-light text-xs">{t('pacing.timeInLevel')}</div>
+            <div className="text-wanikani-text font-bold text-lg">{currentLevelDurationDays.toFixed(1)} {t('common.days')}</div>
           </div>
         </div>
       </div>
@@ -140,11 +142,11 @@ export default function LevelPacingCoach({
       {gatingKanji.length === 0 ? (
         <div className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
           <span>✓</span>
-          All current-level kanji are at or above passing. You can level up as soon as your reviews allow!
+          {t('pacing.allPassed')}
         </div>
       ) : (
         <div>
-          <div className="text-sm text-wanikani-text-light mb-2">Focus these next:</div>
+          <div className="text-sm text-wanikani-text-light mb-2">{t('pacing.focusNext')}:</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {gatingKanji.map(item => (
               <div key={item.subjectId} className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:border-wanikani-kanji hover:shadow-sm transition-all">

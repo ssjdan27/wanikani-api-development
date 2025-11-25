@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import type { UserData, Subject, Assignment } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface LevelProgressProps {
   userData: UserData
@@ -10,6 +11,7 @@ interface LevelProgressProps {
 }
 
 export default function LevelProgress({ userData, subjects, assignments }: LevelProgressProps) {
+  const { t } = useLanguage()
   const [selectedLevel, setSelectedLevel] = useState(userData.level)
 
   useEffect(() => {
@@ -86,9 +88,9 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Level {selectedLevel} Progress
+            {t('levelProgress.title').replace('{level}', String(selectedLevel))}
           </h2>
-          <p className="text-sm text-wanikani-text-light mt-1">Guru+ items count as completed</p>
+          <p className="text-sm text-wanikani-text-light mt-1">{t('levelProgress.guruNote')}</p>
         </div>
         <select
           value={selectedLevel}
@@ -97,7 +99,7 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
         >
           {levelOptions.map(level => (
             <option key={level} value={level}>
-              Level {level} {level === userData.level ? '(current)' : ''}
+              {t('levelProgress.levelOption').replace('{level}', String(level))} {level === userData.level ? t('levelProgress.current') : ''}
             </option>
           ))}
         </select>
@@ -105,27 +107,27 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
       
       {selectedLevelSubjects.length === 0 ? (
         <div className="text-wanikani-text-light text-sm bg-gray-50 border border-wanikani-border rounded-lg p-4">
-          No subject data available for this level yet. Try refreshing or check your subscription limits.
+          {t('levelProgress.noData')}
         </div>
       ) : (
         <>
           <div className="space-y-6">
             <ProgressBar
-              label="Radicals"
+              label={t('common.radicals')}
               current={completedRadicals}
               total={radicals.length}
               color="bg-wanikani-radical"
             />
             
             <ProgressBar
-              label="Kanji"
+              label={t('common.kanji')}
               current={completedKanji}
               total={kanji.length}
               color="bg-wanikani-kanji"
             />
             
             <ProgressBar
-              label="Vocabulary"
+              label={t('common.vocabulary')}
               current={completedVocabulary}
               total={vocabulary.length}
               color="bg-wanikani-vocabulary"
@@ -136,15 +138,15 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-wanikani-radical">{completedRadicals}/{radicals.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">Radicals</div>
+                <div className="text-xs text-wanikani-text-light">{t('common.radicals')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-wanikani-kanji">{completedKanji}/{kanji.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">Kanji</div>
+                <div className="text-xs text-wanikani-text-light">{t('common.kanji')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-wanikani-vocabulary">{completedVocabulary}/{vocabulary.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">Vocabulary</div>
+                <div className="text-xs text-wanikani-text-light">{t('common.vocabulary')}</div>
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import type { Assignment, UserData } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface StudyHeatmapProps {
   assignments: Assignment[]
@@ -31,6 +32,7 @@ function getColor(total: number, maxTotal: number): string {
 }
 
 export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProps) {
+  const { t } = useLanguage()
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
 
   // Ensure the selected year is within the user's activity window
@@ -92,7 +94,7 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
   if (maxTotal === 0) {
     return (
       <div className="bg-gray-50 rounded-lg p-4 border border-wanikani-border text-wanikani-text-light text-sm">
-        No study activity found for {selectedYear}. Try a different year.
+        {t('heatmap.noActivity').replace('{year}', String(selectedYear))}
       </div>
     )
   }
@@ -109,9 +111,9 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Study Heatmap
+            {t('heatmap.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">Hover to see daily lessons. Total: {totalLessons.toLocaleString()}</p>
+          <p className="text-sm text-wanikani-text-light">{t('heatmap.subtitle').replace('{total}', totalLessons.toLocaleString())}</p>
         </div>
         <div className="flex items-center gap-3">
           <select
@@ -125,13 +127,13 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
           </select>
         </div>
         <div className="flex items-center space-x-2 text-xs text-wanikani-text-light">
-          <span>Less</span>
+          <span>{t('heatmap.less')}</span>
           <span className="w-4 h-4 rounded bg-gray-100 border border-gray-200" />
           <span className="w-4 h-4 rounded bg-pink-200" />
           <span className="w-4 h-4 rounded bg-pink-300" />
           <span className="w-4 h-4 rounded bg-pink-400" />
           <span className="w-4 h-4 rounded bg-wanikani-pink" />
-          <span>More</span>
+          <span>{t('heatmap.more')}</span>
         </div>
       </div>
 
@@ -162,11 +164,11 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
 
       <div className="mt-4 text-sm grid grid-cols-2 gap-4">
         <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border">
-          <div className="text-wanikani-text-light text-xs mb-1">Max lessons in a day</div>
+          <div className="text-wanikani-text-light text-xs mb-1">{t('heatmap.maxLessons')}</div>
           <div className="text-wanikani-pink font-bold">{maxLessons}</div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border">
-          <div className="text-wanikani-text-light text-xs mb-1">Total lessons loaded</div>
+          <div className="text-wanikani-text-light text-xs mb-1">{t('heatmap.totalLessons')}</div>
           <div className="text-wanikani-vocabulary font-bold">{totalLessons.toLocaleString()}</div>
         </div>
       </div>

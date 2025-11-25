@@ -2,12 +2,14 @@
 
 import { useMemo } from 'react'
 import type { Summary } from '@/types/wanikani'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface LessonBatchingHelperProps {
   summary: Summary | null
 }
 
 export default function LessonBatchingHelper({ summary }: LessonBatchingHelperProps) {
+  const { t } = useLanguage()
   const {
     lessonsAvailable,
     nextReviewsAt,
@@ -47,38 +49,38 @@ export default function LessonBatchingHelper({ summary }: LessonBatchingHelperPr
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-wanikani-text">
-            Lesson Batching Helper
+            {t('batching.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">Match your lesson pace to upcoming reviews</p>
+          <p className="text-sm text-wanikani-text-light">{t('batching.subtitle')}</p>
         </div>
         <div className="wk-card-pink rounded-lg p-3">
-          <div className="text-white/80 text-xs">Recommended today</div>
-          <div className="text-white font-bold text-xl">{recommendedLessons} lessons</div>
+          <div className="text-white/80 text-xs">{t('batching.recommendedToday')}</div>
+          <div className="text-white font-bold text-xl">{recommendedLessons} {t('common.lessons')}</div>
         </div>
       </div>
 
       {!summary ? (
-        <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">Summary data not loaded yet.</div>
+        <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">{t('batching.noData')}</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Lessons available</div>
+            <div className="text-wanikani-text-light text-xs">{t('batching.lessonsAvailable')}</div>
             <div className="text-wanikani-radical font-bold text-lg">{lessonsAvailable}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Next reviews</div>
+            <div className="text-wanikani-text-light text-xs">{t('batching.nextReviews')}</div>
             <div className="text-wanikani-text font-bold text-lg">
-              {nextReviewsAt ? new Date(nextReviewsAt).toLocaleTimeString() : 'None'}
+              {nextReviewsAt ? new Date(nextReviewsAt).toLocaleTimeString() : t('common.none')}
             </div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Reviews in 24h</div>
+            <div className="text-wanikani-text-light text-xs">{t('batching.reviewsIn24h')}</div>
             <div className="text-wanikani-vocabulary font-bold text-lg">{reviewsNext24h}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">Peak hour</div>
+            <div className="text-wanikani-text-light text-xs">{t('batching.peakHour')}</div>
             <div className="text-wanikani-text font-bold text-lg">
-              {peakHour ? `${new Date(peakHour.hour).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Average'}
+              {peakHour ? `${new Date(peakHour.hour).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : t('batching.average')}
             </div>
           </div>
         </div>

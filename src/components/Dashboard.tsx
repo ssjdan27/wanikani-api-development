@@ -17,6 +17,8 @@ import BurnRadar from './BurnRadar'
 import LeechDetector from './LeechDetector'
 import LessonBatchingHelper from './LessonBatchingHelper'
 import SrsStageHistogram from './SrsStageHistogram'
+import LanguageToggle from './LanguageToggle'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
   apiToken: string
@@ -157,6 +159,8 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
     }
   }, [apiToken, fetchData])
 
+  const { t } = useLanguage()
+
   const handleLogout = () => {
     onTokenChange('')
   }
@@ -168,7 +172,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <div className="w-16 h-16 rounded-full bg-wanikani-pink flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-3xl">🦀</span>
           </div>
-          <p className="text-wanikani-text-light">Loading your WaniKani data...</p>
+          <p className="text-wanikani-text-light">{t('loading')}</p>
         </div>
       </div>
     )
@@ -184,7 +188,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
             onClick={() => onTokenChange('')}
             className="bg-wanikani-pink hover:bg-pink-600 text-white px-6 py-2 rounded-lg transition-colors"
           >
-            Update Token
+            {t('error.updateToken')}
           </button>
         </div>
       </div>
@@ -201,19 +205,20 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🦀</span>
-              <span className="text-xl font-bold text-wanikani-pink">WANIKANI DASHBOARD</span>
+              <span className="text-xl font-bold text-wanikani-pink">{t('header.title')}</span>
             </div>
             <div className="text-sm text-wanikani-text-light">
-              Level <span className="font-bold text-wanikani-text">{userData.level}</span> · {userData.username}
+              {t('header.level')} <span className="font-bold text-wanikani-text">{userData.level}</span> · {userData.username}
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <LanguageToggle />
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2 border border-wanikani-border hover:bg-gray-50 text-wanikani-text rounded-lg transition-colors text-sm"
             >
               <LogOut className="w-4 h-4" />
-              Logout
+              {t('header.logout')}
             </button>
           </div>
         </div>
@@ -247,17 +252,17 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         <div className="wk-card rounded-lg overflow-hidden">
           <div className="flex gap-1 p-3 bg-gray-50 border-b border-wanikani-border">
             <TabButton
-              label="Level Projection"
+              label={t('tabs.levelProjection')}
               isActive={activeTab === 'projection'}
               onClick={() => setActiveTab('projection')}
             />
             <TabButton
-              label="Burn Projection"
+              label={t('tabs.burnProjection')}
               isActive={activeTab === 'burn'}
               onClick={() => setActiveTab('burn')}
             />
             <TabButton
-              label="Study Heatmap"
+              label={t('tabs.studyHeatmap')}
               isActive={activeTab === 'heatmap'}
               onClick={() => setActiveTab('heatmap')}
             />
@@ -298,7 +303,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
         {/* Footer */}
         <footer className="text-center py-6 border-t border-wanikani-border">
-          <p className="text-wanikani-text-light text-sm">頑張って！ Keep going! 🦀</p>
+          <p className="text-wanikani-text-light text-sm">{t('footer.message')} 🦀</p>
         </footer>
       </main>
     </div>
