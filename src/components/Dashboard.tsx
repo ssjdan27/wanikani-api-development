@@ -60,7 +60,19 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   }, [])
 
   const fetchData = useCallback(async (forceRefresh: boolean = false) => {
-    setLoading(true)
+    // Stale-while-revalidate: Try to show cached data immediately
+    if (!forceRefresh) {
+      const staleUser = wanikaniService.getStaleCache<{ data: UserData }>('/user')
+      if (staleUser?.data) {
+        // We have stale data - show it immediately while we refresh in background
+        setUserData(staleUser.data)
+        setLoading(false)
+      }
+    }
+    
+    if (forceRefresh || !userData) {
+      setLoading(true)
+    }
     setError('')
     setRefreshMessage('')
     

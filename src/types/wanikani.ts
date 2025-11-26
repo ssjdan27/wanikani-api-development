@@ -150,6 +150,7 @@ export interface CacheEntry<T> {
   lastModified?: string
   timestamp: number
   expiresAt?: number
+  lastAccessed?: number  // For LRU eviction
 }
 
 export interface CacheConfig {
