@@ -26,15 +26,22 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
       .map(stat => {
         const incorrect = stat.data.meaning_incorrect + stat.data.reading_incorrect
         const subject = subjectById.get(stat.data.subject_id)
+        
+        // Skip items where subject data hasn't loaded yet
+        if (!subject) return null
+        
+        const label = subject.data.characters || subject.data.slug
+        if (!label) return null // Skip if we don't have a valid label
+        
         return {
           subjectId: stat.data.subject_id,
-          label: subject?.data.characters || subject?.data.slug || `Item ${stat.data.subject_id}`,
+          label,
           percentage: stat.data.percentage_correct,
           incorrect,
-          link: subject?.data.document_url
+          link: subject.data.document_url
         }
       })
-      .filter(item => item.percentage < 80 || item.incorrect >= 3)
+      .filter((item): item is Leech => item !== null && (item.percentage < 80 || item.incorrect >= 3))
       .sort((a, b) => (b.incorrect * (100 - b.percentage)) - (a.incorrect * (100 - a.percentage)))
       .slice(0, 10)
   }, [reviewStats, subjects])

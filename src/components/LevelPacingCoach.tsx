@@ -79,13 +79,18 @@ export default function LevelPacingCoach({
     kanjiAssignments.forEach(a => {
       const subject = subjectById.get(a.data.subject_id)
       if (!subject || subject.data.level !== userData.level) return
+      
+      // Ensure we have a valid label before proceeding
+      const label = subject.data.characters || subject.data.slug
+      if (!label) return
+      
       const srs = subject.data.spaced_repetition_system_id ? srsById.get(subject.data.spaced_repetition_system_id) : undefined
       const passingStage = srs?.data.passing_stage_position ?? 5
       const etaMs = calculateTimeToStage(a, passingStage, srs)
       if (a.data.srs_stage < passingStage) {
         gating.push({
           subjectId: subject.id,
-          label: subject.data.characters || subject.data.slug || `Kanji ${subject.id}`,
+          label,
           srsStage: a.data.srs_stage,
           passingStage,
           etaMs

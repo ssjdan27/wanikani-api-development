@@ -88,11 +88,20 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
         return
       }
 
+      // Skip items where we don't have subject data loaded yet
+      // This prevents showing "Item 3243" placeholders
+      if (!subject) return
+
       const etaMs = timeToBurn(a, burningStage, srs?.data.stages || [])
       if (etaMs === 0) return
+      
+      // Use characters if available, otherwise slug (required for radicals with images)
+      const label = subject.data.characters || subject.data.slug
+      if (!label) return // Skip if we still don't have a valid label
+      
       upcoming.push({
         subjectId: a.data.subject_id,
-        label: subject?.data.characters || subject?.data.slug || `Item ${a.data.subject_id}`,
+        label,
         etaMs,
       })
     })
