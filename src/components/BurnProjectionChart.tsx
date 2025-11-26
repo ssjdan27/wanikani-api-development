@@ -14,6 +14,7 @@ import {
 import 'chartjs-adapter-date-fns'
 import type { Assignment, LevelProgression, UserData, Subject } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 ChartJS.register(
   TimeScale,
@@ -38,6 +39,7 @@ const LEVEL_COUNT = 60
 
 export default function BurnProjectionChart({ assignments, levelProgressions, userData, subjects }: BurnProjectionChartProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const {
     actualPoints,
     projectionPoints,
@@ -212,7 +214,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#333333' },
+        labels: { color: isDark ? '#e0e0e0' : '#333333' },
       },
       tooltip: {
         callbacks: {
@@ -226,13 +228,13 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         suggestedMin: 0,
     suggestedMax: Math.max(totalBurnable, burnedCount + 10),
   },
