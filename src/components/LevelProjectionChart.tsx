@@ -14,6 +14,7 @@ import {
 import 'chartjs-adapter-date-fns'
 import type { LevelProgression, UserData } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 ChartJS.register(
   TimeScale,
@@ -33,6 +34,7 @@ const DAY_MS = 1000 * 60 * 60 * 24
 
 export default function LevelProjectionChart({ userData, levelProgressions }: LevelProjectionChartProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const {
     actualPoints,
     projectionPoints,
@@ -140,7 +142,7 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#333333' },
+        labels: { color: isDark ? '#e0e0e0' : '#333333' },
       },
       tooltip: {
         callbacks: {
@@ -154,13 +156,13 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     scales: {
       x: {
         type: 'time' as const,
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         time: { unit: 'month' as const },
       },
       y: {
-        ticks: { color: '#666666', stepSize: 5 },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666', stepSize: 5 },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         suggestedMin: 1,
         suggestedMax: 60,
       },

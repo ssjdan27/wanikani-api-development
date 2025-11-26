@@ -12,6 +12,7 @@ import {
 } from 'chart.js'
 import type { Assignment, Subject } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -24,6 +25,7 @@ const STAGES = Array.from({ length: 10 }, (_, i) => i)
 
 export default function SrsStageHistogram({ assignments, subjects }: SrsStageHistogramProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const { radicalCounts, kanjiCounts, vocabCounts } = useMemo(() => {
     const subjectById = new Map(subjects.map(s => [s.id, s]))
 
@@ -79,19 +81,19 @@ export default function SrsStageHistogram({ assignments, subjects }: SrsStageHis
   const options = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#333333' } },
+      legend: { labels: { color: isDark ? '#e0e0e0' : '#333333' } },
       tooltip: { enabled: true }
     },
     scales: {
       x: {
         stacked: true,
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
       },
       y: {
         stacked: true,
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         beginAtZero: true
       }
     }

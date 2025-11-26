@@ -14,6 +14,7 @@ import {
 import { Doughnut } from 'react-chartjs-2'
 import type { ReviewStatistic } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +32,7 @@ interface AccuracyChartProps {
 
 export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const visibleStats = reviewStats.filter(stat => !stat.data.hidden)
 
   const calculateTypeAccuracy = (type: string) => {
@@ -90,7 +92,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: '#333333',
+          color: isDark ? '#e0e0e0' : '#333333',
           padding: 20,
         },
       },

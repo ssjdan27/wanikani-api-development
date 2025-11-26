@@ -12,6 +12,7 @@ import {
 } from 'chart.js'
 import type { Assignment, Subject, SpacedRepetitionSystem } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -62,6 +63,7 @@ function weekKey(date: Date): string {
 
 export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRadarProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const {
     upcoming,
     totalBurned,
@@ -124,17 +126,17 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
   const options = {
     responsive: true,
     plugins: {
-      legend: { labels: { color: '#333333' } },
+      legend: { labels: { color: isDark ? '#e0e0e0' : '#333333' } },
       tooltip: { enabled: true }
     },
     scales: {
       x: {
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
       },
       y: {
-        ticks: { color: '#666666' },
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
         beginAtZero: true
       }
     }
