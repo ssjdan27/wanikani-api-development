@@ -11,6 +11,12 @@ body {
   min-height: 100vh;
 }
 
+.dark body,
+:root.dark body {
+  background-color: #1a1a2e;
+  color: #e8e8e8;
+}
+
 .japanese-text {
   font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
 }
@@ -33,16 +39,38 @@ body {
   background: #aaaaaa;
 }
 
+/* Dark theme scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4a4a6a;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #5a5a7a;
+}
+
 /* WaniKani-style card */
 .wk-card {
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.dark .wk-card {
+  background: #16213e;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .wk-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* Pink accent card (like Lessons) */
@@ -70,6 +98,10 @@ body {
   overflow: hidden;
 }
 
+.dark .wk-progress {
+  background: #2a2a4a;
+}
+
 .wk-progress-bar {
   height: 100%;
   border-radius: 4px;
@@ -87,3 +119,74 @@ body {
 .srs-master { background: #294ddb; color: white; }
 .srs-enlightened { background: #0093dd; color: white; }
 .srs-burned { background: #434343; color: white; }
+
+/* Dark mode text colors */
+.dark .text-wanikani-text {
+  color: #e8e8e8;
+}
+
+.dark .text-wanikani-text-light {
+  color: #a0a0a0;
+}
+
+/* Dark mode backgrounds */
+.dark .bg-wanikani-bg {
+  background-color: #1a1a2e;
+}
+
+.dark .bg-white {
+  background-color: #16213e;
+}
+
+.dark .bg-gray-50 {
+  background-color: #1e2a47;
+}
+
+.dark .bg-gray-100 {
+  background-color: #2a2a4a;
+}
+
+.dark .bg-gray-200 {
+  background-color: #3a3a5a;
+}
+
+/* Dark mode borders */
+.dark .border-wanikani-border {
+  border-color: #2a2a4a;
+}
+
+.dark .border-gray-200 {
+  border-color: #2a2a4a;
+}
+
+/* Dark mode hover states */
+.dark .hover\:bg-gray-50:hover {
+  background-color: #2a3a57;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #3a3a5a;
+}
+
+/* Dark mode for select elements */
+.dark select {
+  background-color: #1e2a47;
+  color: #e8e8e8;
+  border-color: #2a2a4a;
+}
+
+.dark select option {
+  background-color: #16213e;
+  color: #e8e8e8;
+}
+
+/* Dark mode for input elements */
+.dark input {
+  background-color: #1e2a47;
+  color: #e8e8e8;
+  border-color: #2a2a4a;
+}
+
+.dark input::placeholder {
+  color: #6a6a8a;
+}

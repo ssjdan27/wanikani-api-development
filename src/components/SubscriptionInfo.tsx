@@ -17,9 +17,9 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
       <div className="wk-card rounded-lg p-4 mb-6 border-l-4 border-yellow-500">
         <div className="flex items-center space-x-2">
           <AlertTriangle className="w-5 h-5 text-yellow-500" />
-          <span className="text-yellow-700 font-medium">{t('subscription.statusUnknown')}</span>
+          <span className="text-yellow-700 dark:text-yellow-400 font-medium">{t('subscription.statusUnknown')}</span>
         </div>
-        <p className="text-wanikani-text-light text-sm mt-2">
+        <p className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm mt-2">
           {t('subscription.unableToDetermine')}
         </p>
       </div>
@@ -61,7 +61,7 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           {getSubscriptionIcon()}
-          <span className="font-medium text-wanikani-text">
+          <span className="font-medium text-wanikani-text dark:text-wanikani-text-dark">
             {getStatusText()}
           </span>
           {subscription.type === 'lifetime' && (
@@ -69,7 +69,7 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
           )}
         </div>
         <div className="text-right">
-          <div className="text-wanikani-text text-sm">
+          <div className="text-wanikani-text dark:text-wanikani-text-dark text-sm">
             {t('subscription.access')}: {maxLevel === 60 ? (
               <span className="text-wanikani-cyan font-medium">{t('subscription.fullAccess')}</span>
             ) : (
@@ -77,7 +77,7 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
             )}
           </div>
           {subscription.period_ends_at && (
-            <div className="text-wanikani-text-light text-xs">
+            <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs">
               {subscription.type === 'recurring' ? t('subscription.renews') : t('subscription.ends')}: {' '}
               {new Date(subscription.period_ends_at).toLocaleDateString()}
             </div>
@@ -86,16 +86,16 @@ export default function SubscriptionInfo({ userData }: SubscriptionInfoProps) {
       </div>
       
       {maxLevel < 60 && (
-        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-wanikani-border">
-          <p className="text-wanikani-text-light text-sm">
-            <strong className="text-wanikani-text">{t('subscription.note')}:</strong> {t('subscription.contentFiltered').replace('{level}', String(maxLevel))}
+        <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark">
+          <p className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm">
+            <strong className="text-wanikani-text dark:text-wanikani-text-dark">{t('subscription.note')}:</strong> {t('subscription.contentFiltered').replace('{level}', String(maxLevel))}
           </p>
         </div>
       )}
       
       {!subscription.active && (
-        <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
-          <p className="text-red-600 text-sm">
+        <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800">
+          <p className="text-red-600 dark:text-red-400 text-sm">
             <strong>{t('subscription.notice')}:</strong> {t('subscription.inactiveNotice')}
           </p>
         </div>

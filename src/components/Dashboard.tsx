@@ -18,6 +18,7 @@ import LeechDetector from './LeechDetector'
 import LessonBatchingHelper from './LessonBatchingHelper'
 import SrsStageHistogram from './SrsStageHistogram'
 import LanguageToggle from './LanguageToggle'
+import ThemeToggle from './ThemeToggle'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -167,12 +168,12 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-wanikani-bg flex items-center justify-center">
+      <div className="min-h-screen bg-wanikani-bg dark:bg-wanikani-bg-dark flex items-center justify-center transition-colors">
         <div className="text-center">
           <div className="w-16 h-16 rounded-full bg-wanikani-pink flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-3xl">🦀</span>
           </div>
-          <p className="text-wanikani-text-light">{t('loading')}</p>
+          <p className="text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('loading')}</p>
         </div>
       </div>
     )
@@ -180,7 +181,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-wanikani-bg flex items-center justify-center p-4">
+      <div className="min-h-screen bg-wanikani-bg dark:bg-wanikani-bg-dark flex items-center justify-center p-4 transition-colors">
         <div className="wk-card rounded-lg p-6 max-w-md text-center">
           <div className="text-4xl mb-4">😿</div>
           <p className="text-red-500 mb-4">{error}</p>
@@ -198,24 +199,25 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   if (!userData) return null
 
   return (
-    <div className="min-h-screen bg-wanikani-bg">
+    <div className="min-h-screen bg-wanikani-bg dark:bg-wanikani-bg-dark transition-colors">
       {/* Header */}
-      <header className="bg-white border-b border-wanikani-border px-6 py-3 sticky top-0 z-50">
+      <header className="bg-white dark:bg-wanikani-card-dark border-b border-wanikani-border dark:border-wanikani-border-dark px-6 py-3 sticky top-0 z-50 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🦀</span>
               <span className="text-xl font-bold text-wanikani-pink">{t('header.title')}</span>
             </div>
-            <div className="text-sm text-wanikani-text-light">
-              {t('header.level')} <span className="font-bold text-wanikani-text">{userData.level}</span> · {userData.username}
+            <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
+              {t('header.level')} <span className="font-bold text-wanikani-text dark:text-wanikani-text-dark">{userData.level}</span> · {userData.username}
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <LanguageToggle />
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 border border-wanikani-border hover:bg-gray-50 text-wanikani-text rounded-lg transition-colors text-sm"
+              className="flex items-center gap-2 px-4 py-2 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-50 dark:hover:bg-gray-700 text-wanikani-text dark:text-wanikani-text-dark rounded-lg transition-colors text-sm"
             >
               <LogOut className="w-4 h-4" />
               {t('header.logout')}

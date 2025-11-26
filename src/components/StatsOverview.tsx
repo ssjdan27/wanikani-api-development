@@ -81,16 +81,16 @@ export default function StatsOverview({ userData, reviewStats }: StatsOverviewPr
 
   return (
     <div className="wk-card rounded-lg p-6">
-      <h2 className="text-xl font-bold mb-5 text-wanikani-text">
+      <h2 className="text-xl font-bold mb-5 text-wanikani-text dark:text-wanikani-text-dark">
         {t('stats.title')}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
         {stats.map((stat, index) => (
-          <div key={index} className="text-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div key={index} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
             <div className={`text-2xl font-bold ${stat.color} mb-1`}>
               {stat.value}
             </div>
-            <div className="text-sm text-wanikani-text-light">
+            <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
               {stat.label}
             </div>
           </div>

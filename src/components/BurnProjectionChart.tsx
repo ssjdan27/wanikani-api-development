@@ -245,17 +245,17 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('burnProjection.title')} 🔥
           </h2>
-          <p className="text-sm text-wanikani-text-light">
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
             {t('burnProjection.basedOnPace').replace('{days}', averageDaysPerLevel.toFixed(1))}
           </p>
         </div>
         <div className="text-right text-sm space-y-1">
-          <div className="text-wanikani-text-light">{t('burnProjection.totalBurnable')}: <span className="text-wanikani-text font-bold">{totalBurnable.toLocaleString()}</span></div>
-          <div className="text-wanikani-text-light">{t('burnProjection.burnedSoFar')}: <span className="text-gray-600 font-bold">{burnedCount.toLocaleString()}</span></div>
-          <div className="text-wanikani-text-light">{t('burnProjection.burnRate')}: <span className="text-wanikani-pink font-bold">{impliedBurnRatePerDay.toFixed(2)}/{t('common.day')}</span></div>
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('burnProjection.totalBurnable')}: <span className="text-wanikani-text dark:text-wanikani-text-dark font-bold">{totalBurnable.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('burnProjection.burnedSoFar')}: <span className="text-gray-600 dark:text-gray-400 font-bold">{burnedCount.toLocaleString()}</span></div>
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('burnProjection.burnRate')}: <span className="text-wanikani-pink font-bold">{impliedBurnRatePerDay.toFixed(2)}/{t('common.day')}</span></div>
           {etaDate && (
             <div className="text-xs text-wanikani-cyan font-medium">{t('burnProjection.eta')}: {etaDate.toLocaleDateString()}</div>
           )}
@@ -263,7 +263,7 @@ export default function BurnProjectionChart({ assignments, levelProgressions, us
       </div>
 
       {notEnoughData ? (
-        <div className="bg-gray-50 rounded-lg p-4 border border-wanikani-border text-wanikani-text-light text-sm">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-wanikani-border dark:border-wanikani-border-dark text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm">
           {t('burnProjection.noData')}
         </div>
       ) : (

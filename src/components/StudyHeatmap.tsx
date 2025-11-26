@@ -3,6 +3,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import type { Assignment, UserData } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface StudyHeatmapProps {
   assignments: Assignment[]
@@ -20,19 +21,20 @@ function toDayKey(value: string | Date): DayKey {
 }
 
 // Color scale that adapts to the maximum volume - Light WaniKani themed
-function getColor(total: number, maxTotal: number): string {
-  if (total === 0) return 'bg-gray-100 border border-gray-200'
+function getColor(total: number, maxTotal: number, isDark: boolean): string {
+  if (total === 0) return isDark ? 'bg-gray-800 border border-gray-700' : 'bg-gray-100 border border-gray-200'
   if (maxTotal <= 4) return 'bg-wanikani-pink'
 
   const step = Math.max(1, Math.floor(maxTotal / 4))
-  if (total <= step) return 'bg-pink-200'
-  if (total <= step * 2) return 'bg-pink-300'
-  if (total <= step * 3) return 'bg-pink-400'
+  if (total <= step) return isDark ? 'bg-pink-900' : 'bg-pink-200'
+  if (total <= step * 2) return isDark ? 'bg-pink-700' : 'bg-pink-300'
+  if (total <= step * 3) return isDark ? 'bg-pink-500' : 'bg-pink-400'
   return 'bg-wanikani-pink'
 }
 
 export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProps) {
   const { t } = useLanguage()
+  const { isDark } = useTheme()
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
 
   // Ensure the selected year is within the user's activity window
@@ -93,7 +95,7 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
 
   if (maxTotal === 0) {
     return (
-      <div className="bg-gray-50 rounded-lg p-4 border border-wanikani-border text-wanikani-text-light text-sm">
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-wanikani-border dark:border-wanikani-border-dark text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm">
         {t('heatmap.noActivity').replace('{year}', String(selectedYear))}
       </div>
     )
@@ -110,28 +112,28 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('heatmap.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">{t('heatmap.subtitle').replace('{total}', totalLessons.toLocaleString())}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('heatmap.subtitle').replace('{total}', totalLessons.toLocaleString())}</p>
         </div>
         <div className="flex items-center gap-3">
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
-            className="bg-white text-wanikani-text px-3 py-2 rounded-lg border border-wanikani-border focus:outline-none focus:ring-2 focus:ring-wanikani-pink/50 text-sm"
+            className="bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark px-3 py-2 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink/50 text-sm"
           >
             {years.map(year => (
               <option key={year} value={year}>{year}</option>
             ))}
           </select>
         </div>
-        <div className="flex items-center space-x-2 text-xs text-wanikani-text-light">
+        <div className="flex items-center space-x-2 text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">
           <span>{t('heatmap.less')}</span>
-          <span className="w-4 h-4 rounded bg-gray-100 border border-gray-200" />
-          <span className="w-4 h-4 rounded bg-pink-200" />
-          <span className="w-4 h-4 rounded bg-pink-300" />
-          <span className="w-4 h-4 rounded bg-pink-400" />
+          <span className="w-4 h-4 rounded bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700" />
+          <span className="w-4 h-4 rounded bg-pink-200 dark:bg-pink-900" />
+          <span className="w-4 h-4 rounded bg-pink-300 dark:bg-pink-700" />
+          <span className="w-4 h-4 rounded bg-pink-400 dark:bg-pink-500" />
           <span className="w-4 h-4 rounded bg-wanikani-pink" />
           <span>{t('heatmap.more')}</span>
         </div>
@@ -155,7 +157,7 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
           return (
             <div
               key={day.date.toISOString()}
-              className={`w-4 h-4 rounded ${getColor(total, maxTotal)} hover:ring-2 hover:ring-wanikani-pink/50 transition-all`}
+              className={`w-4 h-4 rounded ${getColor(total, maxTotal, isDark)} hover:ring-2 hover:ring-wanikani-pink/50 transition-all`}
               title={label}
             />
           )
@@ -163,12 +165,12 @@ export default function StudyHeatmap({ assignments, userData }: StudyHeatmapProp
       </div>
 
       <div className="mt-4 text-sm grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border">
-          <div className="text-wanikani-text-light text-xs mb-1">{t('heatmap.maxLessons')}</div>
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark">
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs mb-1">{t('heatmap.maxLessons')}</div>
           <div className="text-wanikani-pink font-bold">{maxLessons}</div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border">
-          <div className="text-wanikani-text-light text-xs mb-1">{t('heatmap.totalLessons')}</div>
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark">
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs mb-1">{t('heatmap.totalLessons')}</div>
           <div className="text-wanikani-vocabulary font-bold">{totalLessons.toLocaleString()}</div>
         </div>
       </div>

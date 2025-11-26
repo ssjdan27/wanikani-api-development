@@ -112,46 +112,46 @@ export default function LevelPacingCoach({
     <div className="wk-card rounded-lg p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('pacing.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">{t('pacing.subtitle')}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('pacing.subtitle')}</p>
         </div>
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">{t('pacing.gatingKanji')}</div>
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs">{t('pacing.gatingKanji')}</div>
             <div className="text-wanikani-kanji font-bold text-lg">{gatingKanji.length}</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">{t('pacing.etaNextLevel')}</div>
-            <div className="text-wanikani-text font-bold text-lg">
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs">{t('pacing.etaNextLevel')}</div>
+            <div className="text-wanikani-text dark:text-wanikani-text-dark font-bold text-lg">
               {gatingKanji.length === 0 ? t('pacing.ready') : `${etaDays.toFixed(1)} ${t('common.days')}`}
             </div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">{t('pacing.passingStage')}</div>
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs">{t('pacing.passingStage')}</div>
             <div className="text-wanikani-guru font-bold text-lg">SRS {passingStage}</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-            <div className="text-wanikani-text-light text-xs">{t('pacing.timeInLevel')}</div>
-            <div className="text-wanikani-text font-bold text-lg">{currentLevelDurationDays.toFixed(1)} {t('common.days')}</div>
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs">{t('pacing.timeInLevel')}</div>
+            <div className="text-wanikani-text dark:text-wanikani-text-dark font-bold text-lg">{currentLevelDurationDays.toFixed(1)} {t('common.days')}</div>
           </div>
         </div>
       </div>
 
       {gatingKanji.length === 0 ? (
-        <div className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+        <div className="text-green-600 dark:text-green-400 text-sm bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-3 flex items-center gap-2">
           <span>✓</span>
           {t('pacing.allPassed')}
         </div>
       ) : (
         <div>
-          <div className="text-sm text-wanikani-text-light mb-2">{t('pacing.focusNext')}:</div>
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark mb-2">{t('pacing.focusNext')}:</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {gatingKanji.map(item => (
-              <div key={item.subjectId} className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:border-wanikani-kanji hover:shadow-sm transition-all">
+              <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-wanikani-kanji hover:shadow-sm transition-all">
                 <div className="text-2xl font-bold text-wanikani-kanji mb-1">{item.label}</div>
-                <div className="text-xs text-wanikani-text-light">SRS {item.srsStage} → {item.passingStage}</div>
+                <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">SRS {item.srsStage} → {item.passingStage}</div>
                 <div className="text-sm text-wanikani-cyan mt-1 font-medium">
                   {item.etaMs <= 0 ? 'Ready now!' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
                 </div>

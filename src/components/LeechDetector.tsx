@@ -43,16 +43,16 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
     <div className="wk-card rounded-lg p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('leech.title')} 🦉
           </h2>
-          <p className="text-sm text-wanikani-text-light">{t('leech.subtitle')}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('leech.subtitle')}</p>
         </div>
-        <div className="text-sm text-wanikani-text-light">{t('leech.topLeeches').replace('{count}', String(leeches.length))}</div>
+        <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('leech.topLeeches').replace('{count}', String(leeches.length))}</div>
       </div>
 
       {leeches.length === 0 ? (
-        <div className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+        <div className="text-green-600 dark:text-green-400 text-sm bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-3 flex items-center gap-2">
           <span>✓</span>
           {t('leech.noLeeches')}
         </div>
@@ -60,7 +60,7 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="text-wanikani-text-light text-left border-b border-wanikani-border">
+              <tr className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-left border-b border-wanikani-border dark:border-wanikani-border-dark">
                 <th className="pb-2">{t('leech.item')}</th>
                 <th className="pb-2">{t('leech.accuracy')}</th>
                 <th className="pb-2">{t('leech.incorrect')}</th>
@@ -69,10 +69,10 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
             </thead>
             <tbody>
               {leeches.map(leech => (
-                <tr key={leech.subjectId} className="border-t border-wanikani-border hover:bg-gray-50 transition-colors">
-                  <td className="py-2 text-wanikani-text font-semibold">{leech.label}</td>
+                <tr key={leech.subjectId} className="border-t border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <td className="py-2 text-wanikani-text dark:text-wanikani-text-dark font-semibold">{leech.label}</td>
                   <td className="py-2">
-                    <span className={leech.percentage < 50 ? 'text-red-500' : leech.percentage < 70 ? 'text-yellow-600' : 'text-wanikani-text'}>
+                    <span className={leech.percentage < 50 ? 'text-red-500' : leech.percentage < 70 ? 'text-yellow-600 dark:text-yellow-400' : 'text-wanikani-text dark:text-wanikani-text-dark'}>
                       {leech.percentage.toFixed(0)}%
                     </span>
                   </td>

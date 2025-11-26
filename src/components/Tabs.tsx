@@ -20,7 +20,7 @@ export function TabButton({ label, isActive, onClick }: TabButtonProps) {
       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
         isActive
           ? 'bg-wanikani-pink text-white'
-          : 'bg-white text-wanikani-text hover:bg-gray-100 border border-wanikani-border'
+          : 'bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark hover:bg-gray-100 dark:hover:bg-gray-700 border border-wanikani-border dark:border-wanikani-border-dark'
       }`}
     >
       {label}

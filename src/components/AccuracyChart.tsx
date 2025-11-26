@@ -106,7 +106,7 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
 
   return (
     <div className="wk-card rounded-lg p-6">
-      <h2 className="text-xl font-bold mb-5 text-wanikani-text">
+      <h2 className="text-xl font-bold mb-5 text-wanikani-text dark:text-wanikani-text-dark">
         {t('accuracy.title')}
       </h2>
       
@@ -115,23 +115,23 @@ export default function AccuracyChart({ reviewStats }: AccuracyChartProps) {
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+        <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
           <div className="text-2xl font-bold text-wanikani-radical">
             {radicalAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">{t('common.radicals')}</div>
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.radicals')}</div>
         </div>
-        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+        <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
           <div className="text-2xl font-bold text-wanikani-kanji">
             {kanjiAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">{t('common.kanji')}</div>
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.kanji')}</div>
         </div>
-        <div className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+        <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
           <div className="text-2xl font-bold text-wanikani-vocabulary">
             {combinedVocabularyAccuracy.toFixed(1)}%
           </div>
-          <div className="text-sm text-wanikani-text-light">{t('common.vocabulary')}</div>
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.vocabulary')}</div>
         </div>
       </div>
     </div>

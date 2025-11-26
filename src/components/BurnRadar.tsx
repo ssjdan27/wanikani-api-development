@@ -144,12 +144,12 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
     <div className="wk-card rounded-lg p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('burn.title')} 🔥
           </h2>
-          <p className="text-sm text-wanikani-text-light">{t('burn.subtitle')}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('burn.subtitle')}</p>
         </div>
-        <div className="bg-gray-700 rounded-lg p-3">
+        <div className="bg-gray-700 dark:bg-gray-800 rounded-lg p-3">
           <div className="text-gray-300 text-xs">{t('burn.totalBurned')}</div>
           <div className="text-white font-bold text-lg">{totalBurned.toLocaleString()} 🔥</div>
         </div>
@@ -160,14 +160,14 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
       </div>
 
       <div>
-        <div className="text-sm text-wanikani-text-light mb-2">{t('burn.nextBurns')}</div>
+        <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark mb-2">{t('burn.nextBurns')}</div>
         {upcoming.length === 0 ? (
-          <div className="text-wanikani-text-light text-sm bg-gray-50 rounded-lg p-3">{t('burn.noItems')}</div>
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm bg-gray-50 dark:bg-gray-800 rounded-lg p-3">{t('burn.noItems')}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {upcoming.map(item => (
-              <div key={item.subjectId} className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:border-gray-400 transition-colors">
-                <div className="text-2xl font-bold text-wanikani-text">{item.label}</div>
+              <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                <div className="text-2xl font-bold text-wanikani-text dark:text-wanikani-text-dark">{item.label}</div>
                 <div className="text-sm text-wanikani-cyan font-medium">
                   {item.etaMs < 3600000 ? `${(item.etaMs / (1000 * 60)).toFixed(0)}m` : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
                 </div>

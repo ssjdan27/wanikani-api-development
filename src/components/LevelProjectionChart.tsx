@@ -171,15 +171,15 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('projection.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
             {t('projection.basedOnPace').replace('{count}', String(sampleSize > 0 ? sampleSize : 5))}
           </p>
         </div>
         <div className="text-right">
-          <div className="text-sm text-wanikani-text-light">{t('projection.averagePace')}</div>
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('projection.averagePace')}</div>
           <div className="text-lg font-bold text-wanikani-cyan">{averageDaysPerLevel.toFixed(1)} {t('projection.daysPerLevel')}</div>
           {level60Eta && (
             <div className="text-xs text-wanikani-pink mt-1 font-medium">
@@ -194,21 +194,21 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       </div>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.latestLevel')}</div>
-          <div className="text-wanikani-text font-bold">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs mb-1">{t('projection.latestLevel')}</div>
+          <div className="text-wanikani-text dark:text-wanikani-text-dark font-bold">
             {latestDurationDays ? `${latestDurationDays.toFixed(1)} ${t('common.days')}` : 'N/A'}
           </div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.projectionStart')}</div>
-          <div className="text-wanikani-text font-bold">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs mb-1">{t('projection.projectionStart')}</div>
+          <div className="text-wanikani-text dark:text-wanikani-text-dark font-bold">
             {t('common.level')} {projectionStartLevel}
           </div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-3 border border-wanikani-border hover:bg-gray-100 transition-colors">
-          <div className="text-wanikani-text-light text-xs mb-1">{t('projection.totalToGo')}</div>
-          <div className="text-wanikani-text font-bold">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-xs mb-1">{t('projection.totalToGo')}</div>
+          <div className="text-wanikani-text dark:text-wanikani-text-dark font-bold">
             {levelsRemaining} {levelsRemaining === 1 ? t('common.level').toLowerCase() : t('projection.levels')}
           </div>
         </div>

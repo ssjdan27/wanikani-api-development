@@ -68,16 +68,16 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
   const levels = Array.from(new Set(subjects.map(s => s.data.level))).sort((a, b) => a - b)
 
   return (
-    <div className="bg-wanikani-darker rounded-xl p-6">
+    <div className="wk-card rounded-xl p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-white">Subject Progress</h2>
+        <h2 className="text-2xl font-bold text-wanikani-text dark:text-wanikani-text-dark">Subject Progress</h2>
         
         <div className="flex flex-wrap gap-2">
           {/* Type Filter */}
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark px-3 py-2 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink"
           >
             <option value="all">All Types</option>
             <option value="radical">Radicals</option>
@@ -89,7 +89,7 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
           <select
             value={selectedLevel || ''}
             onChange={(e) => setSelectedLevel(e.target.value ? parseInt(e.target.value) : null)}
-            className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark px-3 py-2 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink"
           >
             <option value="">All Levels</option>
             {levels.map(level => (
@@ -101,7 +101,7 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
 
       {filteredSubjects.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-400">No subjects found for the selected filters.</p>
+          <p className="text-wanikani-text-light dark:text-wanikani-text-light-dark">No subjects found for the selected filters.</p>
         </div>
       ) : (
         <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-16 xl:grid-cols-20 gap-2">
@@ -115,7 +115,7 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
                 className={`
                   relative aspect-square rounded-lg flex items-center justify-center text-white font-bold text-lg
                   ${getSubjectColor(subject.object)}
-                  ${hasStats ? `border-2 ${getAccuracyColor(accuracy)}` : 'border border-gray-600'}
+                  ${hasStats ? `border-2 ${getAccuracyColor(accuracy)}` : 'border border-gray-300 dark:border-gray-600'}
                   hover:scale-110 transition-transform duration-200 cursor-pointer
                   japanese-text
                 `}
@@ -123,7 +123,7 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
               >
                 {subject.data.characters || subject.data.meanings[0]?.meaning?.slice(0, 2) || '?'}
                 {hasStats && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-gray-800 rounded-full text-xs flex items-center justify-center">
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-white dark:bg-gray-800 rounded-full text-xs flex items-center justify-center text-wanikani-text dark:text-wanikani-text-dark">
                     {accuracy >= 90 ? '✓' : accuracy >= 70 ? '~' : '!'}
                   </div>
                 )}
@@ -134,7 +134,7 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
       )}
       
       {filteredSubjects.length > 200 && (
-        <div className="mt-4 text-center text-gray-400">
+        <div className="mt-4 text-center text-wanikani-text-light dark:text-wanikani-text-light-dark">
           Showing first 200 items. Use filters to narrow down results.
         </div>
       )}

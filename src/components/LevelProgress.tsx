@@ -67,16 +67,16 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
     return (
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-2">
-          <span className="text-wanikani-text">{label}</span>
-          <span className="text-wanikani-text-light">{current}/{total}</span>
+          <span className="text-wanikani-text dark:text-wanikani-text-dark">{label}</span>
+          <span className="text-wanikani-text-light dark:text-wanikani-text-light-dark">{current}/{total}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
           <div
             className={`h-3 rounded-full transition-all duration-500 ${color}`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
         </div>
-        <div className="text-right text-xs text-wanikani-text-light mt-1">
+        <div className="text-right text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark mt-1">
           {percentage.toFixed(1)}%
         </div>
       </div>
@@ -87,15 +87,15 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
     <div className="wk-card rounded-lg p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('levelProgress.title').replace('{level}', String(selectedLevel))}
           </h2>
-          <p className="text-sm text-wanikani-text-light mt-1">{t('levelProgress.guruNote')}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark mt-1">{t('levelProgress.guruNote')}</p>
         </div>
         <select
           value={selectedLevel}
           onChange={(e) => setSelectedLevel(parseInt(e.target.value, 10))}
-          className="bg-white text-wanikani-text px-3 py-2 rounded-lg border border-wanikani-border focus:outline-none focus:ring-2 focus:ring-wanikani-pink/50 focus:border-wanikani-pink transition-all"
+          className="bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark px-3 py-2 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink/50 focus:border-wanikani-pink transition-all"
         >
           {levelOptions.map(level => (
             <option key={level} value={level}>
@@ -106,7 +106,7 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
       </div>
       
       {selectedLevelSubjects.length === 0 ? (
-        <div className="text-wanikani-text-light text-sm bg-gray-50 border border-wanikani-border rounded-lg p-4">
+        <div className="text-wanikani-text-light dark:text-wanikani-text-light-dark text-sm bg-gray-50 dark:bg-gray-800 border border-wanikani-border dark:border-wanikani-border-dark rounded-lg p-4">
           {t('levelProgress.noData')}
         </div>
       ) : (
@@ -134,19 +134,19 @@ export default function LevelProgress({ userData, subjects, assignments }: Level
             />
           </div>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-wanikani-border">
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-wanikani-border dark:border-wanikani-border-dark">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-wanikani-radical">{completedRadicals}/{radicals.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">{t('common.radicals')}</div>
+                <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.radicals')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-wanikani-kanji">{completedKanji}/{kanji.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">{t('common.kanji')}</div>
+                <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.kanji')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-wanikani-vocabulary">{completedVocabulary}/{vocabulary.length || 0}</div>
-                <div className="text-xs text-wanikani-text-light">{t('common.vocabulary')}</div>
+                <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('common.vocabulary')}</div>
               </div>
             </div>
           </div>

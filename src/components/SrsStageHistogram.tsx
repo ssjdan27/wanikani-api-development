@@ -101,15 +101,15 @@ export default function SrsStageHistogram({ assignments, subjects }: SrsStageHis
     <div className="wk-card rounded-lg p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-wanikani-text">
+          <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
             {t('srs.title')}
           </h2>
-          <p className="text-sm text-wanikani-text-light">{t('srs.subtitle')}</p>
+          <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('srs.subtitle')}</p>
         </div>
         <div className="flex gap-2 text-xs">
-          <span className="px-2 py-1 rounded-full bg-blue-100 text-wanikani-radical">{t('common.radicals')}</span>
-          <span className="px-2 py-1 rounded-full bg-pink-100 text-wanikani-kanji">{t('common.kanji')}</span>
-          <span className="px-2 py-1 rounded-full bg-purple-100 text-wanikani-vocabulary">{t('srs.vocab')}</span>
+          <span className="px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-wanikani-radical">{t('common.radicals')}</span>
+          <span className="px-2 py-1 rounded-full bg-pink-100 dark:bg-pink-900/50 text-wanikani-kanji">{t('common.kanji')}</span>
+          <span className="px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/50 text-wanikani-vocabulary">{t('srs.vocab')}</span>
         </div>
       </div>
       <div className="h-64">
