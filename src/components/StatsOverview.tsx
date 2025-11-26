@@ -69,7 +69,7 @@ export default function StatsOverview({ userData, reviewStats }: StatsOverviewPr
     },
     {
       label: t('stats.accountAge'),
-      value: `${accountAge} ${t('stats.days')}`,
+      value: `${accountAge} ${t('common.days')}`,
       color: 'text-yellow-400'
     },
     {
