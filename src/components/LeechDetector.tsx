@@ -19,29 +19,35 @@ type Leech = {
 
 export default function LeechDetector({ reviewStats, subjects }: LeechDetectorProps) {
   const { t } = useLanguage()
-  const leeches = useMemo<Leech[]>(() => {
+  const leeches = useMemo(() => {
     const subjectById = new Map(subjects.map(s => [s.id, s]))
-    return reviewStats
-      .filter(stat => !stat.data.hidden)
-      .map(stat => {
-        const incorrect = stat.data.meaning_incorrect + stat.data.reading_incorrect
-        const subject = subjectById.get(stat.data.subject_id)
-        
-        // Skip items where subject data hasn't loaded yet
-        if (!subject) return null
-        
-        const label = subject.data.characters || subject.data.slug
-        if (!label) return null // Skip if we don't have a valid label
-        
-        return {
+    const result: Leech[] = []
+    
+    for (const stat of reviewStats) {
+      if (stat.data.hidden) continue
+      
+      const subject = subjectById.get(stat.data.subject_id)
+      if (!subject) continue // Skip items where subject data hasn't loaded yet
+      
+      const label = subject.data.characters || subject.data.slug
+      if (!label) continue // Skip if we don't have a valid label
+      
+      const incorrect = stat.data.meaning_incorrect + stat.data.reading_incorrect
+      const percentage = stat.data.percentage_correct
+      
+      // Only include leeches (low accuracy or many incorrect answers)
+      if (percentage < 80 || incorrect >= 3) {
+        result.push({
           subjectId: stat.data.subject_id,
           label,
-          percentage: stat.data.percentage_correct,
+          percentage,
           incorrect,
           link: subject.data.document_url
-        }
-      })
-      .filter((item): item is Leech => item !== null && (item.percentage < 80 || item.incorrect >= 3))
+        })
+      }
+    }
+    
+    return result
       .sort((a, b) => (b.incorrect * (100 - b.percentage)) - (a.incorrect * (100 - a.percentage)))
       .slice(0, 10)
   }, [reviewStats, subjects])
