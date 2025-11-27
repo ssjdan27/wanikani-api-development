@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
+/* Base light theme */
 body {
   background-color: #f5f5f5;
   color: #333333;
@@ -11,10 +12,129 @@ body {
   min-height: 100vh;
 }
 
+/* Dark theme (original) */
 .dark body,
 :root.dark body {
   background-color: #1a1a2e;
   color: #e8e8e8;
+}
+
+/* Sakura theme (pink/cherry blossom) */
+:root.sakura body {
+  background-color: #fff5f7;
+  color: #4a3045;
+}
+
+:root.sakura .wk-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fff0f3 100%);
+  border: 1px solid #ffc0cb;
+}
+
+:root.sakura .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+}
+
+/* Crabigator theme (WaniKani cyan/teal) */
+:root.crabigator body {
+  background-color: #f0f9ff;
+  color: #0d3b50;
+}
+
+:root.crabigator .wk-card {
+  background: linear-gradient(135deg, #ffffff 0%, #e8f7ff 100%);
+  border: 1px solid #7dd3fc;
+}
+
+:root.crabigator .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 170, 255, 0.2);
+}
+
+/* Midnight theme (deep purple/indigo) */
+:root.midnight body {
+  background-color: #0f0a1f;
+  color: #e0d9f7;
+}
+
+:root.midnight .wk-card {
+  background: linear-gradient(135deg, #1a1333 0%, #231548 100%);
+  border: 1px solid #4338ca;
+}
+
+:root.midnight .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Midnight scrollbar */
+:root.midnight ::-webkit-scrollbar-track {
+  background: #0f0a1f;
+}
+
+:root.midnight ::-webkit-scrollbar-thumb {
+  background: #4338ca;
+}
+
+:root.midnight ::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* Ocean theme (deep blue/teal) */
+:root.ocean body {
+  background-color: #0a192f;
+  color: #cce7f8;
+}
+
+:root.ocean .wk-card {
+  background: linear-gradient(135deg, #112240 0%, #0f2847 100%);
+  border: 1px solid #0ea5e9;
+}
+
+:root.ocean .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+}
+
+/* Ocean scrollbar */
+:root.ocean ::-webkit-scrollbar-track {
+  background: #0a192f;
+}
+
+:root.ocean ::-webkit-scrollbar-thumb {
+  background: #0ea5e9;
+}
+
+:root.ocean ::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+/* Sakura theme inputs/selects */
+:root.sakura select,
+:root.sakura input {
+  background-color: #fff5f7;
+  border-color: #ffc0cb;
+  color: #4a3045;
+}
+
+/* Crabigator theme inputs/selects */
+:root.crabigator select,
+:root.crabigator input {
+  background-color: #f0f9ff;
+  border-color: #7dd3fc;
+  color: #0d3b50;
+}
+
+/* Midnight theme inputs/selects */
+:root.midnight select,
+:root.midnight input {
+  background-color: #1a1333;
+  border-color: #4338ca;
+  color: #e0d9f7;
+}
+
+/* Ocean theme inputs/selects */
+:root.ocean select,
+:root.ocean input {
+  background-color: #112240;
+  border-color: #0ea5e9;
+  color: #cce7f8;
 }
 
 .japanese-text {
@@ -189,4 +309,206 @@ body {
 
 .dark input::placeholder {
   color: #6a6a8a;
+}
+
+/* ========================================
+   Sakura Theme Overrides
+   ======================================== */
+:root.sakura .bg-white {
+  background-color: #fff5f7;
+}
+
+:root.sakura .bg-gray-50 {
+  background-color: #fff0f3;
+}
+
+:root.sakura .bg-gray-100 {
+  background-color: #ffe4ec;
+}
+
+:root.sakura .bg-gray-200 {
+  background-color: #ffd6e1;
+}
+
+:root.sakura .border-gray-200 {
+  border-color: #ffb3c6;
+}
+
+:root.sakura .text-gray-600 {
+  color: #7a5568;
+}
+
+:root.sakura .text-gray-500 {
+  color: #9f7a8a;
+}
+
+:root.sakura .wk-progress {
+  background: #ffd6e1;
+}
+
+:root.sakura .hover\:bg-gray-50:hover {
+  background-color: #ffe8ed;
+}
+
+:root.sakura .hover\:bg-gray-100:hover {
+  background-color: #ffdde5;
+}
+
+/* ========================================
+   Crabigator Theme Overrides
+   ======================================== */
+:root.crabigator .bg-white {
+  background-color: #f0f9ff;
+}
+
+:root.crabigator .bg-gray-50 {
+  background-color: #e8f7ff;
+}
+
+:root.crabigator .bg-gray-100 {
+  background-color: #d5efff;
+}
+
+:root.crabigator .bg-gray-200 {
+  background-color: #bae6fd;
+}
+
+:root.crabigator .border-gray-200 {
+  border-color: #7dd3fc;
+}
+
+:root.crabigator .text-gray-600 {
+  color: #0c4a6e;
+}
+
+:root.crabigator .text-gray-500 {
+  color: #0369a1;
+}
+
+:root.crabigator .wk-progress {
+  background: #bae6fd;
+}
+
+:root.crabigator .hover\:bg-gray-50:hover {
+  background-color: #ddf4ff;
+}
+
+:root.crabigator .hover\:bg-gray-100:hover {
+  background-color: #c8ebfd;
+}
+
+/* ========================================
+   Midnight Theme Overrides
+   ======================================== */
+:root.midnight .bg-white {
+  background-color: #1a1333;
+}
+
+:root.midnight .bg-gray-50 {
+  background-color: #231548;
+}
+
+:root.midnight .bg-gray-100 {
+  background-color: #2e1a5e;
+}
+
+:root.midnight .bg-gray-200 {
+  background-color: #3c2273;
+}
+
+:root.midnight .border-gray-200 {
+  border-color: #4338ca;
+}
+
+:root.midnight .text-wanikani-text {
+  color: #e0d9f7;
+}
+
+:root.midnight .text-gray-600 {
+  color: #a5b4fc;
+}
+
+:root.midnight .text-gray-500 {
+  color: #818cf8;
+}
+
+:root.midnight .wk-progress {
+  background: #2e1a5e;
+}
+
+:root.midnight .hover\:bg-gray-50:hover {
+  background-color: #2a1855;
+}
+
+:root.midnight .hover\:bg-gray-100:hover {
+  background-color: #351c65;
+}
+
+:root.midnight select {
+  background-color: #231548;
+  color: #e0d9f7;
+  border-color: #4338ca;
+}
+
+:root.midnight select option {
+  background-color: #1a1333;
+  color: #e0d9f7;
+}
+
+/* ========================================
+   Ocean Theme Overrides
+   ======================================== */
+:root.ocean .bg-white {
+  background-color: #112240;
+}
+
+:root.ocean .bg-gray-50 {
+  background-color: #1a3355;
+}
+
+:root.ocean .bg-gray-100 {
+  background-color: #234166;
+}
+
+:root.ocean .bg-gray-200 {
+  background-color: #2d4f77;
+}
+
+:root.ocean .border-gray-200 {
+  border-color: #0ea5e9;
+}
+
+:root.ocean .text-wanikani-text {
+  color: #cce7f8;
+}
+
+:root.ocean .text-gray-600 {
+  color: #7dd3fc;
+}
+
+:root.ocean .text-gray-500 {
+  color: #38bdf8;
+}
+
+:root.ocean .wk-progress {
+  background: #1a3355;
+}
+
+:root.ocean .hover\:bg-gray-50:hover {
+  background-color: #1f3d5c;
+}
+
+:root.ocean .hover\:bg-gray-100:hover {
+  background-color: #294970;
+}
+
+:root.ocean select {
+  background-color: #1a3355;
+  color: #cce7f8;
+  border-color: #0ea5e9;
+}
+
+:root.ocean select option {
+  background-color: #112240;
+  color: #cce7f8;
 }
