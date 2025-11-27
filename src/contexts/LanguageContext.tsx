@@ -161,6 +161,30 @@ const translations: Record<Language, Record<string, string>> = {
     'srs.subtitle': 'Distribution across SRS stages',
     'srs.vocab': 'Vocab',
     
+    // Streak Analysis
+    'streak.title': 'Streak Analysis',
+    'streak.subtitle': 'Your longest answer streaks',
+    'streak.longestStreak': 'Longest Streak',
+    'streak.avgStreak': 'Avg Current',
+    'streak.perfectItems': 'Perfect Items',
+    'streak.totalReviewed': 'Total Reviewed',
+    'streak.hotStreaks': 'Current Hot Streaks',
+    'streak.bestStreaks': 'All-Time Best',
+    'streak.inARow': 'in a row',
+    'streak.record': 'record',
+    'streak.noData': 'No streak data available yet. Complete some reviews!',
+    
+    // Critical Items
+    'critical.title': 'Critical Items',
+    'critical.subtitle': 'Items that dropped SRS stages - needs attention',
+    'critical.count': '{count} items need review',
+    'critical.noCritical': 'No critical items! All your items are progressing well.',
+    'critical.resurrected': 'Resurrected',
+    'critical.droppedGuru': 'Dropped from Guru',
+    'critical.avgDrop': 'Avg Drop',
+    'critical.nextReview': 'Next review',
+    'critical.now': 'Now',
+    
     // Footer
     'footer.message': 'Keep going!',
     
@@ -316,6 +340,30 @@ const translations: Record<Language, Record<string, string>> = {
     'srs.title': 'SRSステージ分布',
     'srs.subtitle': 'SRSステージ別の分布',
     'srs.vocab': '単語',
+    
+    // Streak Analysis
+    'streak.title': 'ストリーク分析',
+    'streak.subtitle': '最長連続正解記録',
+    'streak.longestStreak': '最長ストリーク',
+    'streak.avgStreak': '平均現在',
+    'streak.perfectItems': '完璧なアイテム',
+    'streak.totalReviewed': '総復習数',
+    'streak.hotStreaks': '現在のホットストリーク',
+    'streak.bestStreaks': '歴代ベスト',
+    'streak.inARow': '連続',
+    'streak.record': '記録',
+    'streak.noData': 'ストリークデータがまだありません。復習を完了してください！',
+    
+    // Critical Items
+    'critical.title': '要注意アイテム',
+    'critical.subtitle': 'SRSステージが下がったアイテム - 注意が必要',
+    'critical.count': '{count}個のアイテムが復習必要',
+    'critical.noCritical': '要注意アイテムなし！全てのアイテムが順調に進んでいます。',
+    'critical.resurrected': '復活済み',
+    'critical.droppedGuru': 'Guruから低下',
+    'critical.avgDrop': '平均低下',
+    'critical.nextReview': '次の復習',
+    'critical.now': '今すぐ',
     
     // Footer
     'footer.message': '頑張って！',

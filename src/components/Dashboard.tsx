@@ -17,6 +17,8 @@ import BurnRadar from './BurnRadar'
 import LeechDetector from './LeechDetector'
 import LessonBatchingHelper from './LessonBatchingHelper'
 import SrsStageHistogram from './SrsStageHistogram'
+import StreakAnalysis from './StreakAnalysis'
+import CriticalItems from './CriticalItems'
 import LanguageToggle from './LanguageToggle'
 import ThemeToggle from './ThemeToggle'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -306,6 +308,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <BurnRadar assignments={assignments} subjects={subjects} srsSystems={srsSystems} />
           <LeechDetector reviewStats={reviewStats} subjects={subjects} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <StreakAnalysis reviewStats={reviewStats} subjects={subjects} />
+          <CriticalItems assignments={assignments} subjects={subjects} srsSystems={srsSystems} />
         </div>
 
         <SrsStageHistogram assignments={assignments} subjects={subjects} />
