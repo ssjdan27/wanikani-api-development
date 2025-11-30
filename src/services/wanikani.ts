@@ -674,4 +674,31 @@ export class WaniKaniService {
     const cached = this.getFromCache(cacheKey)
     return cached !== null
   }
+
+  // Fetch full subject details by ID (on-demand, not cached to save space)
+  async getSubjectDetails(subjectId: number): Promise<Subject | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/subjects/${subjectId}`, {
+        headers: {
+          'Authorization': `Bearer ${this.apiToken}`,
+          'Wanikani-Revision': '20170710'
+        }
+      })
+      
+      if (!response.ok) {
+        console.error(`Failed to fetch subject ${subjectId}: ${response.status}`)
+        return null
+      }
+      
+      const data = await response.json()
+      return {
+        id: data.id,
+        object: data.object,
+        data: data.data
+      } as Subject
+    } catch (error) {
+      console.error(`Error fetching subject ${subjectId}:`, error)
+      return null
+    }
+  }
 }

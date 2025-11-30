@@ -56,6 +56,32 @@ export interface Subject {
     amalgamation_subject_ids?: number[]   // Kanji/vocab that use this subject as a component
     // Similar kanji fields
     visually_similar_subject_ids?: number[] // IDs of visually similar kanji
+    // Vocabulary study fields (fetched on-demand)
+    context_sentences?: ContextSentence[]
+    pronunciation_audios?: PronunciationAudio[]
+    meaning_mnemonic?: string
+    reading_mnemonic?: string
+    meaning_hint?: string | null
+    reading_hint?: string | null
+    parts_of_speech?: string[]
+  }
+}
+
+export interface ContextSentence {
+  en: string
+  ja: string
+}
+
+export interface PronunciationAudio {
+  url: string
+  content_type: 'audio/mpeg' | 'audio/ogg' | 'audio/webm'
+  metadata: {
+    gender: 'male' | 'female'
+    source_id: number
+    pronunciation: string
+    voice_actor_id: number
+    voice_actor_name: string
+    voice_description: string
   }
 }
 
