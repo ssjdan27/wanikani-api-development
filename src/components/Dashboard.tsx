@@ -319,7 +319,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
-          <AccuracyChart reviewStats={reviewStats} />
+          <AccuracyChart reviewStats={reviewStats} subjects={subjects} />
         </div>
 
         {/* Footer */}

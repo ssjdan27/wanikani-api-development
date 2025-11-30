@@ -75,7 +75,13 @@ const translations: Record<Language, Record<string, string>> = {
     'levelProgress.noData': 'No subject data available for this level yet. Try refreshing or check your subscription limits.',
     
     // Accuracy Chart
-    'accuracy.title': 'Accuracy by Type',
+    'accuracy.title': 'Accuracy by Level',
+    'accuracy.subtitle': 'Your review accuracy for each WaniKani level',
+    'accuracy.level': 'Level',
+    'accuracy.accuracyPercent': 'Accuracy %',
+    'accuracy.bestLevel': 'Best Level',
+    'accuracy.worstLevel': 'Needs Work',
+    'accuracy.noData': 'No review data available yet',
     
     // Level Pacing Coach
     'pacing.title': 'Level Pacing Coach',
@@ -255,7 +261,13 @@ const translations: Record<Language, Record<string, string>> = {
     'levelProgress.noData': 'このレベルのデータがまだありません。更新するか、サブスクリプション制限を確認してください。',
     
     // Accuracy Chart
-    'accuracy.title': '種類別正答率',
+    'accuracy.title': 'レベル別正答率',
+    'accuracy.subtitle': '各レベルの復習正答率',
+    'accuracy.level': 'レベル',
+    'accuracy.accuracyPercent': '正答率 %',
+    'accuracy.bestLevel': '最高レベル',
+    'accuracy.worstLevel': '要復習',
+    'accuracy.noData': 'まだ復習データがありません',
     
     // Level Pacing Coach
     'pacing.title': 'レベルペースコーチ',
