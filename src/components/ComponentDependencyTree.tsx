@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import { ChevronRight, ChevronDown, Search, ExternalLink } from 'lucide-react'
 import type { Subject, Assignment } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useWanaKanaBind, toHiragana, isRomaji } from '@/hooks/useWanaKana'
 import type { RawNodeDatum, CustomNodeElementProps, TreeProps } from 'react-d3-tree'
 
 // Dynamically import react-d3-tree to avoid SSR issues
@@ -85,6 +86,10 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
   const [isMobile, setIsMobile] = useState(false)
   const [showSearchResults, setShowSearchResults] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  // Bind WanaKana for romaji to kana conversion (Shift for katakana)
+  useWanaKanaBind(searchInputRef)
 
   // Check for mobile breakpoint (768px)
   useEffect(() => {
@@ -108,16 +113,23 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
     return assignment?.data.srs_stage ?? 0
   }, [assignmentBySubjectId])
 
-  // Search subjects
+  // Search subjects with WanaKana support for romaji input
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return []
     const query = searchQuery.toLowerCase()
+    // Convert romaji to hiragana for matching readings
+    const hiraganaQuery = isRomaji(query) ? toHiragana(query) : query
+    
     return subjects
       .filter(s => {
         const chars = s.data.characters?.toLowerCase() || ''
         const slug = s.data.slug?.toLowerCase() || ''
         const meanings = s.data.meanings?.map(m => m.meaning.toLowerCase()).join(' ') || ''
-        return chars.includes(query) || slug.includes(query) || meanings.includes(query)
+        // Match readings using hiragana-converted query
+        const readings = s.data.readings?.map(r => r.reading.toLowerCase()) || []
+        const matchesReading = readings.some(r => r.includes(hiraganaQuery))
+        
+        return chars.includes(query) || slug.includes(query) || meanings.includes(query) || matchesReading
       })
       .slice(0, 20)
   }, [subjects, searchQuery])
@@ -413,6 +425,7 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-wanikani-text-light" size={18} />
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => {
