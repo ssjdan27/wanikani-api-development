@@ -27,6 +27,7 @@ import ReviewForecast from './ReviewForecast'
 import ComponentDependencyTree from './ComponentDependencyTree'
 import BurnedItemsGallery from './BurnedItemsGallery'
 import ReadingVsMeaningAnalysis from './ReadingVsMeaningAnalysis'
+import VacationRecoveryPlanner from './VacationRecoveryPlanner'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -369,6 +370,9 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <LevelProgress userData={userData} subjects={subjects} assignments={assignments} />
           <AccuracyChart reviewStats={reviewStats} subjects={subjects} />
         </div>
+
+        {/* Vacation Recovery Planner */}
+        <VacationRecoveryPlanner userData={userData} assignments={assignments} />
 
         {/* Footer */}
         <footer className="text-center py-6 border-t border-wanikani-border">

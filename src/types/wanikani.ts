@@ -3,6 +3,7 @@ export interface UserData {
   username: string
   level: number
   started_at: string
+  current_vacation_started_at?: string | null
   subscription?: {
     active: boolean
     type: "lifetime" | "recurring" | "free" | "unknown"
