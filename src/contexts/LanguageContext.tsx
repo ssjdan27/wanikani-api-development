@@ -360,6 +360,28 @@ const translations: Record<Language, Record<string, string>> = {
     'vocabStudy.loadError': 'Failed to load details. Try again.',
     'vocabStudy.showMore': 'Show 20 more',
     'tabs.vocabStudy': 'Vocab Study',
+    
+    // Reading Aloud Practice
+    'readingPractice.title': 'Reading Aloud Practice',
+    'readingPractice.subtitle': 'Read the word aloud, then reveal to hear the pronunciation',
+    'readingPractice.showMeaning': 'Show Meaning',
+    'readingPractice.shuffle': 'Shuffle',
+    'readingPractice.itemsAvailable': '{count} items available to practice',
+    'readingPractice.startPractice': 'Start Practice',
+    'readingPractice.instruction': 'Try reading this word aloud, then reveal the answer',
+    'readingPractice.reveal': 'Reveal',
+    'readingPractice.skip': 'Skip',
+    'readingPractice.playAgain': 'Play Again',
+    'readingPractice.gotIt': 'Got it!',
+    'readingPractice.missedIt': 'Missed it',
+    'readingPractice.endSession': 'End Session',
+    'readingPractice.sessionComplete': 'Session Complete!',
+    'readingPractice.practiced': 'Practiced',
+    'readingPractice.correct': 'Correct',
+    'readingPractice.accuracy': 'Accuracy',
+    'readingPractice.practiceAgain': 'Practice Again',
+    'readingPractice.noItems': 'No vocabulary items available for this filter.',
+    'tabs.readingPractice': 'Reading Practice',
   },
   ja: {
     // Header
@@ -710,6 +732,28 @@ const translations: Record<Language, Record<string, string>> = {
     'vocabStudy.loadError': '詳細の読み込みに失敗しました。もう一度お試しください。',
     'vocabStudy.showMore': 'あと20件を表示',
     'tabs.vocabStudy': '単語学習',
+    
+    // Reading Aloud Practice
+    'readingPractice.title': '音読練習',
+    'readingPractice.subtitle': '単語を声に出して読み、発音を確認しましょう',
+    'readingPractice.showMeaning': '意味を表示',
+    'readingPractice.shuffle': 'シャッフル',
+    'readingPractice.itemsAvailable': '{count}件の練習アイテム',
+    'readingPractice.startPractice': '練習開始',
+    'readingPractice.instruction': 'この単語を声に出して読んでから答えを確認',
+    'readingPractice.reveal': '答えを見る',
+    'readingPractice.skip': 'スキップ',
+    'readingPractice.playAgain': 'もう一度再生',
+    'readingPractice.gotIt': '正解！',
+    'readingPractice.missedIt': '不正解',
+    'readingPractice.endSession': 'セッション終了',
+    'readingPractice.sessionComplete': 'セッション完了！',
+    'readingPractice.practiced': '練習数',
+    'readingPractice.correct': '正解',
+    'readingPractice.accuracy': '正答率',
+    'readingPractice.practiceAgain': 'もう一度練習',
+    'readingPractice.noItems': 'このフィルターで利用可能な単語がありません。',
+    'tabs.readingPractice': '音読練習',
   }
 }
 

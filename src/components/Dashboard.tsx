@@ -29,6 +29,7 @@ import BurnedItemsGallery from './BurnedItemsGallery'
 import ReadingVsMeaningAnalysis from './ReadingVsMeaningAnalysis'
 import VacationRecoveryPlanner from './VacationRecoveryPlanner'
 import VocabularyStudy from './VocabularyStudy'
+import ReadingAloudPractice from './ReadingAloudPractice'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -47,7 +48,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [refreshMessage, setRefreshMessage] = useState('')
-  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies' | 'burned' | 'vocabulary'>('projection')
+  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies' | 'burned' | 'vocabulary' | 'reading'>('projection')
   
   // Track mounted state for safe async cleanup
   const mountedRef = useRef(true)
@@ -278,6 +279,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               isActive={activeTab === 'vocabulary'}
               onClick={() => setActiveTab('vocabulary')}
             />
+            <TabButton
+              label={t('tabs.readingPractice')}
+              isActive={activeTab === 'reading'}
+              onClick={() => setActiveTab('reading')}
+            />
           </div>
           <div className="p-5">
             {activeTab === 'projection' ? (
@@ -309,6 +315,12 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               />
             ) : activeTab === 'vocabulary' ? (
               <VocabularyStudy
+                subjects={subjects}
+                assignments={assignments}
+                apiToken={apiToken}
+              />
+            ) : activeTab === 'reading' ? (
+              <ReadingAloudPractice
                 subjects={subjects}
                 assignments={assignments}
                 apiToken={apiToken}
