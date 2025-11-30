@@ -238,6 +238,24 @@ const translations: Record<Language, Record<string, string>> = {
     'export.exportingLevelProgress': 'Exporting level progress...',
     'export.exportingSubjects': 'Exporting subjects...',
     'export.creatingZip': 'Creating zip file...',
+    
+    // Dependency Tree
+    'dependencyTree.title': 'Dependency Tree',
+    'dependencyTree.subtitle': 'Explore radical → kanji → vocabulary relationships',
+    'dependencyTree.searchPlaceholder': 'Search by character or meaning...',
+    'dependencyTree.emptyPrompt': 'Search for a kanji to explore its radical components and vocabulary usage 🌳',
+    'dependencyTree.components': 'Components',
+    'dependencyTree.usedIn': 'Used in',
+    'dependencyTree.loadMore': 'Load more...',
+    'dependencyTree.noResults': 'No subjects found',
+    'dependencyTree.clickToOpen': 'Click to open on WaniKani',
+    'dependencyTree.locked': 'Locked',
+    'dependencyTree.apprentice': 'Apprentice',
+    'dependencyTree.guru': 'Guru',
+    'dependencyTree.master': 'Master',
+    'dependencyTree.enlightened': 'Enlightened',
+    'dependencyTree.burned': 'Burned',
+    'tabs.dependencyTree': 'Dependency Tree',
   },
   ja: {
     // Header
@@ -466,6 +484,24 @@ const translations: Record<Language, Record<string, string>> = {
     'export.exportingLevelProgress': 'レベル進捗をエクスポート中...',
     'export.exportingSubjects': '学習項目をエクスポート中...',
     'export.creatingZip': 'ZIPファイルを作成中...',
+    
+    // Dependency Tree
+    'dependencyTree.title': '依存関係ツリー',
+    'dependencyTree.subtitle': '部首 → 漢字 → 単語の関係を探索',
+    'dependencyTree.searchPlaceholder': '文字または意味で検索...',
+    'dependencyTree.emptyPrompt': '漢字を検索して、部首の構成要素と単語での使用法を探索 🌳',
+    'dependencyTree.components': '構成要素',
+    'dependencyTree.usedIn': '使用先',
+    'dependencyTree.loadMore': 'もっと読み込む...',
+    'dependencyTree.noResults': '該当項目なし',
+    'dependencyTree.clickToOpen': 'クリックでWaniKaniを開く',
+    'dependencyTree.locked': 'ロック中',
+    'dependencyTree.apprentice': '見習い',
+    'dependencyTree.guru': 'グル',
+    'dependencyTree.master': 'マスター',
+    'dependencyTree.enlightened': '悟り',
+    'dependencyTree.burned': 'バーン',
+    'tabs.dependencyTree': '依存関係ツリー',
   }
 }
 

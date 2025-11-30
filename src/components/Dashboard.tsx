@@ -23,6 +23,7 @@ import LanguageToggle from './LanguageToggle'
 import ThemeToggle from './ThemeToggle'
 import ExportData from './ExportData'
 import ReviewForecast from './ReviewForecast'
+import ComponentDependencyTree from './ComponentDependencyTree'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -44,7 +45,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast'>('projection')
+  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies'>('projection')
 
   // Memoize the WaniKani service to prevent unnecessary re-creation
   const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
@@ -296,6 +297,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               isActive={activeTab === 'forecast'}
               onClick={() => setActiveTab('forecast')}
             />
+            <TabButton
+              label={t('tabs.dependencyTree')}
+              isActive={activeTab === 'dependencies'}
+              onClick={() => setActiveTab('dependencies')}
+            />
           </div>
           <div className="p-5">
             {activeTab === 'projection' ? (
@@ -315,10 +321,15 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
                 assignments={assignments}
                 userData={userData}
               />
-            ) : (
+            ) : activeTab === 'forecast' ? (
               <ReviewForecast
                 assignments={assignments}
                 summary={summary}
+              />
+            ) : (
+              <ComponentDependencyTree
+                subjects={subjects}
+                assignments={assignments}
               />
             )}
           </div>

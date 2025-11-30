@@ -50,6 +50,9 @@ export interface Subject {
     }>
     hidden_at?: string | null
     created_at: string
+    // Dependency tree fields
+    component_subject_ids?: number[]      // Radicals/kanji that make up this subject
+    amalgamation_subject_ids?: number[]   // Kanji/vocab that use this subject as a component
   }
 }
 
