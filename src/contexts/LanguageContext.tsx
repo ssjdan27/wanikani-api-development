@@ -196,6 +196,19 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Errors
     'error.updateToken': 'Update Token',
+    
+    // Export
+    'export.button': 'Export',
+    'export.exporting': 'Exporting...',
+    'export.assignments': 'Assignments',
+    'export.reviewStats': 'Review Statistics',
+    'export.levelProgress': 'Level Progressions',
+    'export.subjects': 'Subjects',
+    'export.allData': 'All Data',
+    'export.exportingAssignments': 'Exporting assignments...',
+    'export.exportingReviewStats': 'Exporting review stats...',
+    'export.exportingLevelProgress': 'Exporting level progress...',
+    'export.exportingSubjects': 'Exporting subjects...',
   },
   ja: {
     // Header
@@ -382,6 +395,19 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Errors
     'error.updateToken': 'トークンを更新',
+    
+    // Export
+    'export.button': 'エクスポート',
+    'export.exporting': 'エクスポート中...',
+    'export.assignments': '課題',
+    'export.reviewStats': '復習統計',
+    'export.levelProgress': 'レベル進捗',
+    'export.subjects': '学習項目',
+    'export.allData': '全データ',
+    'export.exportingAssignments': '課題をエクスポート中...',
+    'export.exportingReviewStats': '復習統計をエクスポート中...',
+    'export.exportingLevelProgress': 'レベル進捗をエクスポート中...',
+    'export.exportingSubjects': '学習項目をエクスポート中...',
   }
 }
 

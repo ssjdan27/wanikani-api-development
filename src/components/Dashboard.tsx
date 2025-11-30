@@ -21,6 +21,7 @@ import StreakAnalysis from './StreakAnalysis'
 import CriticalItems from './CriticalItems'
 import LanguageToggle from './LanguageToggle'
 import ThemeToggle from './ThemeToggle'
+import ExportData from './ExportData'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -229,6 +230,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <LanguageToggle />
+            <ExportData
+              assignments={assignments}
+              reviewStats={reviewStats}
+              levelProgressions={levelProgressions}
+              subjects={subjects}
+              srsSystems={srsSystems}
+            />
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2 border border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-50 dark:hover:bg-gray-700 text-wanikani-text dark:text-wanikani-text-dark rounded-lg transition-colors text-sm"
