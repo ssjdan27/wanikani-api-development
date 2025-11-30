@@ -329,11 +329,19 @@ export class WaniKaniService {
       return existingRequest as Promise<{ data: T; fromCache: boolean }>
     }
 
-    const requestPromise = this.requestQueue.enqueue(async () => {
-      return this.executeRequest<T>(endpoint, cacheKey, cached, useConditionalRequest, cacheTtl)
-    })
-
-    this.inflightRequests.set(inflightKey, requestPromise)
+    // Set inflight key before enqueueing to handle sync throws
+    let requestPromise: Promise<{ data: T; fromCache: boolean }>
+    
+    try {
+      requestPromise = this.requestQueue.enqueue(async () => {
+        return this.executeRequest<T>(endpoint, cacheKey, cached, useConditionalRequest, cacheTtl)
+      })
+      this.inflightRequests.set(inflightKey, requestPromise)
+    } catch (error) {
+      // Clean up if enqueue throws synchronously
+      this.inflightRequests.delete(inflightKey)
+      throw error
+    }
     
     try {
       return await requestPromise as { data: T; fromCache: boolean }

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo, useRef, useCallback } from 'react'
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { Search, Volume2, VolumeX, ChevronDown, ChevronUp, BookOpen, Lightbulb, ExternalLink } from 'lucide-react'
+import DOMPurify from 'dompurify'
 import type { Subject, Assignment, ContextSentence, PronunciationAudio } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { WaniKaniService } from '@/services/wanikani'
@@ -37,6 +38,21 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
   const searchInputRef = useRef<HTMLInputElement>(null)
   
   const { enabled: kanaEnabled, toggle: toggleKana } = useWanaKanaBind(searchInputRef, { enabled: false })
+
+  // Memoize the WaniKani service to prevent recreation on every fetch
+  const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.onended = null
+        audioRef.current.onerror = null
+        audioRef.current = null
+      }
+    }
+  }, [])
 
   // Build assignment map for SRS stage lookup
   const assignmentMap = useMemo(() => {
@@ -103,14 +119,17 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
     return 'bg-gray-400'
   }
 
+  // Use ref to avoid stale closure in fetchDetails
+  const itemDetailsRef = useRef(itemDetails)
+  itemDetailsRef.current = itemDetails
+
   // Fetch details on-demand
   const fetchDetails = useCallback(async (subjectId: number) => {
-    if (itemDetails.has(subjectId)) return
+    if (itemDetailsRef.current.has(subjectId)) return
     
     setLoadingDetails(subjectId)
     try {
-      const service = new WaniKaniService(apiToken)
-      const details = await service.getSubjectDetails(subjectId)
+      const details = await wanikaniService.getSubjectDetails(subjectId)
       if (details) {
         setItemDetails(prev => new Map(prev).set(subjectId, {
           context_sentences: details.data.context_sentences,
@@ -125,7 +144,7 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
     } finally {
       setLoadingDetails(null)
     }
-  }, [apiToken, itemDetails])
+  }, [wanikaniService])
 
   // Toggle expansion
   const toggleExpand = async (subjectId: number) => {
@@ -139,8 +158,11 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
 
   // Play audio
   const playAudio = useCallback((audio: PronunciationAudio) => {
+    // Clean up previous audio
     if (audioRef.current) {
       audioRef.current.pause()
+      audioRef.current.onended = null
+      audioRef.current.onerror = null
     }
     
     const audioElement = new Audio(audio.url)
@@ -154,11 +176,17 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
 
   // Render context sentence with furigana toggle
   const renderSentence = (sentence: ContextSentence) => {
+    // Sanitize HTML to prevent XSS - allow ruby tags for furigana
+    const sanitizedJa = DOMPurify.sanitize(sentence.ja, {
+      ALLOWED_TAGS: ['ruby', 'rt', 'rp', 'span'],
+      ALLOWED_ATTR: ['class']
+    })
+    
     return (
       <div className="border-l-2 border-purple-300 dark:border-purple-600 pl-3 py-2">
         <p 
           className={`text-gray-900 dark:text-white text-lg ${!showFurigana ? 'hide-furigana' : ''}`}
-          dangerouslySetInnerHTML={{ __html: sentence.ja }}
+          dangerouslySetInnerHTML={{ __html: sanitizedJa }}
         />
         <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{sentence.en}</p>
       </div>
@@ -174,7 +202,14 @@ export default function VocabularyStudy({ subjects, assignments, apiToken }: Voc
       .replace(/<vocabulary>([^<]+)<\/vocabulary>/g, '<span class="bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded">$1</span>')
       .replace(/<reading>([^<]+)<\/reading>/g, '<span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1 rounded font-mono">$1</span>')
       .replace(/<ja>([^<]+)<\/ja>/g, '<span class="font-japanese">$1</span>')
-    return <span dangerouslySetInnerHTML={{ __html: html }} />
+    
+    // Sanitize the transformed HTML to prevent XSS
+    const sanitizedHtml = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['span'],
+      ALLOWED_ATTR: ['class']
+    })
+    
+    return <span dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
   }
 
   return (

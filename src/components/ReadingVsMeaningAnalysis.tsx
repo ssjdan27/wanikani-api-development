@@ -59,8 +59,8 @@ export default function ReadingVsMeaningAnalysis({ reviewStats, subjects }: Prop
         vocabReadingErrors += readingErr;
       }
 
-      // Only include items with errors
-      if (meaningErr > 0 || readingErr > 0) {
+      // Only include items with errors and a clear weak side (not ties)
+      if ((meaningErr > 0 || readingErr > 0) && meaningErr !== readingErr) {
         const gap = Math.abs(meaningErr - readingErr);
         itemsWithGap.push({
           subject,

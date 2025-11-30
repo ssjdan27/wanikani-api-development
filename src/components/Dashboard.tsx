@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { LogOut } from 'lucide-react'
 import StatsOverview from './StatsOverview'
 import LevelProgress from './LevelProgress'
@@ -47,27 +47,30 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [refreshMessage, setRefreshMessage] = useState('')
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
   const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies' | 'burned' | 'vocabulary'>('projection')
+  
+  // Track mounted state for safe async cleanup
+  const mountedRef = useRef(true)
+  useEffect(() => {
+    mountedRef.current = true
+    return () => { mountedRef.current = false }
+  }, [])
 
   // Memoize the WaniKani service to prevent unnecessary re-creation
   const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
 
-  // Monitor online status
+  // Use ref to track if we have user data without causing stale closure
+  const hasUserDataRef = useRef(false)
+  hasUserDataRef.current = !!userData
+
+  // Clear refresh message after 3 seconds with proper cleanup
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-    
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-    
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
+    if (!refreshMessage) return
+    const timer = setTimeout(() => {
+      if (mountedRef.current) setRefreshMessage('')
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [refreshMessage])
 
   const fetchData = useCallback(async (forceRefresh: boolean = false) => {
     // Stale-while-revalidate: Try to show cached data immediately
@@ -80,7 +83,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       }
     }
     
-    if (forceRefresh || !userData) {
+    if (forceRefresh || !hasUserDataRef.current) {
       setLoading(true)
     }
     setError('')
@@ -122,11 +125,9 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       setSrsSystems(srsResponse)
       setSummary(summaryResponse)
       setSubjects(subjectsResponse)
-      setLastRefresh(new Date())
       
-      if (forceRefresh) {
+      if (forceRefresh && mountedRef.current) {
         setRefreshMessage('Data refreshed successfully!')
-        setTimeout(() => setRefreshMessage(''), 3000)
       }
     } catch (err) {
       console.error('Error fetching data:', err)
@@ -135,46 +136,6 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
       setLoading(false)
     }
   }, [wanikaniService])
-
-  // Manual refresh with rate limiting
-  const handleRefresh = useCallback(async () => {
-    if (isRefreshing || loading || !isOnline) return
-    
-    setIsRefreshing(true)
-    try {
-      await fetchData(true) // Force refresh
-    } finally {
-      // Prevent rapid refresh clicks - minimum 2 seconds between refreshes
-      setTimeout(() => setIsRefreshing(false), 2000)
-    }
-  }, [fetchData, isRefreshing, loading, isOnline])
-
-  // Clear cache and reload (for debugging)
-  const handleClearCache = useCallback(() => {
-    wanikaniService.clearUserCache()
-    setAssignments([])
-    setReviewStats([])
-    setSubjects([])
-    setLevelProgressions([])
-    setSrsSystems([])
-    setSummary(null)
-    setUserData(null)
-    fetchData(true)
-  }, [wanikaniService, fetchData])
-
-  // Load subjects progressively to avoid rate limiting
-  const loadAllSubjects = useCallback(async () => {
-    if (!userData) return
-    
-    try {
-      console.log('Loading all subjects progressively...')
-      const allSubjects = await wanikaniService.getSubjectsWithSubscriptionFilter(userData)
-      setSubjects(allSubjects)
-      console.log('All subjects loaded:', allSubjects.length)
-    } catch (error) {
-      console.error('Failed to load all subjects:', error)
-    }
-  }, [userData, wanikaniService])
 
   useEffect(() => {
     if (apiToken) {

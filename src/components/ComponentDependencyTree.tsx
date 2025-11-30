@@ -91,12 +91,15 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
   // Bind WanaKana for romaji to kana conversion (disabled by default for English/kanji input)
   const { enabled: kanaMode, toggle: toggleKanaMode } = useWanaKanaBind(searchInputRef, { enabled: false })
 
-  // Check for mobile breakpoint (768px)
+  // Check for mobile breakpoint (768px) - use stable callback ref
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    
+    // Store reference to ensure same function is used for add/remove
+    const resizeHandler = checkMobile
+    window.addEventListener('resize', resizeHandler)
+    return () => window.removeEventListener('resize', resizeHandler)
   }, [])
 
   // Create lookup maps

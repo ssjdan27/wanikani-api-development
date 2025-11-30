@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, type RefObject } from 'react'
+import { useEffect, useState, useCallback, useRef, type RefObject } from 'react'
 import * as wanakana from 'wanakana'
 
 // Re-export useful utilities for search logic
@@ -37,14 +37,20 @@ export function useWanaKanaBind(
   const { enabled: initialEnabled = false } = options
   const [enabled, setEnabled] = useState(initialEnabled)
   const [isShiftHeld, setIsShiftHeld] = useState(false)
+  
+  // Track bound state to avoid unsafe unbind calls
+  const isBoundRef = useRef(false)
 
   const toggle = useCallback(() => {
     setEnabled(prev => !prev)
   }, [])
 
-  // Track Shift key state for katakana mode
+  // Track Shift key state for katakana mode - use stable callbacks
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled) {
+      setIsShiftHeld(false)
+      return
+    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Shift') setIsShiftHeld(true)
@@ -64,34 +70,45 @@ export function useWanaKanaBind(
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
       window.removeEventListener('blur', handleBlur)
+      setIsShiftHeld(false)
     }
   }, [enabled])
 
-  // Bind/unbind WanaKana to input based on enabled state and shift key
+  // Bind/unbind WanaKana to input based on enabled state
   useEffect(() => {
     const input = inputRef.current
     if (!input) return
 
-    if (!enabled) {
-      // Ensure unbound when disabled
+    // Unbind if currently bound
+    if (isBoundRef.current) {
       try {
         wanakana.unbind(input)
       } catch {
-        // Ignore if not bound
+        // Ignore errors
       }
-      return
+      isBoundRef.current = false
     }
 
-    // Bind with appropriate mode
-    wanakana.bind(input, {
-      IMEMode: isShiftHeld ? 'toKatakana' : 'toHiragana'
-    })
+    // Only bind if enabled
+    if (enabled) {
+      try {
+        wanakana.bind(input, {
+          IMEMode: isShiftHeld ? 'toKatakana' : 'toHiragana'
+        })
+        isBoundRef.current = true
+      } catch {
+        // Ignore bind errors
+      }
+    }
 
     return () => {
-      try {
-        wanakana.unbind(input)
-      } catch {
-        // Ignore if not bound
+      if (isBoundRef.current && input) {
+        try {
+          wanakana.unbind(input)
+        } catch {
+          // Ignore errors
+        }
+        isBoundRef.current = false
       }
     }
   }, [inputRef, enabled, isShiftHeld])
