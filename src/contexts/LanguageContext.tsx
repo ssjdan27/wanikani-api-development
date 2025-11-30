@@ -173,6 +173,11 @@ const translations: Record<Language, Record<string, string>> = {
     'forecast.reviews': 'reviews',
     'forecast.heavyWorkload': 'Heavy workload!',
     'forecast.busyDay': 'Busy day',
+    'forecast.clickToExpand': 'Click a bar to see hourly breakdown',
+    'forecast.backToWeek': 'Back to week view',
+    'forecast.hourlyBreakdown': 'Hourly Breakdown',
+    'forecast.hourlySubtitle': 'Reviews by hour (only hours with reviews shown)',
+    'forecast.noReviewsThisDay': 'No reviews scheduled for this day',
     
     // Leech Detector
     'leech.title': 'Leech Detector',
@@ -396,6 +401,11 @@ const translations: Record<Language, Record<string, string>> = {
     'forecast.reviews': '復習',
     'forecast.heavyWorkload': '大量の復習！',
     'forecast.busyDay': '忙しい日',
+    'forecast.clickToExpand': 'バーをクリックして時間別の詳細を表示',
+    'forecast.backToWeek': '週間表示に戻る',
+    'forecast.hourlyBreakdown': '時間別詳細',
+    'forecast.hourlySubtitle': '時間別の復習（復習がある時間のみ表示）',
+    'forecast.noReviewsThisDay': 'この日は復習予定なし',
     
     // Leech Detector
     'leech.title': 'リーチ検出器',

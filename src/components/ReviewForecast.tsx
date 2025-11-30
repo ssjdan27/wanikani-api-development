@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { ArrowLeft } from 'lucide-react'
 import type { Assignment, Summary } from '@/types/wanikani'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -54,6 +55,40 @@ function startOfDay(date: Date): Date {
 export default function ReviewForecast({ assignments, summary }: ReviewForecastProps) {
   const { t } = useLanguage()
   const { isDark } = useTheme()
+  const chartRef = useRef<any>(null)
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
+
+  // Calculate hourly data for a specific day
+  const getHourlyData = (dayIndex: number) => {
+    const now = new Date()
+    const todayStart = startOfDay(now)
+    const targetDate = new Date(todayStart)
+    targetDate.setDate(targetDate.getDate() + dayIndex)
+    const targetEnd = new Date(targetDate)
+    targetEnd.setDate(targetEnd.getDate() + 1)
+
+    const hourlyCounts: number[] = Array(24).fill(0)
+
+    assignments.forEach(a => {
+      if (a.data.hidden || a.data.srs_stage === 9 || !a.data.available_at) return
+
+      const availableAt = new Date(a.data.available_at)
+
+      // For today (dayIndex 0), include overdue items in current hour
+      if (dayIndex === 0 && availableAt < now) {
+        const currentHour = now.getHours()
+        hourlyCounts[currentHour]++
+        return
+      }
+
+      // Check if within target day
+      if (availableAt >= targetDate && availableAt < targetEnd) {
+        hourlyCounts[availableAt.getHours()]++
+      }
+    })
+
+    return hourlyCounts
+  }
 
   const {
     dailyCounts,
@@ -63,7 +98,8 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
     peakDay,
     peakCount,
     dailyAvg,
-    labels
+    labels,
+    dayDates
   } = useMemo(() => {
     const now = new Date()
     const todayStart = startOfDay(now)
@@ -71,11 +107,13 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
     // Initialize counts for next 7 days
     const dailyCounts: number[] = Array(7).fill(0)
     const labels: string[] = []
+    const dayDates: Date[] = []
     
     for (let i = 0; i < 7; i++) {
       const date = new Date(todayStart)
       date.setDate(date.getDate() + i)
       labels.push(formatDateLabel(date))
+      dayDates.push(date)
     }
 
     let overdueCount = 0
@@ -135,9 +173,41 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
       peakDay,
       peakCount,
       dailyAvg,
-      labels
+      labels,
+      dayDates
     }
   }, [assignments])
+
+  // Hourly data for selected day
+  const hourlyData = useMemo(() => {
+    if (selectedDay === null) return null
+    const counts = getHourlyData(selectedDay)
+    
+    // Filter to only hours with reviews
+    const hoursWithReviews: { hour: number; count: number }[] = []
+    counts.forEach((count, hour) => {
+      if (count > 0) {
+        hoursWithReviews.push({ hour, count })
+      }
+    })
+    
+    return hoursWithReviews
+  }, [selectedDay, assignments])
+
+  // Format hour as "9 AM", "2 PM", etc.
+  const formatHour = (hour: number): string => {
+    if (hour === 0) return '12 AM'
+    if (hour === 12) return '12 PM'
+    if (hour < 12) return `${hour} AM`
+    return `${hour - 12} PM`
+  }
+
+  const handleBarClick = (event: any, elements: any[]) => {
+    if (elements.length > 0) {
+      const dayIndex = elements[0].index
+      setSelectedDay(dayIndex)
+    }
+  }
 
   const data = {
     labels,
@@ -153,9 +223,25 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
     ]
   }
 
+  // Hourly chart data
+  const hourlyChartData = hourlyData ? {
+    labels: hourlyData.map(h => formatHour(h.hour)),
+    datasets: [
+      {
+        label: t('forecast.reviews'),
+        data: hourlyData.map(h => h.count),
+        backgroundColor: hourlyData.map(h => getBarColor(h.count)),
+        borderColor: hourlyData.map(h => getBorderColor(h.count)),
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    ]
+  } : null
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleBarClick,
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -169,7 +255,32 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
               label += ` 📈 ${t('forecast.busyDay')}`
             }
             return label
-          }
+          },
+          footer: () => selectedDay === null ? t('forecast.clickToExpand') : ''
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
+      },
+      y: {
+        ticks: { color: isDark ? '#a0a0a0' : '#666666' },
+        grid: { color: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
+        beginAtZero: true
+      }
+    }
+  }
+
+  const hourlyOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => `${context.parsed.y} ${t('forecast.reviews')}`
         }
       }
     },
@@ -190,28 +301,55 @@ export default function ReviewForecast({ assignments, summary }: ReviewForecastP
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
+          {selectedDay !== null ? (
+            <button
+              onClick={() => setSelectedDay(null)}
+              className="flex items-center gap-2 text-wanikani-cyan hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors mb-1"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">{t('forecast.backToWeek')}</span>
+            </button>
+          ) : null}
           <h2 className="text-xl font-bold text-wanikani-text dark:text-wanikani-text-dark">
-            {t('forecast.title')}
+            {selectedDay !== null 
+              ? `${t('forecast.hourlyBreakdown')} - ${labels[selectedDay]}`
+              : t('forecast.title')
+            }
           </h2>
           <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
-            {t('forecast.subtitle')}
+            {selectedDay !== null
+              ? t('forecast.hourlySubtitle')
+              : t('forecast.subtitle')
+            }
           </p>
         </div>
-        <div className="flex gap-2 text-xs">
-          <span className="px-2 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400">
-            &lt;{THRESHOLD_MEDIUM}
-          </span>
-          <span className="px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400">
-            {THRESHOLD_MEDIUM}-{THRESHOLD_HIGH}
-          </span>
-          <span className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400">
-            &gt;{THRESHOLD_HIGH}
-          </span>
-        </div>
+        {selectedDay === null && (
+          <div className="flex gap-2 text-xs">
+            <span className="px-2 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400">
+              &lt;{THRESHOLD_MEDIUM}
+            </span>
+            <span className="px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400">
+              {THRESHOLD_MEDIUM}-{THRESHOLD_HIGH}
+            </span>
+            <span className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400">
+              &gt;{THRESHOLD_HIGH}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="h-64 mb-4">
-        <Bar data={data} options={options} />
+        {selectedDay !== null && hourlyChartData ? (
+          hourlyData && hourlyData.length > 0 ? (
+            <Bar data={hourlyChartData} options={hourlyOptions} />
+          ) : (
+            <div className="h-full flex items-center justify-center text-wanikani-text-light dark:text-wanikani-text-light-dark">
+              {t('forecast.noReviewsThisDay')}
+            </div>
+          )
+        ) : (
+          <Bar ref={chartRef} data={data} options={options} />
+        )}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
