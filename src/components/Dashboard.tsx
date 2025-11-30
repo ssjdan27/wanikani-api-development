@@ -15,6 +15,7 @@ import { useTabState, TabButton } from './Tabs'
 import LevelPacingCoach from './LevelPacingCoach'
 import BurnRadar from './BurnRadar'
 import LeechDetector from './LeechDetector'
+import SimilarKanjiWarnings from './SimilarKanjiWarnings'
 import LessonBatchingHelper from './LessonBatchingHelper'
 import SrsStageHistogram from './SrsStageHistogram'
 import StreakAnalysis from './StreakAnalysis'
@@ -341,7 +342,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SimilarKanjiWarnings subjects={subjects} reviewStats={reviewStats} />
           <StreakAnalysis reviewStats={reviewStats} subjects={subjects} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CriticalItems assignments={assignments} subjects={subjects} srsSystems={srsSystems} />
         </div>
 

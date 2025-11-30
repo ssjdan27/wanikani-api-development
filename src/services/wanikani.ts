@@ -271,7 +271,9 @@ export class WaniKaniService {
             hidden_at: subject.data.hidden_at,
             // Preserve dependency tree fields
             component_subject_ids: subject.data.component_subject_ids,
-            amalgamation_subject_ids: subject.data.amalgamation_subject_ids
+            amalgamation_subject_ids: subject.data.amalgamation_subject_ids,
+            // Preserve similar kanji fields
+            visually_similar_subject_ids: subject.data.visually_similar_subject_ids
           }
         }
       }) as T

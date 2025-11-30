@@ -258,6 +258,15 @@ const translations: Record<Language, Record<string, string>> = {
     'dependencyTree.kanaModeOn': 'Kana input mode (type romaji → kana, hold Shift for katakana)',
     'dependencyTree.kanaModeOff': 'Direct input mode (English/Kanji)',
     'tabs.dependencyTree': 'Dependency Tree',
+    
+    // Similar Kanji Warnings
+    'similarKanji.title': 'Similar Kanji Warnings',
+    'similarKanji.subtitle': 'Kanji pairs you might confuse - sorted by combined errors',
+    'similarKanji.count': '{count} confusing pairs',
+    'similarKanji.noPairs': 'No similar kanji pairs found in your current studies - great job!',
+    'similarKanji.showMore': 'Show {count} more',
+    'similarKanji.errors': 'errors',
+    'similarKanji.vsLabel': 'vs',
   },
   ja: {
     // Header
@@ -506,6 +515,15 @@ const translations: Record<Language, Record<string, string>> = {
     'dependencyTree.kanaModeOn': 'かな入力モード（ローマ字→かな、Shiftでカタカナ）',
     'dependencyTree.kanaModeOff': '直接入力モード（英語・漢字）',
     'tabs.dependencyTree': '依存関係ツリー',
+    
+    // Similar Kanji Warnings
+    'similarKanji.title': '類似漢字警告',
+    'similarKanji.subtitle': '混同しやすい漢字ペア - 合計エラー数順',
+    'similarKanji.count': '{count}組の混同ペア',
+    'similarKanji.noPairs': '学習中の類似漢字ペアは見つかりませんでした - 素晴らしい！',
+    'similarKanji.showMore': 'あと{count}組を表示',
+    'similarKanji.errors': 'エラー',
+    'similarKanji.vsLabel': 'vs',
   }
 }
 

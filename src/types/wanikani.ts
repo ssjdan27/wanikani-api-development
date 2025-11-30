@@ -53,6 +53,8 @@ export interface Subject {
     // Dependency tree fields
     component_subject_ids?: number[]      // Radicals/kanji that make up this subject
     amalgamation_subject_ids?: number[]   // Kanji/vocab that use this subject as a component
+    // Similar kanji fields
+    visually_similar_subject_ids?: number[] // IDs of visually similar kanji
   }
 }
 
