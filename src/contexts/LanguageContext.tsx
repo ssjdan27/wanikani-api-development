@@ -255,6 +255,8 @@ const translations: Record<Language, Record<string, string>> = {
     'dependencyTree.master': 'Master',
     'dependencyTree.enlightened': 'Enlightened',
     'dependencyTree.burned': 'Burned',
+    'dependencyTree.kanaModeOn': 'Kana input mode (type romaji → kana, hold Shift for katakana)',
+    'dependencyTree.kanaModeOff': 'Direct input mode (English/Kanji)',
     'tabs.dependencyTree': 'Dependency Tree',
   },
   ja: {
@@ -501,6 +503,8 @@ const translations: Record<Language, Record<string, string>> = {
     'dependencyTree.master': 'マスター',
     'dependencyTree.enlightened': '悟り',
     'dependencyTree.burned': 'バーン',
+    'dependencyTree.kanaModeOn': 'かな入力モード（ローマ字→かな、Shiftでカタカナ）',
+    'dependencyTree.kanaModeOff': '直接入力モード（英語・漢字）',
     'tabs.dependencyTree': '依存関係ツリー',
   }
 }

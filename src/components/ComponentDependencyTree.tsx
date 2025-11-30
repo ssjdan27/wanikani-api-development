@@ -88,8 +88,8 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
   const containerRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
-  // Bind WanaKana for romaji to kana conversion (Shift for katakana)
-  useWanaKanaBind(searchInputRef)
+  // Bind WanaKana for romaji to kana conversion (disabled by default for English/kanji input)
+  const { enabled: kanaMode, toggle: toggleKanaMode } = useWanaKanaBind(searchInputRef, { enabled: false })
 
   // Check for mobile breakpoint (768px)
   useEffect(() => {
@@ -157,7 +157,7 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
 
     const children: TreeNodeData[] = []
     if (depth < maxDepth) {
-      for (const childId of relatedIds.slice(0, 10)) { // Limit children
+      for (const childId of relatedIds) {
         const childNode = buildTreeNode(childId, dir, depth + 1, maxDepth, new Set(visited))
         if (childNode) children.push(childNode)
       }
@@ -170,7 +170,7 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
         type: subject.object,
         srsStage,
         documentUrl: subject.data.document_url,
-        hasMoreChildren: relatedIds.length > children.length || depth >= maxDepth,
+        hasMoreChildren: depth >= maxDepth && relatedIds.length > 0,
         depth
       },
       children: children.length > 0 ? children : undefined
@@ -217,7 +217,7 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
     }]
 
     if (isExpanded && depth < maxDepth) {
-      for (const childId of relatedIds.slice(0, 15)) {
+      for (const childId of relatedIds) {
         nodes.push(...flattenTree(childId, dir, depth + 1, maxDepth, new Set(visited)))
       }
     }
@@ -422,20 +422,33 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
 
       {/* Search */}
       <div className="relative mb-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-wanikani-text-light" size={18} />
-          <input
-            ref={searchInputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value)
-              setShowSearchResults(true)
-            }}
-            onFocus={() => setShowSearchResults(true)}
-            placeholder={t('dependencyTree.searchPlaceholder')}
-            className="w-full pl-10 pr-4 py-2 border border-wanikani-border dark:border-wanikani-border-dark rounded-lg bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink"
-          />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-wanikani-text-light" size={18} />
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setShowSearchResults(true)
+              }}
+              onFocus={() => setShowSearchResults(true)}
+              placeholder={t('dependencyTree.searchPlaceholder')}
+              className="w-full pl-10 pr-4 py-2 border border-wanikani-border dark:border-wanikani-border-dark rounded-lg bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark focus:outline-none focus:ring-2 focus:ring-wanikani-pink"
+            />
+          </div>
+          <button
+            onClick={toggleKanaMode}
+            className={`px-3 py-2 rounded-lg border text-sm font-bold transition-colors ${
+              kanaMode
+                ? 'bg-wanikani-pink text-white border-wanikani-pink'
+                : 'bg-white dark:bg-wanikani-card-dark text-wanikani-text dark:text-wanikani-text-dark border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-50 dark:hover:bg-gray-700'
+            }`}
+            title={kanaMode ? t('dependencyTree.kanaModeOn') : t('dependencyTree.kanaModeOff')}
+          >
+            {kanaMode ? 'あ' : 'A'}
+          </button>
         </div>
 
         {/* Search results dropdown */}
@@ -515,14 +528,9 @@ export default function ComponentDependencyTree({ subjects, assignments }: Compo
           <div className="h-[400px] border border-wanikani-border dark:border-wanikani-border-dark rounded-lg overflow-auto">
             {flatNodes.length > 0 ? (
               <div>
-                {flatNodes.slice(0, 100).map((node, index) => (
+                {flatNodes.map((node) => (
                   <MobileListRow key={node.id} node={node} />
                 ))}
-                {flatNodes.length > 100 && (
-                  <div className="p-4 text-center text-wanikani-text-light">
-                    {t('dependencyTree.loadMore')} ({flatNodes.length - 100} more)
-                  </div>
-                )}
               </div>
             ) : (
               <div className="flex items-center justify-center h-full text-wanikani-text-light">
