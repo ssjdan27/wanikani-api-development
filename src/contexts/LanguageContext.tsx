@@ -115,6 +115,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.levelProjection': 'Level Projection',
     'tabs.burnProjection': 'Burn Projection',
     'tabs.studyHeatmap': 'Study Heatmap',
+    'tabs.reviewForecast': 'Review Forecast',
     
     // Level Projection
     'projection.title': 'Level Up Projection',
@@ -160,6 +161,18 @@ const translations: Record<Language, Record<string, string>> = {
     'heatmap.maxLessons': 'Max lessons in a day',
     'heatmap.totalLessons': 'Total lessons loaded',
     'heatmap.noActivity': 'No study activity found for {year}. Try a different year.',
+    
+    // Review Forecast
+    'forecast.title': 'Review Forecast',
+    'forecast.subtitle': 'Upcoming reviews for the next 7 days',
+    'forecast.today': 'Today',
+    'forecast.overdue': 'overdue',
+    'forecast.thisWeek': 'This Week',
+    'forecast.peakDay': 'Peak Day',
+    'forecast.dailyAvg': 'Daily Avg',
+    'forecast.reviews': 'reviews',
+    'forecast.heavyWorkload': 'Heavy workload!',
+    'forecast.busyDay': 'Busy day',
     
     // Leech Detector
     'leech.title': 'Leech Detector',
@@ -325,6 +338,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.levelProjection': 'レベル予測',
     'tabs.burnProjection': 'バーン予測',
     'tabs.studyHeatmap': '学習ヒートマップ',
+    'tabs.reviewForecast': '復習予測',
     
     // Level Projection
     'projection.title': 'レベルアップ予測',
@@ -370,6 +384,18 @@ const translations: Record<Language, Record<string, string>> = {
     'heatmap.maxLessons': '1日の最大レッスン数',
     'heatmap.totalLessons': '読み込まれた総レッスン数',
     'heatmap.noActivity': '{year}年の学習活動が見つかりません。別の年を試してください。',
+    
+    // Review Forecast
+    'forecast.title': '復習予測',
+    'forecast.subtitle': '今後7日間の復習予定',
+    'forecast.today': '今日',
+    'forecast.overdue': '期限切れ',
+    'forecast.thisWeek': '今週',
+    'forecast.peakDay': 'ピーク日',
+    'forecast.dailyAvg': '日平均',
+    'forecast.reviews': '復習',
+    'forecast.heavyWorkload': '大量の復習！',
+    'forecast.busyDay': '忙しい日',
     
     // Leech Detector
     'leech.title': 'リーチ検出器',
