@@ -25,6 +25,7 @@ import ThemeToggle from './ThemeToggle'
 import ExportData from './ExportData'
 import ReviewForecast from './ReviewForecast'
 import ComponentDependencyTree from './ComponentDependencyTree'
+import BurnedItemsGallery from './BurnedItemsGallery'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -46,7 +47,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies'>('projection')
+  const { activeTab, setActiveTab } = useTabState<'projection' | 'burn' | 'heatmap' | 'forecast' | 'dependencies' | 'burned'>('projection')
 
   // Memoize the WaniKani service to prevent unnecessary re-creation
   const wanikaniService = useMemo(() => new WaniKaniService(apiToken), [apiToken])
@@ -303,6 +304,11 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
               isActive={activeTab === 'dependencies'}
               onClick={() => setActiveTab('dependencies')}
             />
+            <TabButton
+              label={t('tabs.burnGallery')}
+              isActive={activeTab === 'burned'}
+              onClick={() => setActiveTab('burned')}
+            />
           </div>
           <div className="p-5">
             {activeTab === 'projection' ? (
@@ -327,8 +333,13 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
                 assignments={assignments}
                 summary={summary}
               />
-            ) : (
+            ) : activeTab === 'dependencies' ? (
               <ComponentDependencyTree
+                subjects={subjects}
+                assignments={assignments}
+              />
+            ) : (
+              <BurnedItemsGallery
                 subjects={subjects}
                 assignments={assignments}
               />
