@@ -18,6 +18,7 @@ type GatingKanji = {
   srsStage: number
   passingStage: number
   etaMs: number
+  link?: string
 }
 
 function intervalToMs(interval: number | null, unit: SpacedRepetitionSystem['data']['stages'][number]['interval_unit']): number {
@@ -93,7 +94,8 @@ export default function LevelPacingCoach({
           label,
           srsStage: a.data.srs_stage,
           passingStage,
-          etaMs
+          etaMs,
+          link: subject.data.document_url
         })
       }
     })
@@ -154,13 +156,29 @@ export default function LevelPacingCoach({
           <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark mb-2">{t('pacing.focusNext')}:</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {gatingKanji.map(item => (
-              <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-wanikani-kanji hover:shadow-sm transition-all">
-                <div className="text-2xl font-bold text-wanikani-kanji mb-1">{item.label}</div>
-                <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">SRS {item.srsStage} → {item.passingStage}</div>
-                <div className="text-sm text-wanikani-cyan mt-1 font-medium">
-                  {item.etaMs <= 0 ? 'Ready now!' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+              item.link ? (
+                <a
+                  key={item.subjectId}
+                  href={item.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-wanikani-kanji hover:shadow-sm hover:ring-2 hover:ring-wanikani-cyan/50 transition-all"
+                >
+                  <div className="text-2xl font-bold text-wanikani-kanji mb-1">{item.label}</div>
+                  <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">SRS {item.srsStage} → {item.passingStage}</div>
+                  <div className="text-sm text-wanikani-cyan mt-1 font-medium">
+                    {item.etaMs <= 0 ? 'Ready now!' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+                  </div>
+                </a>
+              ) : (
+                <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-wanikani-kanji hover:shadow-sm transition-all">
+                  <div className="text-2xl font-bold text-wanikani-kanji mb-1">{item.label}</div>
+                  <div className="text-xs text-wanikani-text-light dark:text-wanikani-text-light-dark">SRS {item.srsStage} → {item.passingStage}</div>
+                  <div className="text-sm text-wanikani-cyan mt-1 font-medium">
+                    {item.etaMs <= 0 ? 'Ready now!' : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+                  </div>
                 </div>
-              </div>
+              )
             ))}
           </div>
         </div>

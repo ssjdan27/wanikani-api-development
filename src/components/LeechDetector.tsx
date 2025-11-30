@@ -77,26 +77,31 @@ export default function LeechDetector({ reviewStats, subjects }: LeechDetectorPr
                 <th className="pb-2">{t('leech.item')}</th>
                 <th className="pb-2">{t('leech.accuracy')}</th>
                 <th className="pb-2">{t('leech.incorrect')}</th>
-                <th className="pb-2">{t('leech.link')}</th>
               </tr>
             </thead>
             <tbody>
               {leeches.map(leech => (
                 <tr key={leech.subjectId} className="border-t border-wanikani-border dark:border-wanikani-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  <td className="py-2 text-wanikani-text dark:text-wanikani-text-dark font-semibold">{leech.label}</td>
+                  <td className="py-2">
+                    {leech.link ? (
+                      <a
+                        href={leech.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-wanikani-text dark:text-wanikani-text-dark font-semibold hover:ring-2 hover:ring-wanikani-cyan/50 rounded px-1 transition-all"
+                      >
+                        {leech.label}
+                      </a>
+                    ) : (
+                      <span className="text-wanikani-text dark:text-wanikani-text-dark font-semibold">{leech.label}</span>
+                    )}
+                  </td>
                   <td className="py-2">
                     <span className={leech.percentage < 50 ? 'text-red-500' : leech.percentage < 70 ? 'text-yellow-600 dark:text-yellow-400' : 'text-wanikani-text dark:text-wanikani-text-dark'}>
                       {leech.percentage.toFixed(0)}%
                     </span>
                   </td>
                   <td className="py-2 text-red-500">{leech.incorrect}</td>
-                  <td className="py-2">
-                    {leech.link ? (
-                      <a href={leech.link} target="_blank" rel="noreferrer" className="text-wanikani-cyan hover:text-wanikani-pink transition-colors">{t('leech.view')}</a>
-                    ) : (
-                      <span className="text-gray-400">N/A</span>
-                    )}
-                  </td>
                 </tr>
               ))}
             </tbody>

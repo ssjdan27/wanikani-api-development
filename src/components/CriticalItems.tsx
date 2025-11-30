@@ -210,9 +210,20 @@ export default function CriticalItems({ assignments, subjects, srsSystems }: Cri
                 key={item.subjectId}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${getUrgencyColor(item.droppedStages)}`}
               >
-                <span className={`px-2 py-0.5 rounded text-white text-sm font-bold shrink-0 ${getSubjectTypeColor(item.subjectType)}`}>
-                  {item.label}
-                </span>
+                {item.link ? (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`px-2 py-0.5 rounded text-white text-sm font-bold shrink-0 ${getSubjectTypeColor(item.subjectType)} hover:ring-2 hover:ring-wanikani-cyan/50 transition-all`}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <span className={`px-2 py-0.5 rounded text-white text-sm font-bold shrink-0 ${getSubjectTypeColor(item.subjectType)}`}>
+                    {item.label}
+                  </span>
+                )}
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 text-sm">
@@ -237,17 +248,6 @@ export default function CriticalItems({ assignments, subjects, srsSystems }: Cri
                     {formatTimeUntilReview(item.availableAt)}
                   </div>
                 </div>
-
-                {item.link && (
-                  <a
-                    href={item.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-wanikani-cyan hover:text-wanikani-pink transition-colors text-sm shrink-0"
-                  >
-                    {t('leech.view')}
-                  </a>
-                )}
               </div>
             ))}
           </div>

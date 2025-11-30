@@ -108,25 +108,46 @@ export default function SubjectGrid({ subjects, reviewStats }: SubjectGridProps)
           {filteredSubjects.slice(0, 200).map((subject) => {
             const accuracy = getSubjectAccuracy(subject.id)
             const hasStats = accuracy !== null
+            const linkUrl = subject.data.document_url
             
-            return (
-              <div
-                key={subject.id}
-                className={`
-                  relative aspect-square rounded-lg flex items-center justify-center text-white font-bold text-lg
-                  ${getSubjectColor(subject.object)}
-                  ${hasStats ? `border-2 ${getAccuracyColor(accuracy)}` : 'border border-gray-300 dark:border-gray-600'}
-                  hover:scale-110 transition-transform duration-200 cursor-pointer
-                  japanese-text
-                `}
-                title={`${subject.data.meanings[0]?.meaning || 'Unknown'} - Level ${subject.data.level}${hasStats ? ` - ${accuracy.toFixed(0)}% accuracy` : ''}`}
-              >
+            const content = (
+              <>
                 {subject.data.characters || subject.data.meanings[0]?.meaning?.slice(0, 2) || '?'}
                 {hasStats && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-white dark:bg-gray-800 rounded-full text-xs flex items-center justify-center text-wanikani-text dark:text-wanikani-text-dark">
                     {accuracy >= 90 ? '✓' : accuracy >= 70 ? '~' : '!'}
                   </div>
                 )}
+              </>
+            )
+            
+            const className = `
+              group relative aspect-square rounded-lg flex items-center justify-center text-white font-bold text-lg
+              ${getSubjectColor(subject.object)}
+              ${hasStats ? `border-2 ${getAccuracyColor(accuracy)}` : 'border border-gray-300 dark:border-gray-600'}
+              hover:scale-110 transition-all duration-200 cursor-pointer
+              hover:ring-2 hover:ring-wanikani-cyan/50
+              japanese-text
+            `
+            
+            return linkUrl ? (
+              <a
+                key={subject.id}
+                href={linkUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={className}
+                title={`${subject.data.meanings[0]?.meaning || 'Unknown'} - Level ${subject.data.level}${hasStats ? ` - ${accuracy.toFixed(0)}% accuracy` : ''}`}
+              >
+                {content}
+              </a>
+            ) : (
+              <div
+                key={subject.id}
+                className={className}
+                title={`${subject.data.meanings[0]?.meaning || 'Unknown'} - Level ${subject.data.level}${hasStats ? ` - ${accuracy.toFixed(0)}% accuracy` : ''}`}
+              >
+                {content}
               </div>
             )
           })}

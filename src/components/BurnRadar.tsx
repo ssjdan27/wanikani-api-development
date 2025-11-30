@@ -26,6 +26,7 @@ type BurnCandidate = {
   subjectId: number
   label: string
   etaMs: number
+  link?: string
 }
 
 function intervalToMs(interval: number | null, unit: SpacedRepetitionSystem['data']['stages'][number]['interval_unit']) {
@@ -103,6 +104,7 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
         subjectId: a.data.subject_id,
         label,
         etaMs,
+        link: subject.data.document_url
       })
     })
 
@@ -177,12 +179,27 @@ export default function BurnRadar({ assignments, subjects, srsSystems }: BurnRad
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {upcoming.map(item => (
-              <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-                <div className="text-2xl font-bold text-wanikani-text dark:text-wanikani-text-dark">{item.label}</div>
-                <div className="text-sm text-wanikani-cyan font-medium">
-                  {item.etaMs < 3600000 ? `${(item.etaMs / (1000 * 60)).toFixed(0)}m` : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+              item.link ? (
+                <a
+                  key={item.subjectId}
+                  href={item.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-gray-400 dark:hover:border-gray-500 hover:ring-2 hover:ring-wanikani-cyan/50 transition-all"
+                >
+                  <div className="text-2xl font-bold text-wanikani-text dark:text-wanikani-text-dark">{item.label}</div>
+                  <div className="text-sm text-wanikani-cyan font-medium">
+                    {item.etaMs < 3600000 ? `${(item.etaMs / (1000 * 60)).toFixed(0)}m` : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+                  </div>
+                </a>
+              ) : (
+                <div key={item.subjectId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-wanikani-border dark:border-wanikani-border-dark hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                  <div className="text-2xl font-bold text-wanikani-text dark:text-wanikani-text-dark">{item.label}</div>
+                  <div className="text-sm text-wanikani-cyan font-medium">
+                    {item.etaMs < 3600000 ? `${(item.etaMs / (1000 * 60)).toFixed(0)}m` : `${(item.etaMs / (1000 * 60 * 60)).toFixed(1)}h`}
+                  </div>
                 </div>
-              </div>
+              )
             ))}
           </div>
         )}

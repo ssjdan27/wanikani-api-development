@@ -171,9 +171,20 @@ export default function StreakAnalysis({ reviewStats, subjects }: StreakAnalysis
                   <span className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark w-5">
                     {index + 1}.
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)}`}>
-                    {item.label}
-                  </span>
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)} hover:ring-2 hover:ring-wanikani-cyan/50 transition-all`}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <span className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)}`}>
+                      {item.label}
+                    </span>
+                  )}
                   <span className="flex-1" />
                   <div className="text-right">
                     <span className="text-lg font-bold text-orange-500">{item.combinedCurrentStreak}</span>
@@ -200,9 +211,20 @@ export default function StreakAnalysis({ reviewStats, subjects }: StreakAnalysis
                   <span className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark w-5">
                     {index + 1}.
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)}`}>
-                    {item.label}
-                  </span>
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)} hover:ring-2 hover:ring-wanikani-cyan/50 transition-all`}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <span className={`px-2 py-0.5 rounded text-white text-sm font-bold ${getSubjectTypeColor(item.subjectType)}`}>
+                      {item.label}
+                    </span>
+                  )}
                   <span className="flex-1" />
                   <div className="text-right">
                     <span className="text-lg font-bold text-yellow-500">{item.combinedMaxStreak}</span>
