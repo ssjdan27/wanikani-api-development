@@ -127,7 +127,11 @@ const translations: Record<Language, Record<string, string>> = {
     'projection.totalToGo': 'Total to go',
     'projection.levels': 'levels',
     'projection.actual': 'Actual',
-    'projection.projected': 'Projected',
+    'projection.projected': 'Projected (Avg)',
+    'projection.fastPace': 'Fast',
+    'projection.avgPace': 'Avg',
+    'projection.slowPace': 'Slow',
+    'projection.paceComparison': 'Pace comparison (days/level)',
     
     // Burn Radar
     'burn.title': 'Burn Radar',
@@ -333,7 +337,11 @@ const translations: Record<Language, Record<string, string>> = {
     'projection.totalToGo': '残り',
     'projection.levels': 'レベル',
     'projection.actual': '実績',
-    'projection.projected': '予測',
+    'projection.projected': '予測（平均）',
+    'projection.fastPace': '速い',
+    'projection.avgPace': '平均',
+    'projection.slowPace': '遅い',
+    'projection.paceComparison': 'ペース比較（日/レベル）',
     
     // Burn Radar
     'burn.title': 'バーンレーダー',

@@ -31,15 +31,44 @@ interface LevelProjectionChartProps {
 }
 
 const DAY_MS = 1000 * 60 * 60 * 24
+const MIN_DAYS_PER_LEVEL = 3.5 // Theoretical minimum based on SRS intervals
+
+// Pace multipliers
+const FAST_MULTIPLIER = 0.7
+const SLOW_MULTIPLIER = 1.5
+
+// Helper to generate projection points
+function generateProjectionPoints(
+  startDate: Date,
+  startingLevel: number,
+  daysPerLevel: number
+): { x: Date; y: number }[] {
+  const points: { x: Date; y: number }[] = []
+  const durationMs = daysPerLevel * DAY_MS
+  let currentDate = startDate
+  
+  for (let level = startingLevel; level <= 60; level++) {
+    currentDate = new Date(currentDate.getTime() + durationMs)
+    points.push({ x: currentDate, y: level })
+  }
+  
+  return points
+}
 
 export default function LevelProjectionChart({ userData, levelProgressions }: LevelProjectionChartProps) {
   const { t } = useLanguage()
   const { isDark } = useTheme()
   const {
     actualPoints,
-    projectionPoints,
+    fastProjectionPoints,
+    avgProjectionPoints,
+    slowProjectionPoints,
+    fastDaysPerLevel,
     averageDaysPerLevel,
-    level60Eta,
+    slowDaysPerLevel,
+    fastEta,
+    avgEta,
+    slowEta,
     sampleSize,
     latestDurationDays,
     projectionStartLevel,
@@ -66,6 +95,8 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       : 7 * DAY_MS // fallback pace
 
     const averageDaysPerLevel = averageDurationMs / DAY_MS
+    const fastDaysPerLevel = Math.max(averageDaysPerLevel * FAST_MULTIPLIER, MIN_DAYS_PER_LEVEL)
+    const slowDaysPerLevel = averageDaysPerLevel * SLOW_MULTIPLIER
     const latestDurationDays = durationsMs.length > 0 ? durationsMs[durationsMs.length - 1] / DAY_MS : null
 
     const actualPoints = completedLevels.map(lp => ({
@@ -82,19 +113,17 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
       userData.level
     )
 
-    const projectionPoints: { x: Date; y: number }[] = []
-    let currentDate = projectionStartDate
-    for (let level = startingLevel; level <= 60; level++) {
-      currentDate = new Date(currentDate.getTime() + averageDurationMs)
-      projectionPoints.push({
-        x: currentDate,
-        y: level,
-      })
-    }
+    // Generate all three projection lines
+    const fastProjectionPoints = generateProjectionPoints(projectionStartDate, startingLevel, fastDaysPerLevel)
+    const avgProjectionPoints = generateProjectionPoints(projectionStartDate, startingLevel, averageDaysPerLevel)
+    const slowProjectionPoints = generateProjectionPoints(projectionStartDate, startingLevel, slowDaysPerLevel)
 
-    const level60Eta = projectionPoints.find(point => point.y === 60)?.x || actualPoints.find(point => point.y === 60)?.x
+    // Get Level 60 ETAs
+    const fastEta = fastProjectionPoints.find(p => p.y === 60)?.x || actualPoints.find(p => p.y === 60)?.x
+    const avgEta = avgProjectionPoints.find(p => p.y === 60)?.x || actualPoints.find(p => p.y === 60)?.x
+    const slowEta = slowProjectionPoints.find(p => p.y === 60)?.x || actualPoints.find(p => p.y === 60)?.x
 
-    const projectionStartLevel = projectionPoints[0]?.y ?? (lastActualLevel?.data.level || userData.level)
+    const projectionStartLevel = avgProjectionPoints[0]?.y ?? (lastActualLevel?.data.level || userData.level)
     const levelsRemaining = reachedLevel60
       ? 0
       : projectionStartLevel > 60
@@ -103,9 +132,15 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
 
     return {
       actualPoints,
-      projectionPoints,
+      fastProjectionPoints,
+      avgProjectionPoints,
+      slowProjectionPoints,
+      fastDaysPerLevel,
       averageDaysPerLevel,
-      level60Eta,
+      slowDaysPerLevel,
+      fastEta,
+      avgEta,
+      slowEta,
       sampleSize: recentDurations.length,
       latestDurationDays,
       projectionStartLevel,
@@ -125,13 +160,33 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
         tension: 0.25,
       },
       {
-        label: t('projection.projected'),
-        data: projectionPoints,
-        borderColor: '#ff00aa',
-        backgroundColor: 'rgba(255,0,170,0.15)',
+        label: t('projection.fastPace'),
+        data: fastProjectionPoints,
+        borderColor: '#00cc66',
+        backgroundColor: 'rgba(0,204,102,0.1)',
         borderWidth: 2,
         borderDash: [6, 6],
-        pointRadius: 3,
+        pointRadius: 2,
+        tension: 0.25,
+      },
+      {
+        label: t('projection.projected'),
+        data: avgProjectionPoints,
+        borderColor: '#ff00aa',
+        backgroundColor: 'rgba(255,0,170,0.1)',
+        borderWidth: 2,
+        borderDash: [6, 6],
+        pointRadius: 2,
+        tension: 0.25,
+      },
+      {
+        label: t('projection.slowPace'),
+        data: slowProjectionPoints,
+        borderColor: '#ff6600',
+        backgroundColor: 'rgba(255,102,0,0.1)',
+        borderWidth: 2,
+        borderDash: [6, 6],
+        pointRadius: 2,
         tension: 0.25,
       },
     ],
@@ -181,11 +236,17 @@ export default function LevelProjectionChart({ userData, levelProgressions }: Le
           </p>
         </div>
         <div className="text-right">
-          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">{t('projection.averagePace')}</div>
-          <div className="text-lg font-bold text-wanikani-cyan">{averageDaysPerLevel.toFixed(1)} {t('projection.daysPerLevel')}</div>
-          {level60Eta && (
-            <div className="text-xs text-wanikani-pink mt-1 font-medium">
-              {t('projection.level60Eta')}: {new Date(level60Eta).toLocaleDateString()}
+          <div className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark mb-1">{t('projection.paceComparison')}</div>
+          <div className="flex gap-3 text-xs font-medium">
+            <span className="text-green-500">{t('projection.fastPace')}: {fastDaysPerLevel.toFixed(1)}d</span>
+            <span className="text-wanikani-pink">{t('projection.avgPace')}: {averageDaysPerLevel.toFixed(1)}d</span>
+            <span className="text-orange-500">{t('projection.slowPace')}: {slowDaysPerLevel.toFixed(1)}d</span>
+          </div>
+          {avgEta && (
+            <div className="mt-2 text-xs space-y-0.5">
+              <div className="text-green-500">{t('projection.level60Eta')}: {new Date(fastEta!).toLocaleDateString()}</div>
+              <div className="text-wanikani-pink">{t('projection.level60Eta')}: {new Date(avgEta).toLocaleDateString()}</div>
+              <div className="text-orange-500">{t('projection.level60Eta')}: {new Date(slowEta!).toLocaleDateString()}</div>
             </div>
           )}
         </div>
