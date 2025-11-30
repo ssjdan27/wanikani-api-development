@@ -24,6 +24,12 @@ const translations: Record<Language, Record<string, string>> = {
     'token.submit': 'Connect',
     'token.help': 'Get your API token from',
     'token.settings': 'WaniKani Settings',
+    'token.stepsTitle': 'How to get your API token:',
+    'token.step1': 'Go to your WaniKani Profile → Settings → API Tokens',
+    'token.step2': 'Click "Generate a new token"',
+    'token.step3': 'Give your token a description (e.g., "Dashboard")',
+    'token.step4': 'Leave all permission boxes unchecked (read-only access is automatic)',
+    'token.step5': 'Click "Generate token" and copy it here',
     
     // Loading
     'loading': 'Loading...',
@@ -224,6 +230,12 @@ const translations: Record<Language, Record<string, string>> = {
     'token.submit': '接続',
     'token.help': 'APIトークンの取得先：',
     'token.settings': 'WaniKani設定',
+    'token.stepsTitle': 'APIトークンの取得方法：',
+    'token.step1': 'WaniKaniのプロフィール → 設定 → APIトークンへ移動',
+    'token.step2': '「新しいトークンを生成」をクリック',
+    'token.step3': 'トークンに説明を入力（例：「ダッシュボード」）',
+    'token.step4': '権限のチェックボックスはすべて空のまま（読み取り専用アクセスは自動）',
+    'token.step5': '「トークンを生成」をクリックしてここにコピー',
     
     // Loading
     'loading': '読み込み中...',

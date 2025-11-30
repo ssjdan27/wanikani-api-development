@@ -64,7 +64,7 @@ export default function ApiTokenInput({ onTokenSubmit }: ApiTokenInputProps) {
           </button>
         </form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-6 text-center space-y-4">
           <p className="text-sm text-wanikani-text-light dark:text-wanikani-text-light-dark">
             {t('token.help')}{' '}
             <a
@@ -76,6 +76,17 @@ export default function ApiTokenInput({ onTokenSubmit }: ApiTokenInputProps) {
               {t('token.settings')}
             </a>
           </p>
+          
+          <div className="text-left bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-sm">
+            <p className="font-medium text-wanikani-text dark:text-wanikani-text-dark mb-2">{t('token.stepsTitle')}</p>
+            <ol className="list-decimal list-inside space-y-1 text-wanikani-text-light dark:text-wanikani-text-light-dark">
+              <li>{t('token.step1')}</li>
+              <li>{t('token.step2')}</li>
+              <li>{t('token.step3')}</li>
+              <li>{t('token.step4')}</li>
+              <li>{t('token.step5')}</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
