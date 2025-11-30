@@ -209,6 +209,7 @@ const translations: Record<Language, Record<string, string>> = {
     'export.exportingReviewStats': 'Exporting review stats...',
     'export.exportingLevelProgress': 'Exporting level progress...',
     'export.exportingSubjects': 'Exporting subjects...',
+    'export.creatingZip': 'Creating zip file...',
   },
   ja: {
     // Header
@@ -408,6 +409,7 @@ const translations: Record<Language, Record<string, string>> = {
     'export.exportingReviewStats': '復習統計をエクスポート中...',
     'export.exportingLevelProgress': 'レベル進捗をエクスポート中...',
     'export.exportingSubjects': '学習項目をエクスポート中...',
+    'export.creatingZip': 'ZIPファイルを作成中...',
   }
 }
 

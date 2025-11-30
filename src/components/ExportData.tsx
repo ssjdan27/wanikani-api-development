@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Download, ChevronDown, Loader2 } from 'lucide-react'
+import JSZip from 'jszip'
 import { useLanguage } from '@/contexts/LanguageContext'
 import type { Assignment, ReviewStatistic, LevelProgression, Subject, SpacedRepetitionSystem } from '@/types/wanikani'
 import {
@@ -15,7 +16,6 @@ import {
   reviewStatColumns,
   levelProgressionColumns,
   subjectColumns,
-  delay,
   getTimestamp
 } from '@/utils/csvExport'
 
@@ -78,30 +78,51 @@ export default function ExportData({
     downloadCSV(csv, `wanikani-subjects-${getTimestamp()}.csv`)
   }
 
+  const exportAllAsZip = async () => {
+    const timestamp = getTimestamp()
+    const zip = new JSZip()
+
+    setExportProgress(t('export.exportingAssignments'))
+    const assignmentsData = transformAssignments(assignments)
+    const assignmentsCsv = arrayToCSV(assignmentsData, assignmentColumns)
+    zip.file(`wanikani-assignments-${timestamp}.csv`, assignmentsCsv)
+
+    setExportProgress(t('export.exportingReviewStats'))
+    const reviewStatsData = transformReviewStats(reviewStats)
+    const reviewStatsCsv = arrayToCSV(reviewStatsData, reviewStatColumns)
+    zip.file(`wanikani-review-stats-${timestamp}.csv`, reviewStatsCsv)
+
+    setExportProgress(t('export.exportingLevelProgress'))
+    const levelProgressionsData = transformLevelProgressions(levelProgressions)
+    const levelProgressionsCsv = arrayToCSV(levelProgressionsData, levelProgressionColumns)
+    zip.file(`wanikani-level-progressions-${timestamp}.csv`, levelProgressionsCsv)
+
+    setExportProgress(t('export.exportingSubjects'))
+    const subjectsData = transformSubjects(subjects)
+    const subjectsCsv = arrayToCSV(subjectsData, subjectColumns)
+    zip.file(`wanikani-subjects-${timestamp}.csv`, subjectsCsv)
+
+    setExportProgress(t('export.creatingZip'))
+    const blob = await zip.generateAsync({ type: 'blob' })
+    
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `wanikani-export-${timestamp}.zip`
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const handleExport = async (type: ExportType) => {
     setIsExporting(true)
     setIsOpen(false)
 
     try {
       if (type === 'all') {
-        // Sequential downloads with delay
-        setExportProgress(t('export.exportingAssignments'))
-        await delay(100)
-        exportAssignments()
-
-        setExportProgress(t('export.exportingReviewStats'))
-        await delay(300)
-        exportReviewStats()
-
-        setExportProgress(t('export.exportingLevelProgress'))
-        await delay(300)
-        exportLevelProgressions()
-
-        setExportProgress(t('export.exportingSubjects'))
-        await delay(300)
-        exportSubjects()
-
-        setExportProgress('')
+        await exportAllAsZip()
       } else {
         switch (type) {
           case 'assignments':
