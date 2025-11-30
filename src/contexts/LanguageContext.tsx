@@ -293,6 +293,25 @@ const translations: Record<Language, Record<string, string>> = {
     'burnGallery.kanji': 'Kanji',
     'burnGallery.vocabulary': 'Vocabulary',
     'tabs.burnGallery': 'Burned Gallery',
+    
+    // Reading vs Meaning Analysis
+    'readingMeaning.title': 'Reading vs Meaning Analysis',
+    'readingMeaning.subtitle': 'Identify your weak spots 🎯',
+    'readingMeaning.meaningErrors': 'Meaning Errors',
+    'readingMeaning.readingErrors': 'Reading Errors',
+    'readingMeaning.balanced': 'Balanced - Great job keeping both skills sharp!',
+    'readingMeaning.meaningWeak': 'You struggle more with meanings - focus on meaning mnemonics!',
+    'readingMeaning.readingWeak': 'You struggle more with readings - practice reading out loud!',
+    'readingMeaning.kanjiBreakdown': 'Kanji',
+    'readingMeaning.vocabBreakdown': 'Vocabulary',
+    'readingMeaning.meaningWeakItems': 'Meaning-weak items',
+    'readingMeaning.readingWeakItems': 'Reading-weak items',
+    'readingMeaning.gap': 'Gap',
+    'readingMeaning.noData': 'No review data yet. Start reviewing to see your patterns!',
+    'readingMeaning.showMore': 'Show {count} more',
+    'readingMeaning.item': 'Item',
+    'readingMeaning.meaning': 'Meaning',
+    'readingMeaning.reading': 'Reading',
   },
   ja: {
     // Header
@@ -576,6 +595,25 @@ const translations: Record<Language, Record<string, string>> = {
     'burnGallery.kanji': '漢字',
     'burnGallery.vocabulary': '単語',
     'tabs.burnGallery': '習得ギャラリー',
+    
+    // Reading vs Meaning Analysis
+    'readingMeaning.title': '読み vs 意味分析',
+    'readingMeaning.subtitle': '弱点を特定しよう 🎯',
+    'readingMeaning.meaningErrors': '意味エラー',
+    'readingMeaning.readingErrors': '読みエラー',
+    'readingMeaning.balanced': 'バランスが取れています - 素晴らしい！',
+    'readingMeaning.meaningWeak': '意味が苦手です - 意味のニーモニックに集中！',
+    'readingMeaning.readingWeak': '読みが苦手です - 声に出して練習！',
+    'readingMeaning.kanjiBreakdown': '漢字',
+    'readingMeaning.vocabBreakdown': '単語',
+    'readingMeaning.meaningWeakItems': '意味が弱い項目',
+    'readingMeaning.readingWeakItems': '読みが弱い項目',
+    'readingMeaning.gap': '差',
+    'readingMeaning.noData': 'まだ復習データがありません。復習を始めてパターンを確認！',
+    'readingMeaning.showMore': 'あと{count}個を表示',
+    'readingMeaning.item': '項目',
+    'readingMeaning.meaning': '意味',
+    'readingMeaning.reading': '読み',
   }
 }
 

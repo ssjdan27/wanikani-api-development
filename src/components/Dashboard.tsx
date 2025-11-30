@@ -26,6 +26,7 @@ import ExportData from './ExportData'
 import ReviewForecast from './ReviewForecast'
 import ComponentDependencyTree from './ComponentDependencyTree'
 import BurnedItemsGallery from './BurnedItemsGallery'
+import ReadingVsMeaningAnalysis from './ReadingVsMeaningAnalysis'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface DashboardProps {
@@ -359,6 +360,7 @@ export default function Dashboard({ apiToken, onTokenChange }: DashboardProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CriticalItems assignments={assignments} subjects={subjects} srsSystems={srsSystems} />
+          <ReadingVsMeaningAnalysis reviewStats={reviewStats} subjects={subjects} />
         </div>
 
         <SrsStageHistogram assignments={assignments} subjects={subjects} />
